@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using BaseSensor;
 using System.Globalization;
 
-namespace twoMlxSensors
+namespace TwoMlxSensors
 
 {
     public partial class TwoMlxSensorsForm : BaseSensorForm

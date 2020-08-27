@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BaseSensor;
 
-namespace oneMlxSensor
+namespace OneMlxSensor
 {
     public partial class OneMLXForm : BaseSensorForm
     {

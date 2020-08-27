@@ -9,9 +9,9 @@ using System.Security.AccessControl;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace array_mlx
+namespace ArrayMlxSensor
 {
-    public partial class ArraySensorForm : BaseSensorForm
+    public partial class ArrayMlxSensorForm : BaseSensorForm
     {
         private SerialPort _comPort = null; // COM port connection.
 
@@ -55,7 +55,7 @@ namespace array_mlx
         // Timer to send temperatures to the main app.
         private Timer _sendTimer = new Timer() { Interval = 1000 };
 
-        public ArraySensorForm()
+        public ArrayMlxSensorForm()
         {
             InitializeComponent();
 

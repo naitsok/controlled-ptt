@@ -1,4 +1,4 @@
-﻿namespace twoMlxSensors
+﻿namespace TwoMlxSensors
 {
     partial class TwoMlxSensorsForm
     {

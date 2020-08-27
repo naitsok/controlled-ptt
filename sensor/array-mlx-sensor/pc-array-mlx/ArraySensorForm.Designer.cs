@@ -1,6 +1,6 @@
-﻿namespace array_mlx
+﻿namespace ArrayMlxSensor
 {
-    partial class ArraySensorForm
+    partial class ArrayMlxSensorForm
     {
         /// <summary>
         /// Required designer variable.

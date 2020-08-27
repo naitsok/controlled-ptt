@@ -1,4 +1,4 @@
-﻿namespace oneMlxSensor
+﻿namespace OneMlxSensor
 {
     partial class OneMLXForm
     {
