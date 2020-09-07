@@ -28,49 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.tbTempFilePath = new System.Windows.Forms.TextBox();
-            this.btnSelectTempPath = new System.Windows.Forms.Button();
+            this.txtExpDir = new System.Windows.Forms.TextBox();
+            this.btnSelectDir = new System.Windows.Forms.Button();
             this.txtTempFileName = new System.Windows.Forms.TextBox();
             this.pltObjTemp = new OxyPlot.WindowsForms.PlotView();
             this.gbExperiment = new System.Windows.Forms.GroupBox();
-            this.gbPID = new System.Windows.Forms.GroupBox();
-            this.gmPIDParams = new System.Windows.Forms.GroupBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.txtCalcCurrent = new System.Windows.Forms.TextBox();
-            this.nudDGain = new System.Windows.Forms.NumericUpDown();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.nudPGain = new System.Windows.Forms.NumericUpDown();
-            this.nudIGain = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
-            this.txtbPIDTime = new System.Windows.Forms.TextBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.gbTargetTemp = new System.Windows.Forms.GroupBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.cbUseCalObjTemp = new System.Windows.Forms.CheckBox();
-            this.nudTargetT = new System.Windows.Forms.NumericUpDown();
-            this.txtPIDStatus = new System.Windows.Forms.TextBox();
-            this.bPIDStart = new System.Windows.Forms.Button();
-            this.label26 = new System.Windows.Forms.Label();
-            this.nudExpTime = new System.Windows.Forms.NumericUpDown();
-            this.label25 = new System.Windows.Forms.Label();
-            this.txtExpTime = new System.Windows.Forms.TextBox();
-            this.rbOnlySaveTemp = new System.Windows.Forms.RadioButton();
+            this.lblFileName = new System.Windows.Forms.Label();
+            this.lblFileDir = new System.Windows.Forms.Label();
+            this.cmbExperimentType = new System.Windows.Forms.ComboBox();
+            this.lblExpTime = new System.Windows.Forms.Label();
             this.txtExperimentStarted = new System.Windows.Forms.TextBox();
+            this.nudExpTime = new System.Windows.Forms.NumericUpDown();
+            this.gbPID = new System.Windows.Forms.GroupBox();
+            this.lblTargetTemp = new System.Windows.Forms.Label();
+            this.nudTargetTemp = new System.Windows.Forms.NumericUpDown();
+            this.nudDiffGain = new System.Windows.Forms.NumericUpDown();
+            this.lblPropGain = new System.Windows.Forms.Label();
+            this.lblRelativePower = new System.Windows.Forms.Label();
+            this.txtRelativePower = new System.Windows.Forms.TextBox();
+            this.nudIntGain = new System.Windows.Forms.NumericUpDown();
+            this.lblDiffGain = new System.Windows.Forms.Label();
+            this.lblIntGain = new System.Windows.Forms.Label();
+            this.nudPropGain = new System.Windows.Forms.NumericUpDown();
             this.btnStartExperiment = new System.Windows.Forms.Button();
-            this.cbSaveData = new System.Windows.Forms.CheckBox();
-            this.rbPIDControl = new System.Windows.Forms.RadioButton();
-            this.rbNoPIDControl = new System.Windows.Forms.RadioButton();
+            this.lblElapsedTime = new System.Windows.Forms.Label();
+            this.txtExpTime = new System.Windows.Forms.TextBox();
+            this.lblCalibratedTemperature = new System.Windows.Forms.Label();
+            this.lblSensorTemp = new System.Windows.Forms.Label();
+            this.txtCalibratedTemp = new System.Windows.Forms.TextBox();
+            this.txtSensorTemp = new System.Windows.Forms.TextBox();
             this.gbSensor = new System.Windows.Forms.GroupBox();
             this.btnStartSensor = new System.Windows.Forms.Button();
             this.btnLoadSensor = new System.Windows.Forms.Button();
             this.cmbSensors = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.cbNoCalibration = new System.Windows.Forms.CheckBox();
-            this.btnCalibration = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.rtbInfo = new System.Windows.Forms.RichTextBox();
             this.pltLaserCurrent = new OxyPlot.WindowsForms.PlotView();
@@ -81,75 +72,56 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveCurrentSettingsWhenClosingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutControlledPTTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbCalibration = new System.Windows.Forms.GroupBox();
             this.btnCalibrate = new System.Windows.Forms.Button();
             this.btnLoadCalibration = new System.Windows.Forms.Button();
             this.txtCalibration = new System.Windows.Forms.TextBox();
-            this.selectSensorDialog = new System.Windows.Forms.OpenFileDialog();
-            this.groupBox1.SuspendLayout();
+            this.ofdSelectSensor = new System.Windows.Forms.OpenFileDialog();
+            this.fbdSelectDir = new System.Windows.Forms.FolderBrowserDialog();
+            this.selectLogsDirectoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectCalibrationsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnViewCalibration = new System.Windows.Forms.Button();
             this.gbExperiment.SuspendLayout();
-            this.gbPID.SuspendLayout();
-            this.gmPIDParams.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDGain)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPGain)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudIGain)).BeginInit();
-            this.gbTargetTemp.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTargetT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpTime)).BeginInit();
+            this.gbPID.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTargetTemp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDiffGain)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntGain)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPropGain)).BeginInit();
             this.gbSensor.SuspendLayout();
             this.menuMain.SuspendLayout();
             this.gbCalibration.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // txtExpDir
             // 
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.tbTempFilePath);
-            this.groupBox1.Controls.Add(this.btnSelectTempPath);
-            this.groupBox1.Controls.Add(this.txtTempFileName);
-            this.groupBox1.Location = new System.Drawing.Point(148, 527);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(486, 78);
-            this.groupBox1.TabIndex = 36;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Save Temperature Data";
+            this.txtExpDir.Location = new System.Drawing.Point(60, 46);
+            this.txtExpDir.Name = "txtExpDir";
+            this.txtExpDir.Size = new System.Drawing.Size(246, 20);
+            this.txtExpDir.TabIndex = 16;
             // 
-            // button2
+            // btnSelectDir
             // 
-            this.button2.Location = new System.Drawing.Point(6, 46);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(115, 23);
-            this.button2.TabIndex = 17;
-            this.button2.Text = "File Name";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // tbTempFilePath
-            // 
-            this.tbTempFilePath.Location = new System.Drawing.Point(127, 19);
-            this.tbTempFilePath.Name = "tbTempFilePath";
-            this.tbTempFilePath.Size = new System.Drawing.Size(352, 20);
-            this.tbTempFilePath.TabIndex = 16;
-            // 
-            // btnSelectTempPath
-            // 
-            this.btnSelectTempPath.Location = new System.Drawing.Point(6, 17);
-            this.btnSelectTempPath.Name = "btnSelectTempPath";
-            this.btnSelectTempPath.Size = new System.Drawing.Size(115, 23);
-            this.btnSelectTempPath.TabIndex = 18;
-            this.btnSelectTempPath.Text = "Select Path";
-            this.btnSelectTempPath.UseVisualStyleBackColor = true;
-            this.btnSelectTempPath.Click += new System.EventHandler(this.BtnSelectTempPath_Click);
+            this.btnSelectDir.Location = new System.Drawing.Point(312, 44);
+            this.btnSelectDir.Name = "btnSelectDir";
+            this.btnSelectDir.Size = new System.Drawing.Size(100, 23);
+            this.btnSelectDir.TabIndex = 18;
+            this.btnSelectDir.Text = "Select Directory";
+            this.btnSelectDir.UseVisualStyleBackColor = true;
+            this.btnSelectDir.Click += new System.EventHandler(this.BtnSelectTempPath_Click);
             // 
             // txtTempFileName
             // 
-            this.txtTempFileName.Location = new System.Drawing.Point(127, 48);
+            this.txtTempFileName.Location = new System.Drawing.Point(60, 73);
             this.txtTempFileName.Name = "txtTempFileName";
-            this.txtTempFileName.Size = new System.Drawing.Size(352, 20);
+            this.txtTempFileName.Size = new System.Drawing.Size(246, 20);
             this.txtTempFileName.TabIndex = 19;
             // 
             // pltObjTemp
             // 
-            this.pltObjTemp.Location = new System.Drawing.Point(504, 12);
+            this.pltObjTemp.Location = new System.Drawing.Point(436, 27);
             this.pltObjTemp.Name = "pltObjTemp";
             this.pltObjTemp.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.pltObjTemp.Size = new System.Drawing.Size(433, 240);
@@ -160,281 +132,82 @@
             // 
             // gbExperiment
             // 
-            this.gbExperiment.Controls.Add(this.gbPID);
-            this.gbExperiment.Controls.Add(this.label26);
-            this.gbExperiment.Controls.Add(this.nudExpTime);
-            this.gbExperiment.Controls.Add(this.label25);
-            this.gbExperiment.Controls.Add(this.txtExpTime);
-            this.gbExperiment.Controls.Add(this.rbOnlySaveTemp);
+            this.gbExperiment.Controls.Add(this.lblFileName);
+            this.gbExperiment.Controls.Add(this.lblFileDir);
+            this.gbExperiment.Controls.Add(this.txtTempFileName);
+            this.gbExperiment.Controls.Add(this.btnSelectDir);
+            this.gbExperiment.Controls.Add(this.cmbExperimentType);
+            this.gbExperiment.Controls.Add(this.txtExpDir);
+            this.gbExperiment.Controls.Add(this.lblExpTime);
             this.gbExperiment.Controls.Add(this.txtExperimentStarted);
+            this.gbExperiment.Controls.Add(this.nudExpTime);
+            this.gbExperiment.Controls.Add(this.gbPID);
             this.gbExperiment.Controls.Add(this.btnStartExperiment);
-            this.gbExperiment.Controls.Add(this.cbSaveData);
-            this.gbExperiment.Controls.Add(this.rbPIDControl);
-            this.gbExperiment.Controls.Add(this.rbNoPIDControl);
-            this.gbExperiment.Location = new System.Drawing.Point(148, 160);
+            this.gbExperiment.Controls.Add(this.lblElapsedTime);
+            this.gbExperiment.Controls.Add(this.txtExpTime);
+            this.gbExperiment.Location = new System.Drawing.Point(12, 190);
             this.gbExperiment.Name = "gbExperiment";
-            this.gbExperiment.Size = new System.Drawing.Size(486, 381);
+            this.gbExperiment.Size = new System.Drawing.Size(418, 249);
             this.gbExperiment.TabIndex = 47;
             this.gbExperiment.TabStop = false;
             this.gbExperiment.Text = "Experiment";
             // 
-            // gbPID
+            // lblFileName
             // 
-            this.gbPID.Controls.Add(this.gmPIDParams);
-            this.gbPID.Controls.Add(this.txtbPIDTime);
-            this.gbPID.Controls.Add(this.label31);
-            this.gbPID.Controls.Add(this.gbTargetTemp);
-            this.gbPID.Controls.Add(this.txtPIDStatus);
-            this.gbPID.Controls.Add(this.bPIDStart);
-            this.gbPID.Location = new System.Drawing.Point(12, 19);
-            this.gbPID.Name = "gbPID";
-            this.gbPID.Size = new System.Drawing.Size(474, 224);
-            this.gbPID.TabIndex = 73;
-            this.gbPID.TabStop = false;
-            this.gbPID.Text = "PID control";
-            this.gbPID.Visible = false;
+            this.lblFileName.AutoSize = true;
+            this.lblFileName.Location = new System.Drawing.Point(6, 76);
+            this.lblFileName.Name = "lblFileName";
+            this.lblFileName.Size = new System.Drawing.Size(54, 13);
+            this.lblFileName.TabIndex = 84;
+            this.lblFileName.Text = "File Name";
             // 
-            // gmPIDParams
+            // lblFileDir
             // 
-            this.gmPIDParams.Controls.Add(this.label24);
-            this.gmPIDParams.Controls.Add(this.label21);
-            this.gmPIDParams.Controls.Add(this.txtCalcCurrent);
-            this.gmPIDParams.Controls.Add(this.nudDGain);
-            this.gmPIDParams.Controls.Add(this.label16);
-            this.gmPIDParams.Controls.Add(this.label18);
-            this.gmPIDParams.Controls.Add(this.nudPGain);
-            this.gmPIDParams.Controls.Add(this.nudIGain);
-            this.gmPIDParams.Controls.Add(this.label17);
-            this.gmPIDParams.Location = new System.Drawing.Point(6, 111);
-            this.gmPIDParams.Name = "gmPIDParams";
-            this.gmPIDParams.Size = new System.Drawing.Size(462, 107);
-            this.gmPIDParams.TabIndex = 29;
-            this.gmPIDParams.TabStop = false;
-            this.gmPIDParams.Text = "PID parameters";
+            this.lblFileDir.AutoSize = true;
+            this.lblFileDir.Location = new System.Drawing.Point(6, 49);
+            this.lblFileDir.Name = "lblFileDir";
+            this.lblFileDir.Size = new System.Drawing.Size(49, 13);
+            this.lblFileDir.TabIndex = 83;
+            this.lblFileDir.Text = "Directory";
             // 
-            // label24
+            // cmbExperimentType
             // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(436, 79);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(14, 13);
-            this.label24.TabIndex = 22;
-            this.label24.Text = "A";
+            this.cmbExperimentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbExperimentType.FormattingEnabled = true;
+            this.cmbExperimentType.Items.AddRange(new object[] {
+            "Full Power PTT",
+            "PID Controlled PTT"});
+            this.cmbExperimentType.Location = new System.Drawing.Point(6, 19);
+            this.cmbExperimentType.Name = "cmbExperimentType";
+            this.cmbExperimentType.Size = new System.Drawing.Size(406, 21);
+            this.cmbExperimentType.TabIndex = 79;
+            this.cmbExperimentType.SelectedIndexChanged += new System.EventHandler(this.cmbExperimentType_SelectedIndexChanged);
             // 
-            // label21
+            // lblExpTime
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(237, 79);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(94, 13);
-            this.label21.TabIndex = 28;
-            this.label21.Text = "Calculated Current";
+            this.lblExpTime.AutoSize = true;
+            this.lblExpTime.Location = new System.Drawing.Point(8, 103);
+            this.lblExpTime.Name = "lblExpTime";
+            this.lblExpTime.Size = new System.Drawing.Size(52, 13);
+            this.lblExpTime.TabIndex = 82;
+            this.lblExpTime.Text = "Time, min";
             // 
-            // txtCalcCurrent
+            // txtExperimentStarted
             // 
-            this.txtCalcCurrent.Location = new System.Drawing.Point(335, 76);
-            this.txtCalcCurrent.Name = "txtCalcCurrent";
-            this.txtCalcCurrent.ReadOnly = true;
-            this.txtCalcCurrent.Size = new System.Drawing.Size(101, 20);
-            this.txtCalcCurrent.TabIndex = 21;
-            this.txtCalcCurrent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // nudDGain
-            // 
-            this.nudDGain.Location = new System.Drawing.Point(105, 75);
-            this.nudDGain.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudDGain.Minimum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            -2147483648});
-            this.nudDGain.Name = "nudDGain";
-            this.nudDGain.Size = new System.Drawing.Size(118, 20);
-            this.nudDGain.TabIndex = 26;
-            this.nudDGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudDGain.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(7, 26);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(88, 13);
-            this.label16.TabIndex = 22;
-            this.label16.Text = "Proportional Gain";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(7, 79);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(82, 13);
-            this.label18.TabIndex = 27;
-            this.label18.Text = "Differential Gain";
-            // 
-            // nudPGain
-            // 
-            this.nudPGain.Location = new System.Drawing.Point(105, 23);
-            this.nudPGain.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudPGain.Minimum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            -2147483648});
-            this.nudPGain.Name = "nudPGain";
-            this.nudPGain.Size = new System.Drawing.Size(118, 20);
-            this.nudPGain.TabIndex = 23;
-            this.nudPGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudPGain.Value = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            // 
-            // nudIGain
-            // 
-            this.nudIGain.Location = new System.Drawing.Point(105, 49);
-            this.nudIGain.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudIGain.Minimum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            -2147483648});
-            this.nudIGain.Name = "nudIGain";
-            this.nudIGain.Size = new System.Drawing.Size(118, 20);
-            this.nudIGain.TabIndex = 24;
-            this.nudIGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudIGain.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(7, 53);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(67, 13);
-            this.label17.TabIndex = 25;
-            this.label17.Text = "Integral Gain";
-            // 
-            // txtbPIDTime
-            // 
-            this.txtbPIDTime.Location = new System.Drawing.Point(114, 84);
-            this.txtbPIDTime.Name = "txtbPIDTime";
-            this.txtbPIDTime.ReadOnly = true;
-            this.txtbPIDTime.Size = new System.Drawing.Size(118, 20);
-            this.txtbPIDTime.TabIndex = 24;
-            this.txtbPIDTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(13, 87);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(73, 13);
-            this.label31.TabIndex = 23;
-            this.label31.Text = "Running Time";
-            // 
-            // gbTargetTemp
-            // 
-            this.gbTargetTemp.Controls.Add(this.label19);
-            this.gbTargetTemp.Controls.Add(this.cbUseCalObjTemp);
-            this.gbTargetTemp.Controls.Add(this.nudTargetT);
-            this.gbTargetTemp.Location = new System.Drawing.Point(237, 23);
-            this.gbTargetTemp.Name = "gbTargetTemp";
-            this.gbTargetTemp.Size = new System.Drawing.Size(231, 82);
-            this.gbTargetTemp.TabIndex = 28;
-            this.gbTargetTemp.TabStop = false;
-            this.gbTargetTemp.Text = "Target Temperature";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(6, 48);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(67, 13);
-            this.label19.TabIndex = 29;
-            this.label19.Text = "Temperature";
-            // 
-            // cbUseCalObjTemp
-            // 
-            this.cbUseCalObjTemp.AutoSize = true;
-            this.cbUseCalObjTemp.Checked = true;
-            this.cbUseCalObjTemp.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbUseCalObjTemp.Location = new System.Drawing.Point(6, 21);
-            this.cbUseCalObjTemp.Name = "cbUseCalObjTemp";
-            this.cbUseCalObjTemp.Size = new System.Drawing.Size(192, 17);
-            this.cbUseCalObjTemp.TabIndex = 30;
-            this.cbUseCalObjTemp.Text = "Use Calibrated Object Temperature";
-            this.cbUseCalObjTemp.UseVisualStyleBackColor = true;
-            // 
-            // nudTargetT
-            // 
-            this.nudTargetT.DecimalPlaces = 1;
-            this.nudTargetT.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.nudTargetT.Location = new System.Drawing.Point(107, 44);
-            this.nudTargetT.Name = "nudTargetT";
-            this.nudTargetT.Size = new System.Drawing.Size(118, 20);
-            this.nudTargetT.TabIndex = 28;
-            this.nudTargetT.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // txtPIDStatus
-            // 
-            this.txtPIDStatus.BackColor = System.Drawing.Color.Red;
-            this.txtPIDStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPIDStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtPIDStatus.Location = new System.Drawing.Point(13, 57);
-            this.txtPIDStatus.Name = "txtPIDStatus";
-            this.txtPIDStatus.ReadOnly = true;
-            this.txtPIDStatus.Size = new System.Drawing.Size(219, 20);
-            this.txtPIDStatus.TabIndex = 21;
-            this.txtPIDStatus.Text = "PID Control Off";
-            this.txtPIDStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // bPIDStart
-            // 
-            this.bPIDStart.Location = new System.Drawing.Point(13, 23);
-            this.bPIDStart.Name = "bPIDStart";
-            this.bPIDStart.Size = new System.Drawing.Size(219, 28);
-            this.bPIDStart.TabIndex = 0;
-            this.bPIDStart.Text = "Start PID Control";
-            this.bPIDStart.UseVisualStyleBackColor = true;
-            this.bPIDStart.Click += new System.EventHandler(this.BtnPIDStart_Click);
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(317, 261);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(30, 13);
-            this.label26.TabIndex = 82;
-            this.label26.Text = "Time";
+            this.txtExperimentStarted.BackColor = System.Drawing.Color.Red;
+            this.txtExperimentStarted.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtExperimentStarted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtExperimentStarted.Location = new System.Drawing.Point(221, 224);
+            this.txtExperimentStarted.Name = "txtExperimentStarted";
+            this.txtExperimentStarted.ReadOnly = true;
+            this.txtExperimentStarted.Size = new System.Drawing.Size(191, 20);
+            this.txtExperimentStarted.TabIndex = 76;
+            this.txtExperimentStarted.Text = "Experiment Not Started";
+            this.txtExperimentStarted.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // nudExpTime
             // 
-            this.nudExpTime.Location = new System.Drawing.Point(353, 257);
+            this.nudExpTime.Location = new System.Drawing.Point(106, 99);
             this.nudExpTime.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -446,101 +219,245 @@
             0,
             -2147483648});
             this.nudExpTime.Name = "nudExpTime";
-            this.nudExpTime.Size = new System.Drawing.Size(98, 20);
+            this.nudExpTime.Size = new System.Drawing.Size(94, 20);
             this.nudExpTime.TabIndex = 79;
             this.nudExpTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudExpTime.Value = new decimal(new int[] {
-            11,
+            10,
             0,
             0,
             0});
             // 
-            // label25
+            // gbPID
             // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(457, 261);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(24, 13);
-            this.label25.TabIndex = 81;
-            this.label25.Text = "Min";
+            this.gbPID.Controls.Add(this.lblTargetTemp);
+            this.gbPID.Controls.Add(this.nudTargetTemp);
+            this.gbPID.Controls.Add(this.nudDiffGain);
+            this.gbPID.Controls.Add(this.lblPropGain);
+            this.gbPID.Controls.Add(this.lblRelativePower);
+            this.gbPID.Controls.Add(this.txtRelativePower);
+            this.gbPID.Controls.Add(this.nudIntGain);
+            this.gbPID.Controls.Add(this.lblDiffGain);
+            this.gbPID.Controls.Add(this.lblIntGain);
+            this.gbPID.Controls.Add(this.nudPropGain);
+            this.gbPID.Location = new System.Drawing.Point(6, 125);
+            this.gbPID.Name = "gbPID";
+            this.gbPID.Size = new System.Drawing.Size(406, 90);
+            this.gbPID.TabIndex = 73;
+            this.gbPID.TabStop = false;
+            this.gbPID.Text = "PID control";
+            this.gbPID.Visible = false;
             // 
-            // txtExpTime
+            // lblTargetTemp
             // 
-            this.txtExpTime.Location = new System.Drawing.Point(353, 257);
-            this.txtExpTime.Name = "txtExpTime";
-            this.txtExpTime.ReadOnly = true;
-            this.txtExpTime.Size = new System.Drawing.Size(98, 20);
-            this.txtExpTime.TabIndex = 80;
-            this.txtExpTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.txtExpTime.Visible = false;
+            this.lblTargetTemp.AutoSize = true;
+            this.lblTargetTemp.Location = new System.Drawing.Point(6, 35);
+            this.lblTargetTemp.Name = "lblTargetTemp";
+            this.lblTargetTemp.Size = new System.Drawing.Size(67, 26);
+            this.lblTargetTemp.TabIndex = 84;
+            this.lblTargetTemp.Text = "Target\nTemperature";
             // 
-            // rbOnlySaveTemp
+            // nudTargetTemp
             // 
-            this.rbOnlySaveTemp.AutoSize = true;
-            this.rbOnlySaveTemp.Checked = true;
-            this.rbOnlySaveTemp.Location = new System.Drawing.Point(136, 252);
-            this.rbOnlySaveTemp.Name = "rbOnlySaveTemp";
-            this.rbOnlySaveTemp.Size = new System.Drawing.Size(137, 17);
-            this.rbOnlySaveTemp.TabIndex = 78;
-            this.rbOnlySaveTemp.TabStop = true;
-            this.rbOnlySaveTemp.Text = "Only Save Temperature";
-            this.rbOnlySaveTemp.UseVisualStyleBackColor = true;
+            this.nudTargetTemp.Location = new System.Drawing.Point(100, 39);
+            this.nudTargetTemp.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudTargetTemp.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.nudTargetTemp.Name = "nudTargetTemp";
+            this.nudTargetTemp.Size = new System.Drawing.Size(94, 20);
+            this.nudTargetTemp.TabIndex = 83;
+            this.nudTargetTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudTargetTemp.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
             // 
-            // txtExperimentStarted
+            // nudDiffGain
             // 
-            this.txtExperimentStarted.BackColor = System.Drawing.Color.Red;
-            this.txtExperimentStarted.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtExperimentStarted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtExperimentStarted.Location = new System.Drawing.Point(255, 355);
-            this.txtExperimentStarted.Name = "txtExperimentStarted";
-            this.txtExperimentStarted.ReadOnly = true;
-            this.txtExperimentStarted.Size = new System.Drawing.Size(219, 20);
-            this.txtExperimentStarted.TabIndex = 76;
-            this.txtExperimentStarted.Text = "Experiment Not Started";
-            this.txtExperimentStarted.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudDiffGain.Location = new System.Drawing.Point(306, 65);
+            this.nudDiffGain.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudDiffGain.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.nudDiffGain.Name = "nudDiffGain";
+            this.nudDiffGain.Size = new System.Drawing.Size(94, 20);
+            this.nudDiffGain.TabIndex = 26;
+            this.nudDiffGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudDiffGain.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // lblPropGain
+            // 
+            this.lblPropGain.AutoSize = true;
+            this.lblPropGain.Location = new System.Drawing.Point(212, 16);
+            this.lblPropGain.Name = "lblPropGain";
+            this.lblPropGain.Size = new System.Drawing.Size(88, 13);
+            this.lblPropGain.TabIndex = 22;
+            this.lblPropGain.Text = "Proportional Gain";
+            // 
+            // lblRelativePower
+            // 
+            this.lblRelativePower.AutoSize = true;
+            this.lblRelativePower.Location = new System.Drawing.Point(6, 67);
+            this.lblRelativePower.Name = "lblRelativePower";
+            this.lblRelativePower.Size = new System.Drawing.Size(79, 13);
+            this.lblRelativePower.TabIndex = 28;
+            this.lblRelativePower.Text = "Relative Power";
+            // 
+            // txtRelativePower
+            // 
+            this.txtRelativePower.Location = new System.Drawing.Point(100, 64);
+            this.txtRelativePower.Name = "txtRelativePower";
+            this.txtRelativePower.ReadOnly = true;
+            this.txtRelativePower.Size = new System.Drawing.Size(94, 20);
+            this.txtRelativePower.TabIndex = 21;
+            this.txtRelativePower.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // nudIntGain
+            // 
+            this.nudIntGain.Location = new System.Drawing.Point(306, 39);
+            this.nudIntGain.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudIntGain.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.nudIntGain.Name = "nudIntGain";
+            this.nudIntGain.Size = new System.Drawing.Size(94, 20);
+            this.nudIntGain.TabIndex = 24;
+            this.nudIntGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudIntGain.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // lblDiffGain
+            // 
+            this.lblDiffGain.AutoSize = true;
+            this.lblDiffGain.Location = new System.Drawing.Point(212, 67);
+            this.lblDiffGain.Name = "lblDiffGain";
+            this.lblDiffGain.Size = new System.Drawing.Size(82, 13);
+            this.lblDiffGain.TabIndex = 27;
+            this.lblDiffGain.Text = "Differential Gain";
+            // 
+            // lblIntGain
+            // 
+            this.lblIntGain.AutoSize = true;
+            this.lblIntGain.Location = new System.Drawing.Point(212, 41);
+            this.lblIntGain.Name = "lblIntGain";
+            this.lblIntGain.Size = new System.Drawing.Size(67, 13);
+            this.lblIntGain.TabIndex = 25;
+            this.lblIntGain.Text = "Integral Gain";
+            // 
+            // nudPropGain
+            // 
+            this.nudPropGain.Location = new System.Drawing.Point(306, 13);
+            this.nudPropGain.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudPropGain.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.nudPropGain.Name = "nudPropGain";
+            this.nudPropGain.Size = new System.Drawing.Size(94, 20);
+            this.nudPropGain.TabIndex = 23;
+            this.nudPropGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudPropGain.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
             // 
             // btnStartExperiment
             // 
-            this.btnStartExperiment.Location = new System.Drawing.Point(255, 322);
+            this.btnStartExperiment.Location = new System.Drawing.Point(6, 221);
             this.btnStartExperiment.Name = "btnStartExperiment";
-            this.btnStartExperiment.Size = new System.Drawing.Size(219, 28);
+            this.btnStartExperiment.Size = new System.Drawing.Size(194, 23);
             this.btnStartExperiment.TabIndex = 77;
             this.btnStartExperiment.Text = "Start Experiment";
             this.btnStartExperiment.UseVisualStyleBackColor = true;
             this.btnStartExperiment.Click += new System.EventHandler(this.BtnStartExperiment_Click);
             // 
-            // cbSaveData
+            // lblElapsedTime
             // 
-            this.cbSaveData.AutoSize = true;
-            this.cbSaveData.Checked = true;
-            this.cbSaveData.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbSaveData.Location = new System.Drawing.Point(313, 283);
-            this.cbSaveData.Name = "cbSaveData";
-            this.cbSaveData.Size = new System.Drawing.Size(108, 17);
-            this.cbSaveData.TabIndex = 73;
-            this.cbSaveData.Text = "Save Data to File";
-            this.cbSaveData.UseVisualStyleBackColor = true;
+            this.lblElapsedTime.AutoSize = true;
+            this.lblElapsedTime.Location = new System.Drawing.Point(218, 102);
+            this.lblElapsedTime.Name = "lblElapsedTime";
+            this.lblElapsedTime.Size = new System.Drawing.Size(71, 13);
+            this.lblElapsedTime.TabIndex = 81;
+            this.lblElapsedTime.Text = "Elapsed Time";
             // 
-            // rbPIDControl
+            // txtExpTime
             // 
-            this.rbPIDControl.AutoSize = true;
-            this.rbPIDControl.Location = new System.Drawing.Point(24, 281);
-            this.rbPIDControl.Name = "rbPIDControl";
-            this.rbPIDControl.Size = new System.Drawing.Size(79, 17);
-            this.rbPIDControl.TabIndex = 75;
-            this.rbPIDControl.Text = "PID Control";
-            this.rbPIDControl.UseVisualStyleBackColor = true;
-            this.rbPIDControl.CheckedChanged += new System.EventHandler(this.RbPIDControl_CheckedChanged);
+            this.txtExpTime.Location = new System.Drawing.Point(312, 99);
+            this.txtExpTime.Name = "txtExpTime";
+            this.txtExpTime.ReadOnly = true;
+            this.txtExpTime.Size = new System.Drawing.Size(94, 20);
+            this.txtExpTime.TabIndex = 80;
+            this.txtExpTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtExpTime.Visible = false;
             // 
-            // rbNoPIDControl
+            // lblCalibratedTemperature
             // 
-            this.rbNoPIDControl.AutoSize = true;
-            this.rbNoPIDControl.Location = new System.Drawing.Point(24, 252);
-            this.rbNoPIDControl.Name = "rbNoPIDControl";
-            this.rbNoPIDControl.Size = new System.Drawing.Size(96, 17);
-            this.rbNoPIDControl.TabIndex = 74;
-            this.rbNoPIDControl.Text = "Simple Heating";
-            this.rbNoPIDControl.UseVisualStyleBackColor = true;
+            this.lblCalibratedTemperature.AutoSize = true;
+            this.lblCalibratedTemperature.Location = new System.Drawing.Point(206, 72);
+            this.lblCalibratedTemperature.Name = "lblCalibratedTemperature";
+            this.lblCalibratedTemperature.Size = new System.Drawing.Size(67, 26);
+            this.lblCalibratedTemperature.TabIndex = 83;
+            this.lblCalibratedTemperature.Text = "Calibrated\nTemperature";
+            // 
+            // lblSensorTemp
+            // 
+            this.lblSensorTemp.AutoSize = true;
+            this.lblSensorTemp.Location = new System.Drawing.Point(6, 72);
+            this.lblSensorTemp.Name = "lblSensorTemp";
+            this.lblSensorTemp.Size = new System.Drawing.Size(67, 26);
+            this.lblSensorTemp.TabIndex = 82;
+            this.lblSensorTemp.Text = "Sensor\nTemperature";
+            // 
+            // txtCalibratedTemp
+            // 
+            this.txtCalibratedTemp.Location = new System.Drawing.Point(312, 75);
+            this.txtCalibratedTemp.Name = "txtCalibratedTemp";
+            this.txtCalibratedTemp.ReadOnly = true;
+            this.txtCalibratedTemp.Size = new System.Drawing.Size(100, 20);
+            this.txtCalibratedTemp.TabIndex = 81;
+            this.txtCalibratedTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // txtSensorTemp
+            // 
+            this.txtSensorTemp.Location = new System.Drawing.Point(106, 75);
+            this.txtSensorTemp.Name = "txtSensorTemp";
+            this.txtSensorTemp.ReadOnly = true;
+            this.txtSensorTemp.Size = new System.Drawing.Size(94, 20);
+            this.txtSensorTemp.TabIndex = 80;
+            this.txtSensorTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // gbSensor
             // 
@@ -556,7 +473,7 @@
             // 
             // btnStartSensor
             // 
-            this.btnStartSensor.Location = new System.Drawing.Point(206, 18);
+            this.btnStartSensor.Location = new System.Drawing.Point(312, 18);
             this.btnStartSensor.Name = "btnStartSensor";
             this.btnStartSensor.Size = new System.Drawing.Size(100, 23);
             this.btnStartSensor.TabIndex = 62;
@@ -566,7 +483,7 @@
             // 
             // btnLoadSensor
             // 
-            this.btnLoadSensor.Location = new System.Drawing.Point(312, 18);
+            this.btnLoadSensor.Location = new System.Drawing.Point(206, 18);
             this.btnLoadSensor.Name = "btnLoadSensor";
             this.btnLoadSensor.Size = new System.Drawing.Size(100, 23);
             this.btnLoadSensor.TabIndex = 60;
@@ -582,15 +499,6 @@
             this.cmbSensors.Size = new System.Drawing.Size(194, 21);
             this.cmbSensors.TabIndex = 57;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(690, 384);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 13);
-            this.label1.TabIndex = 56;
-            this.label1.Text = "Select Sensor:";
-            // 
             // cbNoCalibration
             // 
             this.cbNoCalibration.AutoSize = true;
@@ -600,16 +508,7 @@
             this.cbNoCalibration.TabIndex = 54;
             this.cbNoCalibration.Text = "Do not use calibration";
             this.cbNoCalibration.UseVisualStyleBackColor = true;
-            // 
-            // btnCalibration
-            // 
-            this.btnCalibration.Location = new System.Drawing.Point(666, 508);
-            this.btnCalibration.Name = "btnCalibration";
-            this.btnCalibration.Size = new System.Drawing.Size(219, 30);
-            this.btnCalibration.TabIndex = 51;
-            this.btnCalibration.Text = "Calibration";
-            this.btnCalibration.UseVisualStyleBackColor = true;
-            this.btnCalibration.Click += new System.EventHandler(this.BtnCalibration_Click);
+            this.cbNoCalibration.CheckedChanged += new System.EventHandler(this.cbNoCalibration_CheckedChanged);
             // 
             // label2
             // 
@@ -653,10 +552,11 @@
             // menuMain
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.appSettingsToolStripMenuItem});
+            this.appSettingsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(945, 24);
+            this.menuMain.Size = new System.Drawing.Size(879, 24);
             this.menuMain.TabIndex = 51;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -666,7 +566,9 @@
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.loadToolStripMenuItem,
-            this.saveCurrentSettingsWhenClosingToolStripMenuItem});
+            this.saveCurrentSettingsWhenClosingToolStripMenuItem,
+            this.selectLogsDirectoryToolStripMenuItem1,
+            this.selectCalibrationsDirectoryToolStripMenuItem});
             this.appSettingsToolStripMenuItem.Name = "appSettingsToolStripMenuItem";
             this.appSettingsToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
             this.appSettingsToolStripMenuItem.Text = "App Settings";
@@ -698,26 +600,45 @@
             this.saveCurrentSettingsWhenClosingToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
             this.saveCurrentSettingsWhenClosingToolStripMenuItem.Text = "Save current settings when closing";
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutControlledPTTToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutControlledPTTToolStripMenuItem
+            // 
+            this.aboutControlledPTTToolStripMenuItem.Name = "aboutControlledPTTToolStripMenuItem";
+            this.aboutControlledPTTToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.aboutControlledPTTToolStripMenuItem.Text = "About Controlled PTT";
+            // 
             // gbCalibration
             // 
+            this.gbCalibration.Controls.Add(this.btnViewCalibration);
+            this.gbCalibration.Controls.Add(this.lblCalibratedTemperature);
             this.gbCalibration.Controls.Add(this.btnCalibrate);
+            this.gbCalibration.Controls.Add(this.lblSensorTemp);
             this.gbCalibration.Controls.Add(this.btnLoadCalibration);
+            this.gbCalibration.Controls.Add(this.txtCalibratedTemp);
+            this.gbCalibration.Controls.Add(this.txtSensorTemp);
             this.gbCalibration.Controls.Add(this.txtCalibration);
             this.gbCalibration.Controls.Add(this.cbNoCalibration);
             this.gbCalibration.Location = new System.Drawing.Point(12, 80);
             this.gbCalibration.Name = "gbCalibration";
-            this.gbCalibration.Size = new System.Drawing.Size(418, 74);
+            this.gbCalibration.Size = new System.Drawing.Size(418, 104);
             this.gbCalibration.TabIndex = 61;
             this.gbCalibration.TabStop = false;
             this.gbCalibration.Text = "Sensor Calibration";
             // 
             // btnCalibrate
             // 
-            this.btnCalibrate.Location = new System.Drawing.Point(312, 40);
+            this.btnCalibrate.Location = new System.Drawing.Point(365, 40);
             this.btnCalibrate.Name = "btnCalibrate";
-            this.btnCalibrate.Size = new System.Drawing.Size(100, 23);
+            this.btnCalibrate.Size = new System.Drawing.Size(47, 23);
             this.btnCalibrate.TabIndex = 63;
-            this.btnCalibrate.Text = "New Calibration";
+            this.btnCalibrate.Text = "New";
             this.btnCalibrate.UseVisualStyleBackColor = true;
             // 
             // btnLoadCalibration
@@ -736,48 +657,59 @@
             this.txtCalibration.Size = new System.Drawing.Size(194, 20);
             this.txtCalibration.TabIndex = 0;
             // 
-            // selectSensorDialog
+            // ofdSelectSensor
             // 
-            this.selectSensorDialog.DefaultExt = "exe";
-            this.selectSensorDialog.Title = "Select Sensor Executable";
-            this.selectSensorDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.selectSensorDialog_FileOk);
+            this.ofdSelectSensor.DefaultExt = "exe";
+            this.ofdSelectSensor.Title = "Select Sensor Executable";
+            // 
+            // selectLogsDirectoryToolStripMenuItem1
+            // 
+            this.selectLogsDirectoryToolStripMenuItem1.Name = "selectLogsDirectoryToolStripMenuItem1";
+            this.selectLogsDirectoryToolStripMenuItem1.Size = new System.Drawing.Size(256, 22);
+            this.selectLogsDirectoryToolStripMenuItem1.Text = "Select Logs Directory";
+            // 
+            // selectCalibrationsDirectoryToolStripMenuItem
+            // 
+            this.selectCalibrationsDirectoryToolStripMenuItem.Name = "selectCalibrationsDirectoryToolStripMenuItem";
+            this.selectCalibrationsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.selectCalibrationsDirectoryToolStripMenuItem.Text = "Select Calibrations Directory";
+            // 
+            // btnViewCalibration
+            // 
+            this.btnViewCalibration.Location = new System.Drawing.Point(312, 40);
+            this.btnViewCalibration.Name = "btnViewCalibration";
+            this.btnViewCalibration.Size = new System.Drawing.Size(47, 23);
+            this.btnViewCalibration.TabIndex = 64;
+            this.btnViewCalibration.Text = "View";
+            this.btnViewCalibration.UseVisualStyleBackColor = true;
             // 
             // MainApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 868);
+            this.ClientSize = new System.Drawing.Size(879, 868);
             this.Controls.Add(this.gbCalibration);
             this.Controls.Add(this.pltAmbTemp);
             this.Controls.Add(this.pltLaserCurrent);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnCalibration);
             this.Controls.Add(this.rtbInfo);
             this.Controls.Add(this.gbExperiment);
             this.Controls.Add(this.pltObjTemp);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuMain);
             this.Controls.Add(this.gbSensor);
             this.MainMenuStrip = this.menuMain;
             this.Name = "MainApp";
             this.Text = "Controlled Photothermal Therapy 2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainApp_FormClosing);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.gbExperiment.ResumeLayout(false);
             this.gbExperiment.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudExpTime)).EndInit();
             this.gbPID.ResumeLayout(false);
             this.gbPID.PerformLayout();
-            this.gmPIDParams.ResumeLayout(false);
-            this.gmPIDParams.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDGain)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPGain)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudIGain)).EndInit();
-            this.gbTargetTemp.ResumeLayout(false);
-            this.gbTargetTemp.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTargetT)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudExpTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTargetTemp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDiffGain)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntGain)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPropGain)).EndInit();
             this.gbSensor.ResumeLayout(false);
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
@@ -789,51 +721,33 @@
         }
 
         #endregion
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox tbTempFilePath;
-        private System.Windows.Forms.Button btnSelectTempPath;
+        private System.Windows.Forms.TextBox txtExpDir;
+        private System.Windows.Forms.Button btnSelectDir;
         private System.Windows.Forms.TextBox txtTempFileName;
         private OxyPlot.WindowsForms.PlotView pltObjTemp;
         private System.Windows.Forms.GroupBox gbExperiment;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RichTextBox rtbInfo;
         private System.Windows.Forms.CheckBox cbNoCalibration;
-        private System.Windows.Forms.Button btnCalibration;
         private System.Windows.Forms.ComboBox cmbSensors;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox gbSensor;
         private OxyPlot.WindowsForms.PlotView pltLaserCurrent;
         private OxyPlot.WindowsForms.PlotView pltAmbTemp;
         private System.Windows.Forms.GroupBox gbPID;
-        private System.Windows.Forms.GroupBox gmPIDParams;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox txtCalcCurrent;
-        private System.Windows.Forms.NumericUpDown nudDGain;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.NumericUpDown nudPGain;
-        private System.Windows.Forms.NumericUpDown nudIGain;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox txtbPIDTime;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.GroupBox gbTargetTemp;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.CheckBox cbUseCalObjTemp;
-        private System.Windows.Forms.NumericUpDown nudTargetT;
-        private System.Windows.Forms.TextBox txtPIDStatus;
-        private System.Windows.Forms.Button bPIDStart;
-        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label lblRelativePower;
+        private System.Windows.Forms.TextBox txtRelativePower;
+        private System.Windows.Forms.NumericUpDown nudDiffGain;
+        private System.Windows.Forms.Label lblPropGain;
+        private System.Windows.Forms.Label lblDiffGain;
+        private System.Windows.Forms.NumericUpDown nudPropGain;
+        private System.Windows.Forms.NumericUpDown nudIntGain;
+        private System.Windows.Forms.Label lblIntGain;
+        private System.Windows.Forms.Label lblExpTime;
         private System.Windows.Forms.NumericUpDown nudExpTime;
-        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label lblElapsedTime;
         private System.Windows.Forms.TextBox txtExpTime;
-        private System.Windows.Forms.RadioButton rbOnlySaveTemp;
         private System.Windows.Forms.TextBox txtExperimentStarted;
         private System.Windows.Forms.Button btnStartExperiment;
-        private System.Windows.Forms.CheckBox cbSaveData;
-        private System.Windows.Forms.RadioButton rbPIDControl;
-        private System.Windows.Forms.RadioButton rbNoPIDControl;
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.ToolStripMenuItem appSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
@@ -846,7 +760,22 @@
         private System.Windows.Forms.Button btnCalibrate;
         private System.Windows.Forms.Button btnLoadCalibration;
         private System.Windows.Forms.Button btnStartSensor;
-        private System.Windows.Forms.OpenFileDialog selectSensorDialog;
+        private System.Windows.Forms.OpenFileDialog ofdSelectSensor;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutControlledPTTToolStripMenuItem;
+        private System.Windows.Forms.ComboBox cmbExperimentType;
+        private System.Windows.Forms.TextBox txtCalibratedTemp;
+        private System.Windows.Forms.TextBox txtSensorTemp;
+        private System.Windows.Forms.Label lblCalibratedTemperature;
+        private System.Windows.Forms.Label lblSensorTemp;
+        private System.Windows.Forms.Label lblTargetTemp;
+        private System.Windows.Forms.NumericUpDown nudTargetTemp;
+        private System.Windows.Forms.Label lblFileDir;
+        private System.Windows.Forms.Label lblFileName;
+        private System.Windows.Forms.FolderBrowserDialog fbdSelectDir;
+        private System.Windows.Forms.ToolStripMenuItem selectLogsDirectoryToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem selectCalibrationsDirectoryToolStripMenuItem;
+        private System.Windows.Forms.Button btnViewCalibration;
     }
 }
 

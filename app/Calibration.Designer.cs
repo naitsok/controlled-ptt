@@ -1,6 +1,6 @@
 ﻿namespace MainApp
 {
-    partial class CalibrationForm
+    partial class Calibration
     {
         /// <summary>
         /// Required designer variable.
@@ -28,168 +28,46 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gbCalibration = new System.Windows.Forms.GroupBox();
-            this.gbAmbientTemp = new System.Windows.Forms.GroupBox();
-            this.cbNoAmbCalibration = new System.Windows.Forms.CheckBox();
-            this.label29 = new System.Windows.Forms.Label();
-            this.nudRealAmbTemp = new System.Windows.Forms.NumericUpDown();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.rtbAmbTemp = new System.Windows.Forms.TextBox();
-            this.rtbCalAmbTemp = new System.Windows.Forms.TextBox();
-            this.gbObjectTemp = new System.Windows.Forms.GroupBox();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.lblCalibFile = new System.Windows.Forms.Label();
+            this.txtCalibFile = new System.Windows.Forms.TextBox();
             this.nudSensorCalB = new System.Windows.Forms.NumericUpDown();
             this.label32 = new System.Windows.Forms.Label();
+            this.txtCalibratedTemp = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
-            this.cbNoObjCalibration = new System.Windows.Forms.CheckBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.rtbCalObjTemp = new System.Windows.Forms.TextBox();
-            this.nudSensorCalA = new System.Windows.Forms.NumericUpDown();
-            this.rtbObjTemp = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
+            this.txtSensorTemp = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.nudSensorCalA = new System.Windows.Forms.NumericUpDown();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.dgCalibration = new System.Windows.Forms.DataGridView();
-            this.TempSensor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTempSensor = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RealTemp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnCalculate = new System.Windows.Forms.Button();
             this.pltCalibration = new OxyPlot.WindowsForms.PlotView();
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.gbCalibration.SuspendLayout();
-            this.gbAmbientTemp.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudRealAmbTemp)).BeginInit();
-            this.gbObjectTemp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgCalibration)).BeginInit();
             this.SuspendLayout();
             // 
-            // gbCalibration
+            // lblCalibFile
             // 
-            this.gbCalibration.Controls.Add(this.gbAmbientTemp);
-            this.gbCalibration.Controls.Add(this.gbObjectTemp);
-            this.gbCalibration.Location = new System.Drawing.Point(12, 12);
-            this.gbCalibration.Name = "gbCalibration";
-            this.gbCalibration.Size = new System.Drawing.Size(232, 268);
-            this.gbCalibration.TabIndex = 35;
-            this.gbCalibration.TabStop = false;
-            this.gbCalibration.Text = "Temperature Calibration";
+            this.lblCalibFile.AutoSize = true;
+            this.lblCalibFile.Location = new System.Drawing.Point(12, 9);
+            this.lblCalibFile.Name = "lblCalibFile";
+            this.lblCalibFile.Size = new System.Drawing.Size(23, 13);
+            this.lblCalibFile.TabIndex = 47;
+            this.lblCalibFile.Text = "File";
             // 
-            // gbAmbientTemp
+            // txtCalibFile
             // 
-            this.gbAmbientTemp.Controls.Add(this.cbNoAmbCalibration);
-            this.gbAmbientTemp.Controls.Add(this.label29);
-            this.gbAmbientTemp.Controls.Add(this.nudRealAmbTemp);
-            this.gbAmbientTemp.Controls.Add(this.label28);
-            this.gbAmbientTemp.Controls.Add(this.label20);
-            this.gbAmbientTemp.Controls.Add(this.rtbAmbTemp);
-            this.gbAmbientTemp.Controls.Add(this.rtbCalAmbTemp);
-            this.gbAmbientTemp.Location = new System.Drawing.Point(6, 19);
-            this.gbAmbientTemp.Name = "gbAmbientTemp";
-            this.gbAmbientTemp.Size = new System.Drawing.Size(215, 118);
-            this.gbAmbientTemp.TabIndex = 29;
-            this.gbAmbientTemp.TabStop = false;
-            this.gbAmbientTemp.Text = "Ambient Temperature";
-            // 
-            // cbNoAmbCalibration
-            // 
-            this.cbNoAmbCalibration.AutoSize = true;
-            this.cbNoAmbCalibration.Checked = true;
-            this.cbNoAmbCalibration.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbNoAmbCalibration.Location = new System.Drawing.Point(6, 19);
-            this.cbNoAmbCalibration.Name = "cbNoAmbCalibration";
-            this.cbNoAmbCalibration.Size = new System.Drawing.Size(92, 17);
-            this.cbNoAmbCalibration.TabIndex = 32;
-            this.cbNoAmbCalibration.Text = "No Calibration";
-            this.cbNoAmbCalibration.UseVisualStyleBackColor = true;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(6, 95);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(54, 13);
-            this.label29.TabIndex = 31;
-            this.label29.Text = "Calibrated";
-            // 
-            // nudRealAmbTemp
-            // 
-            this.nudRealAmbTemp.DecimalPlaces = 6;
-            this.nudRealAmbTemp.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.nudRealAmbTemp.Location = new System.Drawing.Point(73, 66);
-            this.nudRealAmbTemp.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudRealAmbTemp.Minimum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            -2147483648});
-            this.nudRealAmbTemp.Name = "nudRealAmbTemp";
-            this.nudRealAmbTemp.Size = new System.Drawing.Size(136, 20);
-            this.nudRealAmbTemp.TabIndex = 31;
-            this.nudRealAmbTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(6, 66);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(29, 13);
-            this.label28.TabIndex = 31;
-            this.label28.Text = "Real";
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(8, 42);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(40, 13);
-            this.label20.TabIndex = 31;
-            this.label20.Text = "Sensor";
-            // 
-            // rtbAmbTemp
-            // 
-            this.rtbAmbTemp.Location = new System.Drawing.Point(73, 39);
-            this.rtbAmbTemp.Name = "rtbAmbTemp";
-            this.rtbAmbTemp.ReadOnly = true;
-            this.rtbAmbTemp.Size = new System.Drawing.Size(136, 20);
-            this.rtbAmbTemp.TabIndex = 21;
-            this.rtbAmbTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // rtbCalAmbTemp
-            // 
-            this.rtbCalAmbTemp.Location = new System.Drawing.Point(73, 92);
-            this.rtbCalAmbTemp.Name = "rtbCalAmbTemp";
-            this.rtbCalAmbTemp.ReadOnly = true;
-            this.rtbCalAmbTemp.Size = new System.Drawing.Size(136, 20);
-            this.rtbCalAmbTemp.TabIndex = 26;
-            this.rtbCalAmbTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // gbObjectTemp
-            // 
-            this.gbObjectTemp.Controls.Add(this.nudSensorCalB);
-            this.gbObjectTemp.Controls.Add(this.label32);
-            this.gbObjectTemp.Controls.Add(this.label23);
-            this.gbObjectTemp.Controls.Add(this.cbNoObjCalibration);
-            this.gbObjectTemp.Controls.Add(this.label27);
-            this.gbObjectTemp.Controls.Add(this.rtbCalObjTemp);
-            this.gbObjectTemp.Controls.Add(this.nudSensorCalA);
-            this.gbObjectTemp.Controls.Add(this.rtbObjTemp);
-            this.gbObjectTemp.Controls.Add(this.label22);
-            this.gbObjectTemp.Location = new System.Drawing.Point(6, 143);
-            this.gbObjectTemp.Name = "gbObjectTemp";
-            this.gbObjectTemp.Size = new System.Drawing.Size(215, 118);
-            this.gbObjectTemp.TabIndex = 28;
-            this.gbObjectTemp.TabStop = false;
-            this.gbObjectTemp.Text = "Object Temperature";
+            this.txtCalibFile.Location = new System.Drawing.Point(12, 25);
+            this.txtCalibFile.Name = "txtCalibFile";
+            this.txtCalibFile.Size = new System.Drawing.Size(243, 20);
+            this.txtCalibFile.TabIndex = 47;
             // 
             // nudSensorCalB
             // 
@@ -199,7 +77,7 @@
             0,
             0,
             65536});
-            this.nudSensorCalB.Location = new System.Drawing.Point(144, 67);
+            this.nudSensorCalB.Location = new System.Drawing.Point(165, 77);
             this.nudSensorCalB.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -211,7 +89,7 @@
             0,
             -2147483648});
             this.nudSensorCalB.Name = "nudSensorCalB";
-            this.nudSensorCalB.Size = new System.Drawing.Size(64, 20);
+            this.nudSensorCalB.Size = new System.Drawing.Size(90, 20);
             this.nudSensorCalB.TabIndex = 36;
             this.nudSensorCalB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudSensorCalB.ValueChanged += new System.EventHandler(this.NudSensorCalB_ValueChanged);
@@ -219,48 +97,56 @@
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(108, 70);
+            this.label32.Location = new System.Drawing.Point(130, 80);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(33, 13);
             this.label32.TabIndex = 35;
             this.label32.Text = "* X + ";
             // 
+            // txtCalibratedTemp
+            // 
+            this.txtCalibratedTemp.Location = new System.Drawing.Point(145, 103);
+            this.txtCalibratedTemp.Name = "txtCalibratedTemp";
+            this.txtCalibratedTemp.ReadOnly = true;
+            this.txtCalibratedTemp.Size = new System.Drawing.Size(110, 20);
+            this.txtCalibratedTemp.TabIndex = 25;
+            this.txtCalibratedTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(10, 69);
+            this.label23.Location = new System.Drawing.Point(12, 79);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(26, 13);
             this.label23.TabIndex = 34;
             this.label23.Text = "Y = ";
             // 
-            // cbNoObjCalibration
+            // label22
             // 
-            this.cbNoObjCalibration.AutoSize = true;
-            this.cbNoObjCalibration.Location = new System.Drawing.Point(7, 19);
-            this.cbNoObjCalibration.Name = "cbNoObjCalibration";
-            this.cbNoObjCalibration.Size = new System.Drawing.Size(92, 17);
-            this.cbNoObjCalibration.TabIndex = 33;
-            this.cbNoObjCalibration.Text = "No Calibration";
-            this.cbNoObjCalibration.UseVisualStyleBackColor = true;
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(12, 54);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(103, 13);
+            this.label22.TabIndex = 28;
+            this.label22.Text = "Sensor Temperature";
+            // 
+            // txtSensorTemp
+            // 
+            this.txtSensorTemp.Location = new System.Drawing.Point(145, 51);
+            this.txtSensorTemp.Name = "txtSensorTemp";
+            this.txtSensorTemp.ReadOnly = true;
+            this.txtSensorTemp.Size = new System.Drawing.Size(110, 20);
+            this.txtSensorTemp.TabIndex = 20;
+            this.txtSensorTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(10, 95);
+            this.label27.Location = new System.Drawing.Point(12, 106);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(54, 13);
+            this.label27.Size = new System.Drawing.Size(117, 13);
             this.label27.TabIndex = 30;
-            this.label27.Text = "Calibrated";
-            // 
-            // rtbCalObjTemp
-            // 
-            this.rtbCalObjTemp.Location = new System.Drawing.Point(73, 92);
-            this.rtbCalObjTemp.Name = "rtbCalObjTemp";
-            this.rtbCalObjTemp.ReadOnly = true;
-            this.rtbCalObjTemp.Size = new System.Drawing.Size(136, 20);
-            this.rtbCalObjTemp.TabIndex = 25;
-            this.rtbCalObjTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.label27.Text = "Calibrated Temperature";
             // 
             // nudSensorCalA
             // 
@@ -270,7 +156,7 @@
             0,
             0,
             65536});
-            this.nudSensorCalA.Location = new System.Drawing.Point(39, 66);
+            this.nudSensorCalA.Location = new System.Drawing.Point(38, 77);
             this.nudSensorCalA.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -282,34 +168,16 @@
             0,
             -2147483648});
             this.nudSensorCalA.Name = "nudSensorCalA";
-            this.nudSensorCalA.Size = new System.Drawing.Size(64, 20);
+            this.nudSensorCalA.Size = new System.Drawing.Size(90, 20);
             this.nudSensorCalA.TabIndex = 20;
             this.nudSensorCalA.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudSensorCalA.ValueChanged += new System.EventHandler(this.NudSensorCalA_ValueChanged);
             // 
-            // rtbObjTemp
-            // 
-            this.rtbObjTemp.Location = new System.Drawing.Point(73, 39);
-            this.rtbObjTemp.Name = "rtbObjTemp";
-            this.rtbObjTemp.ReadOnly = true;
-            this.rtbObjTemp.Size = new System.Drawing.Size(136, 20);
-            this.rtbObjTemp.TabIndex = 20;
-            this.rtbObjTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(10, 42);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(40, 13);
-            this.label22.TabIndex = 28;
-            this.label22.Text = "Sensor";
-            // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(73, 287);
+            this.btnSave.Location = new System.Drawing.Point(74, 287);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(55, 31);
+            this.btnSave.Size = new System.Drawing.Size(55, 23);
             this.btnSave.TabIndex = 36;
             this.btnSave.Text = "Save as";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -317,9 +185,9 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(192, 287);
+            this.btnCancel.Location = new System.Drawing.Point(196, 287);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(52, 31);
+            this.btnCancel.Size = new System.Drawing.Size(55, 23);
             this.btnCancel.TabIndex = 37;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -327,47 +195,51 @@
             // 
             // dgCalibration
             // 
+            dataGridViewCellStyle3.NullValue = null;
+            this.dgCalibration.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.dgCalibration.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            this.dgCalibration.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dgCalibration.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgCalibration.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.TempSensor,
+            this.colTempSensor,
             this.RealTemp});
-            this.dgCalibration.Location = new System.Drawing.Point(261, 21);
+            this.dgCalibration.Location = new System.Drawing.Point(261, 9);
             this.dgCalibration.MultiSelect = false;
             this.dgCalibration.Name = "dgCalibration";
-            this.dgCalibration.Size = new System.Drawing.Size(344, 259);
+            this.dgCalibration.Size = new System.Drawing.Size(270, 272);
             this.dgCalibration.TabIndex = 38;
             this.dgCalibration.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgCalibration_CellEnter);
             // 
-            // TempSensor
+            // colTempSensor
             // 
-            this.TempSensor.Frozen = true;
-            this.TempSensor.HeaderText = "Temperature from sensor";
-            this.TempSensor.Name = "TempSensor";
-            this.TempSensor.ReadOnly = true;
-            this.TempSensor.Width = 150;
+            this.colTempSensor.Frozen = true;
+            this.colTempSensor.HeaderText = "Temperature from Sensor";
+            this.colTempSensor.Name = "colTempSensor";
+            this.colTempSensor.ReadOnly = true;
+            this.colTempSensor.Width = 108;
             // 
             // RealTemp
             // 
-            this.RealTemp.HeaderText = "Real temperature";
+            this.RealTemp.HeaderText = "Correct Temperature";
             this.RealTemp.Name = "RealTemp";
-            this.RealTemp.Width = 150;
+            this.RealTemp.Width = 118;
             // 
             // btnCalculate
             // 
             this.btnCalculate.Location = new System.Drawing.Point(261, 287);
             this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(140, 31);
+            this.btnCalculate.Size = new System.Drawing.Size(270, 23);
             this.btnCalculate.TabIndex = 39;
-            this.btnCalculate.Text = "Calculate";
+            this.btnCalculate.Text = "Calculate Coefficients";
             this.btnCalculate.UseVisualStyleBackColor = true;
             this.btnCalculate.Click += new System.EventHandler(this.BtnCalculate_Click);
             // 
             // pltCalibration
             // 
-            this.pltCalibration.Location = new System.Drawing.Point(611, 12);
+            this.pltCalibration.Location = new System.Drawing.Point(537, 9);
             this.pltCalibration.Name = "pltCalibration";
             this.pltCalibration.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.pltCalibration.Size = new System.Drawing.Size(534, 305);
+            this.pltCalibration.Size = new System.Drawing.Size(534, 301);
             this.pltCalibration.TabIndex = 44;
             this.pltCalibration.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.pltCalibration.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -375,9 +247,9 @@
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(134, 287);
+            this.btnLoad.Location = new System.Drawing.Point(135, 287);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(52, 31);
+            this.btnLoad.Size = new System.Drawing.Size(55, 23);
             this.btnLoad.TabIndex = 45;
             this.btnLoad.Text = "Load";
             this.btnLoad.UseVisualStyleBackColor = true;
@@ -387,73 +259,66 @@
             // 
             this.btnOK.Location = new System.Drawing.Point(12, 287);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(55, 31);
+            this.btnOK.Size = new System.Drawing.Size(55, 23);
             this.btnOK.TabIndex = 46;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
             // 
-            // CalibrationForm
+            // Calibration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1157, 330);
+            this.ClientSize = new System.Drawing.Size(1084, 321);
+            this.Controls.Add(this.lblCalibFile);
             this.Controls.Add(this.btnOK);
+            this.Controls.Add(this.txtCalibFile);
+            this.Controls.Add(this.nudSensorCalB);
             this.Controls.Add(this.btnLoad);
+            this.Controls.Add(this.label32);
             this.Controls.Add(this.pltCalibration);
+            this.Controls.Add(this.txtCalibratedTemp);
             this.Controls.Add(this.btnCalculate);
+            this.Controls.Add(this.label23);
             this.Controls.Add(this.dgCalibration);
+            this.Controls.Add(this.label22);
             this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.txtSensorTemp);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.gbCalibration);
-            this.MaximumSize = new System.Drawing.Size(1173, 369);
-            this.MinimumSize = new System.Drawing.Size(1173, 369);
-            this.Name = "CalibrationForm";
-            this.Text = "Calibration";
+            this.Controls.Add(this.label27);
+            this.Controls.Add(this.nudSensorCalA);
+            this.MinimumSize = new System.Drawing.Size(1100, 360);
+            this.Name = "Calibration";
+            this.Text = "Sensor Calibration";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Calibration_FormClosing);
             this.Load += new System.EventHandler(this.Calibration_Load);
-            this.gbCalibration.ResumeLayout(false);
-            this.gbAmbientTemp.ResumeLayout(false);
-            this.gbAmbientTemp.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudRealAmbTemp)).EndInit();
-            this.gbObjectTemp.ResumeLayout(false);
-            this.gbObjectTemp.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgCalibration)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox gbCalibration;
-        private System.Windows.Forms.GroupBox gbAmbientTemp;
-        private System.Windows.Forms.CheckBox cbNoAmbCalibration;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.NumericUpDown nudRealAmbTemp;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.TextBox rtbAmbTemp;
-        private System.Windows.Forms.TextBox rtbCalAmbTemp;
-        private System.Windows.Forms.GroupBox gbObjectTemp;
         private System.Windows.Forms.NumericUpDown nudSensorCalB;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.TextBox rtbCalObjTemp;
+        private System.Windows.Forms.TextBox txtCalibratedTemp;
         private System.Windows.Forms.NumericUpDown nudSensorCalA;
-        private System.Windows.Forms.TextBox rtbObjTemp;
+        private System.Windows.Forms.TextBox txtSensorTemp;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.DataGridView dgCalibration;
         private System.Windows.Forms.Button btnCalculate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TempSensor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RealTemp;
         private OxyPlot.WindowsForms.PlotView pltCalibration;
         private System.Windows.Forms.Button btnLoad;
-        private System.Windows.Forms.CheckBox cbNoObjCalibration;
         private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTempSensor;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RealTemp;
+        private System.Windows.Forms.Label lblCalibFile;
+        private System.Windows.Forms.TextBox txtCalibFile;
     }
 }

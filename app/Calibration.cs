@@ -21,9 +21,16 @@ namespace MainApp
 {
     public delegate void ShowFrm();
 
-    public partial class CalibrationForm : Form
+    /// <summary>
+    /// Performs caliblration for sensor. Can save and load previous calibrations in json format.
+    /// </summary>
+    public partial class Calibration : Form
     {
-        public event ShowFrm _evtForm;
+        public string CalibrationFile { get; set; } = "";
+
+        public double CoefficientA { get; set; } = 0;
+
+        public double CoefficientB { get; set; } = 0;
 
         // Timer for calibration.
         private Timer _calTimer = new Timer()
@@ -59,7 +66,7 @@ namespace MainApp
             LegendFontWeight = 500,
             LegendFontSize = 10,
             LegendPosition = LegendPosition.LeftTop,
-            LegendTextColor = OxyColors.White
+            LegendTextColor = OxyColors.White,
         };
 
         // Scaling and setting the Graph.
@@ -109,9 +116,12 @@ namespace MainApp
             
         }
 
-        public CalibrationForm()
+        public Calibration()
         {
             InitializeComponent();
+
+
+
             _calTimer.Tick += new EventHandler(this.CalibrationTimer_Tick);
           
             // To log information.
@@ -124,15 +134,16 @@ namespace MainApp
             {
                 Title = "Sensor Temperature",
                 Position = AxisPosition.Bottom,
-                Minimum = 0,
-                Maximum = 50
+                // Minimum = 0,
+                // Maximum = 50,
+                
             }) ;
             _calibrationPlotModel.Axes.Add(new LinearAxis()
             {
                 Title = "Real Temperature",
                 Position = AxisPosition.Left,
-                Minimum = 0,
-                Maximum = 50
+                // Minimum = 0,
+                // Maximum = 50
             });
             //// Series for sensor temperature.
             _calibrationPlotModel.Series.Add(new ScatterSeries()
@@ -164,8 +175,8 @@ namespace MainApp
 
         private void CalibrationTimer_Tick(object sender, EventArgs e)
         {       
-            rtbObjTemp.Text = _objTemp.ToString();
-            rtbCalObjTemp.Text = (_sensorCalA * _objTemp + _sensorCalB).ToString();
+            txtSensorTemp.Text = _objTemp.ToString();
+            txtCalibratedTemp.Text = (_sensorCalA * _objTemp + _sensorCalB).ToString();
 
             // Sets the measured temperature from sensor to DataGrid's selected row's first index. 
             if (dgCalibration.CurrentCell != null)
@@ -180,7 +191,7 @@ namespace MainApp
             Log.Information("Calibration cancelled.");
             _calTimer.Stop();
             this.Hide();
-            _evtForm();
+            // _evtForm();
             if (_tempWriter != null)
             {
                 _tempWriter.Flush();
@@ -258,7 +269,7 @@ namespace MainApp
         private void Calibration_FormClosing(object sender, FormClosingEventArgs e)
         {
             _calTimer.Stop();
-            _evtForm();
+            // _evtForm();
         }
 
         // Value in cell cannot be changed when value has been set.
@@ -288,7 +299,7 @@ namespace MainApp
             Log.Information("Calibration performed.");
             _calTimer.Stop();
             this.Hide();
-            _evtForm();
+            // _evtForm();
         }
     }
 }

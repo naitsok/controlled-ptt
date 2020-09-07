@@ -23,8 +23,10 @@ namespace MainApp
 {
     public partial class MainApp : Form
     {
-        // configuration from appsettings.json
-        private static string CONFIG_PATH = @".\appsettings.json";
+        // base directory where executable is located
+        private static string BASE_DIR = Directory.GetCurrentDirectory();
+        // configuration from appsettings.json located in the same directory as the executable
+        private static string CONFIG_PATH = Path.Combine(BASE_DIR, "appsettings.json");
         private JObject _config = null;
 
         // sensors
@@ -33,17 +35,28 @@ namespace MainApp
         private BaseSensorForm _sensorForm = null;
         private double _receivedTemperature = 0;
 
+        // Experiment
         // Timer for experiment.
         private Timer _experimentTimer = new Timer()
         {
             Interval = 1000
         };
+        // PID
+        private double _propGain = 0;
+        private double _intGain = 0;
+        private double _diffGain = 0;
 
         // Timer for calibration.
         private Timer _calibrationTimer = new Timer()
         {
             Interval = 1000
         };
+
+        // Experiment
+        private string _expDir = "";
+        private string _expFileName = "";
+        private bool _expDirChanged = false;
+        private double _calibratedTemperature = 0;
 
         private bool _expGoing = false;
 
@@ -60,7 +73,7 @@ namespace MainApp
         private int _secondsTillEnd = 0;
 
         //Instances of forms.
-        private CalibrationForm calibration = new CalibrationForm();
+        private Calibration calibration = new Calibration();
 
 
         // Plot models.
@@ -155,25 +168,48 @@ namespace MainApp
             InitializeComponent();
 
             // Load configuration from appsettings.json
-            _config = JObject.Parse(File.ReadAllText(CONFIG_PATH));
+            _config = JObject.Parse(File.ReadAllText(Path.GetFullPath(CONFIG_PATH)));
 
             saveCurrentSettingsWhenClosingToolStripMenuItem.Checked = (bool)_config["save_settings_on_closing"];
 
-            // get dev_path if necessary
-            string dev_path = (string)_config["dev_path"];
+            // get base_sensor_path if necessary
+            string base_sensor_path = (string)_config["base_sensor_path"];
 
             // get information about sensors and selected the indicated one
             _selectedSensorIndex = (int)_config["selected_sensor_index"] - 1;
             foreach (JToken token in _config["sensors"])
             {
                 cmbSensors.Items.Add(token["title"]);
-                _sensorPaths.Add(Path.GetFullPath(Path.Combine(dev_path, (string)token["path"])));
+                _sensorPaths.Add(Path.GetFullPath(Path.Combine(base_sensor_path, (string)token["path"])));
             }
             if (_selectedSensorIndex >= 0 && _selectedSensorIndex < cmbSensors.Items.Count)
             {
                 cmbSensors.SelectedIndex = _selectedSensorIndex;
             }
-            
+
+            // get information about experiment and set values
+            cmbExperimentType.SelectedIndex = (int)_config["experiment_type_index"] - 1;
+            _propGain = (double)_config["pid"]["proportional"];
+            _intGain = (double)_config["pid"]["integral"];
+            _diffGain = (double)_config["pid"]["differential"];
+            nudPropGain.Value = (decimal)_propGain;
+            nudIntGain.Value = (decimal)_intGain;
+            nudDiffGain.Value = (decimal)_diffGain;
+
+            // Initialization for Experiment
+            // directory to save files of the experiment
+            _expDir = (string)_config["experiment_dir"];
+            if (!(bool)_config["user_experiment_dir"])
+            {
+                // path is relative and needs to be combined
+                _expDir = Path.GetFullPath(Path.Combine(BASE_DIR, _expDir, DateTime.Now.ToString("yyyy-MM-dd")));
+            }
+            fbdSelectDir.SelectedPath = _expDir;
+            txtExpDir.Text = _expDir;
+
+            // generate file name
+            _expFileName = "Record_" + DateTime.Now.ToString("hh-mm-ss") + ".txt";
+            txtTempFileName.Text = _expFileName;
 
             // To log information.
             Log.Logger = new LoggerConfiguration()
@@ -183,9 +219,6 @@ namespace MainApp
 
             _experimentTimer.Tick += new EventHandler(this.experimentTimer_Tick);
             _calibrationTimer.Tick += new EventHandler(this.calibrationTimer_Tick);
-
-            tbTempFilePath.Text = _tempSavePath;
-            txtTempFileName.Text = "Record_" + DateTime.Now.ToString("dd-MM-yy-hh-mm-ss") + ".txt";
 
             // object temperature plot axes
             _objTempPlotModel.Axes.Add(new LinearAxis()
@@ -225,6 +258,28 @@ namespace MainApp
         }
 
         /// <summary>
+        /// Opens dialog to select sensor executable manually.
+        /// Gets the filename of selected executable and adds it to the list of sensors to be loaded.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnLoadSensor_Click(object sender, EventArgs e)
+        {
+            DialogResult result = ofdSelectSensor.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                // get sensor executable name and add it to list
+                string fileName = Path.GetFileNameWithoutExtension(ofdSelectSensor.FileName);
+                if (!cmbSensors.Items.Contains(fileName))
+                {
+                    cmbSensors.Items.Add(fileName);
+                    _sensorPaths.Add(ofdSelectSensor.FileName);
+                    cmbSensors.SelectedIndex = cmbSensors.Items.Count - 1;
+                }
+            }
+        }
+
+        /// <summary>
         /// Starts the sensor part.
         /// </summary>
         /// <param name="sender"></param>
@@ -255,8 +310,7 @@ namespace MainApp
             this.Location = new Point(10 + _sensorForm.Size.Width, 10);
 
             // Disable controls
-            btnStartSensor.Enabled = false;
-            btnLoadSensor.Enabled = false;
+            gbSensor.Enabled = false;
         }
 
         /// <summary>
@@ -268,8 +322,25 @@ namespace MainApp
         {
             _sensorForm.FormClosed -= sensorForm_FormClosed;
             _sensorForm.OnTemperatureSent -= sensorForm_TemperatureSent;
-            btnStartSensor.Enabled = true;
-            btnLoadSensor.Enabled = true;
+            gbSensor.Enabled = true;
+        }
+
+        private void cbNoCalibration_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbNoCalibration.Checked)
+            {
+                txtCalibration.Enabled = false;
+                btnCalibrate.Enabled = false;
+                btnLoadCalibration.Enabled = false;
+                btnViewCalibration.Enabled = false;
+            }
+            else
+            {
+                txtCalibration.Enabled = true;
+                btnCalibrate.Enabled = true;
+                btnLoadCalibration.Enabled = true;
+                btnViewCalibration.Enabled = true;
+            }
         }
 
         /// <summary>
@@ -280,52 +351,60 @@ namespace MainApp
         private void sensorForm_TemperatureSent(object sender, TemperatureSentEventArgs e)
         {
             _receivedTemperature = e.Temperature;
-        }
-
-        private void btnLoadSensor_Click(object sender, EventArgs e)
-        {
-            selectSensorDialog.ShowDialog();
-        }
-
-        private void selectSensorDialog_FileOk(object sender, CancelEventArgs e)
-        {
-            // get sensor executable name and add it to list
-            string fileName = Path.GetFileNameWithoutExtension(selectSensorDialog.FileName);
-            if (!cmbSensors.Items.Contains(fileName))
+            txtSensorTemp.Text = _receivedTemperature.ToString("#.##");
+            if (cbNoCalibration.Checked)
             {
-                cmbSensors.Items.Add(fileName);
-                _sensorPaths.Add(selectSensorDialog.FileName);
-                cmbSensors.SelectedIndex = cmbSensors.Items.Count - 1;
+                _calibratedTemperature = _receivedTemperature;
+                txtCalibratedTemp.Text = txtSensorTemp.Text;
+            }
+            else
+            { 
+                _calibratedTemperature = _receivedTemperature;
+                txtCalibratedTemp.Text = _calibratedTemperature.ToString("#.##");
+            } 
+        }
+
+
+
+        /// <summary>
+        /// Show PID control panel when PID controlled experiment is selected
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cmbExperimentType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbExperimentType.SelectedIndex == 1)
+            {
+                // PID control is selected
+                gbPID.Visible = true;
+            }
+            else
+            {
+                gbPID.Visible = false;
             }
         }
 
-        private void BtnSelectSensor_Click(object sender, EventArgs e)
+        /// <summary>
+        /// User can select path where to save experiment data.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnSelectTempPath_Click(object sender, EventArgs e)
         {
-          //if (cmbSensors.SelectedIndex == 0)
-          //  {
-          //      Log.Information("MLX90621 Infrared (IR) sensor array selected.");
-          //      array = new ArraySensor();
-          //      array.Show();
-          //      btnSelectSensor.Enabled = false;
-          //  }
-          //else if (cmbSensors.SelectedIndex == 1)
-          //  {
-          //      Log.Information("MLX90614 Infrared Thermometer selected.");
-          //      oneMlxSensor = new OneMLXForm();
-          //      oneMlxSensor.Show();
-          //      btnSelectSensor.Enabled = false;
-          //  }
-          //else if (cmbSensors.SelectedIndex == 2)
-          //  {
-          //      Log.Information("Two MLX90614 Infrared Thermometers selected.");
-          //      twoMlxSensors = new TwoMLXForm();
-          //      twoMlxSensors.Show();
-          //      btnSelectSensor.Enabled = false;
-          //  }
-          //else
-          //  {
-          //      AddError("No sensor selected.");
-          //  }         
+            DialogResult result = fbdSelectDir.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                _expDirChanged = true;
+                txtExpDir.Text = fbdSelectDir.SelectedPath;
+            }
+        }
+
+        /// <summary>
+        /// Checks everything before the experiment
+        /// </summary>
+        private void PrepareExperiment()
+        {
+
         }
 
         private void BtnStartExperiment_Click(object sender, EventArgs e)
@@ -508,7 +587,7 @@ namespace MainApp
         private void MainApp_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Settings from menu should be always saved
-            _config["save_settings_on_closing"] = saveAsToolStripMenuItem.Checked;
+            _config["save_settings_on_closing"] = saveCurrentSettingsWhenClosingToolStripMenuItem.Checked;
 
             if (saveCurrentSettingsWhenClosingToolStripMenuItem.Checked)
             {
@@ -522,6 +601,24 @@ namespace MainApp
                             new JProperty("path", _sensorPaths[i])
                             ));
                 }
+                // Save sensor selected index
+                _config["selected_sensor_index"] = cmbSensors.SelectedIndex + 1;
+
+                // Save experiment type
+                _config["experiment_type_index"] = cmbExperimentType.SelectedIndex + 1;
+
+                // Save PID values
+                _config["pid"]["proportional"] = _propGain;
+                _config["pid"]["integral"] = _intGain;
+                _config["pid"]["differential"] = _diffGain;
+
+                // Save experiment dir
+                if (_expDirChanged)
+                {
+                    _config["user_experiment_dir"] = true;
+                    _config["experiment_dir"] = fbdSelectDir.SelectedPath;
+                }
+
             }
             File.WriteAllText(CONFIG_PATH, _config.ToString());
 
@@ -529,21 +626,6 @@ namespace MainApp
             Log.CloseAndFlush();
         }
 
-        // User can select path where to save experiment data.
-        private void BtnSelectTempPath_Click(object sender, EventArgs e)
-        {
-            using (var fbd = new FolderBrowserDialog())
-            {
-                DialogResult result = fbd.ShowDialog();
-
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    string[] files = Directory.GetFiles(fbd.SelectedPath);
-                    _tempSavePath = fbd.SelectedPath;
-                    tbTempFilePath.Text = fbd.SelectedPath;
-                }
-            }
-        }
         private void BtnCalibration_Click(object sender, EventArgs e)
         {
       
@@ -588,13 +670,6 @@ namespace MainApp
             //    catch { calibration._objTemp = 0; }
             //}
             
-        }
-
-        // To enable button from calibration form and stopping the timer.
-        private void CalibrationHelper()
-        {
-            btnCalibration.Enabled = true;
-            _calibrationTimer.Stop();
         }
     }
 }
