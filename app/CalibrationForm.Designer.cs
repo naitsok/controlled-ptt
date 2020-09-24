@@ -1,6 +1,6 @@
 ﻿namespace MainApp
 {
-    partial class Calibration
+    partial class CalibrationForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lblCalibFile = new System.Windows.Forms.Label();
             this.txtCalibFile = new System.Windows.Forms.TextBox();
             this.nudSensorCalB = new System.Windows.Forms.NumericUpDown();
@@ -179,7 +179,7 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(55, 23);
             this.btnSave.TabIndex = 36;
-            this.btnSave.Text = "Save as";
+            this.btnSave.Text = "Save As";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
@@ -195,8 +195,8 @@
             // 
             // dgCalibration
             // 
-            dataGridViewCellStyle3.NullValue = null;
-            this.dgCalibration.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.NullValue = null;
+            this.dgCalibration.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgCalibration.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
             this.dgCalibration.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dgCalibration.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -265,7 +265,7 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
             // 
-            // Calibration
+            // CalibrationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -288,7 +288,7 @@
             this.Controls.Add(this.label27);
             this.Controls.Add(this.nudSensorCalA);
             this.MinimumSize = new System.Drawing.Size(1100, 360);
-            this.Name = "Calibration";
+            this.Name = "CalibrationForm";
             this.Text = "Sensor Calibration";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Calibration_FormClosing);
             this.Load += new System.EventHandler(this.Calibration_Load);

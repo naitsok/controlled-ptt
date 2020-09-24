@@ -1,6 +1,6 @@
 ﻿namespace MainApp
 {
-    partial class MainApp
+    partial class MainAppForm
     {
         /// <summary>
         /// Required designer variable.
@@ -72,17 +72,17 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveCurrentSettingsWhenClosingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectLogsDirectoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectCalibrationsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutControlledPTTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbCalibration = new System.Windows.Forms.GroupBox();
+            this.btnViewCalibration = new System.Windows.Forms.Button();
             this.btnCalibrate = new System.Windows.Forms.Button();
             this.btnLoadCalibration = new System.Windows.Forms.Button();
             this.txtCalibration = new System.Windows.Forms.TextBox();
             this.ofdSelectSensor = new System.Windows.Forms.OpenFileDialog();
             this.fbdSelectDir = new System.Windows.Forms.FolderBrowserDialog();
-            this.selectLogsDirectoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectCalibrationsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnViewCalibration = new System.Windows.Forms.Button();
             this.gbExperiment.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpTime)).BeginInit();
             this.gbPID.SuspendLayout();
@@ -600,6 +600,18 @@
             this.saveCurrentSettingsWhenClosingToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
             this.saveCurrentSettingsWhenClosingToolStripMenuItem.Text = "Save current settings when closing";
             // 
+            // selectLogsDirectoryToolStripMenuItem1
+            // 
+            this.selectLogsDirectoryToolStripMenuItem1.Name = "selectLogsDirectoryToolStripMenuItem1";
+            this.selectLogsDirectoryToolStripMenuItem1.Size = new System.Drawing.Size(256, 22);
+            this.selectLogsDirectoryToolStripMenuItem1.Text = "Select Logs Directory";
+            // 
+            // selectCalibrationsDirectoryToolStripMenuItem
+            // 
+            this.selectCalibrationsDirectoryToolStripMenuItem.Name = "selectCalibrationsDirectoryToolStripMenuItem";
+            this.selectCalibrationsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.selectCalibrationsDirectoryToolStripMenuItem.Text = "Select Calibrations Directory";
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -632,6 +644,16 @@
             this.gbCalibration.TabStop = false;
             this.gbCalibration.Text = "Sensor Calibration";
             // 
+            // btnViewCalibration
+            // 
+            this.btnViewCalibration.Location = new System.Drawing.Point(312, 40);
+            this.btnViewCalibration.Name = "btnViewCalibration";
+            this.btnViewCalibration.Size = new System.Drawing.Size(47, 23);
+            this.btnViewCalibration.TabIndex = 64;
+            this.btnViewCalibration.Text = "View";
+            this.btnViewCalibration.UseVisualStyleBackColor = true;
+            this.btnViewCalibration.Click += new System.EventHandler(this.btnViewCalibration_Click);
+            // 
             // btnCalibrate
             // 
             this.btnCalibrate.Location = new System.Drawing.Point(365, 40);
@@ -661,27 +683,6 @@
             // 
             this.ofdSelectSensor.DefaultExt = "exe";
             this.ofdSelectSensor.Title = "Select Sensor Executable";
-            // 
-            // selectLogsDirectoryToolStripMenuItem1
-            // 
-            this.selectLogsDirectoryToolStripMenuItem1.Name = "selectLogsDirectoryToolStripMenuItem1";
-            this.selectLogsDirectoryToolStripMenuItem1.Size = new System.Drawing.Size(256, 22);
-            this.selectLogsDirectoryToolStripMenuItem1.Text = "Select Logs Directory";
-            // 
-            // selectCalibrationsDirectoryToolStripMenuItem
-            // 
-            this.selectCalibrationsDirectoryToolStripMenuItem.Name = "selectCalibrationsDirectoryToolStripMenuItem";
-            this.selectCalibrationsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-            this.selectCalibrationsDirectoryToolStripMenuItem.Text = "Select Calibrations Directory";
-            // 
-            // btnViewCalibration
-            // 
-            this.btnViewCalibration.Location = new System.Drawing.Point(312, 40);
-            this.btnViewCalibration.Name = "btnViewCalibration";
-            this.btnViewCalibration.Size = new System.Drawing.Size(47, 23);
-            this.btnViewCalibration.TabIndex = 64;
-            this.btnViewCalibration.Text = "View";
-            this.btnViewCalibration.UseVisualStyleBackColor = true;
             // 
             // MainApp
             // 

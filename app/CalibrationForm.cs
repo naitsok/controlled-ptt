@@ -16,6 +16,7 @@ using OxyPlot.Series;
 using CenterSpace.NMath.Core;
 using Newtonsoft.Json;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace MainApp
 {
@@ -24,15 +25,18 @@ namespace MainApp
     /// <summary>
     /// Performs caliblration for sensor. Can save and load previous calibrations in json format.
     /// </summary>
-    public partial class Calibration : Form
+    public partial class CalibrationForm : Form
     {
         public string CalibrationFile { get; set; } = "";
+        private JObject _calibration = null;
 
-        public double CoefficientA { get; set; } = 0;
+        public double Slope { get; set; } = 1;
+        public double Intercept { get; set; } = 0;
 
-        public double CoefficientB { get; set; } = 0;
+        private List<double> _sensorTemps = null;
+        private List<double> _correctTemps = null;
 
-        // Timer for calibration.
+        // Timer for calibration
         private Timer _calTimer = new Timer()
         {
             Interval = 1000
@@ -69,19 +73,21 @@ namespace MainApp
             LegendTextColor = OxyColors.White,
         };
 
-        // Scaling and setting the Graph.
-        private void SetGraphData(PlotView pw, double x, double y)
+        // Scaling and setting the Graph
+        private void SetGraphData(PlotView pw, List<double> sensorTemps, List<double> correctTemps)
         {
+
             var xAxis = pw.Model.Axes[0];
             var yAxis = pw.Model.Axes[1];
 
-            //Scaling the axes.
+            // Scaling the axes
             xAxis.Maximum = x + 10;
+            xAxis.Minimum = sensorTemps + sensorTemps
             yAxis.Maximum = y + 10;
 
             (pw.Model.Series[0] as ScatterSeries).Points.Add(new ScatterPoint(x, y, 3, 1));
-            (pw.Model.Series[1] as LineSeries).Points.Add(new DataPoint(xAxis.Minimum, _intercept));
-            (pw.Model.Series[1] as LineSeries).Points.Add(new DataPoint(xAxis.Maximum, _slope*xAxis.Maximum + _intercept));
+            (pw.Model.Series[1] as ScatterSeries).Points.Add(new DataPoint(xAxis.Minimum, _intercept));
+            (pw.Model.Series[2] as LineSeries).Points.Add(new DataPoint(xAxis.Maximum, _slope*xAxis.Maximum + _intercept));
             pw.InvalidatePlot(false);
         }
         
@@ -116,11 +122,12 @@ namespace MainApp
             
         }
 
-        public Calibration()
+        public CalibrationForm(string calibrationFile = "")
         {
             InitializeComponent();
 
-
+            CalibrationFile = Path.GetFullPath(calibrationFile);
+            LoadCalibration();
 
             _calTimer.Tick += new EventHandler(this.CalibrationTimer_Tick);
           
@@ -160,6 +167,20 @@ namespace MainApp
             });
 
             this.pltCalibration.Model = _calibrationPlotModel;
+
+        }
+
+        private void LoadCalibration()
+        {
+            if (string.IsNullOrEmpty(this.CalibrationFile))
+                return;
+
+            _calibration = JObject.Parse(File.ReadAllText(this.CalibrationFile));
+            this.Slope = (double)_calibration["slope"];
+            this.Intercept = (double)_calibration["intercept"];
+            _sensorTemps = _calibration["sensor_temperatures"].ToObject<List<double>>();
+            _correctTemps = _calibration["correct_temperatures"].ToObject<List<double>>();
+
 
         }
 

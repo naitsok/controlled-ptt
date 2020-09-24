@@ -7,7 +7,7 @@ using Serilog;
 
 namespace MainApp
 {
-    public partial class MainApp : Form
+    public partial class MainAppForm : Form
     {
         //PID controls here.
         private void BtnPIDStart_Click(object sender, EventArgs e)
