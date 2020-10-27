@@ -16,35 +16,26 @@ using OxyPlot.Series;
 using System.IO;
 using Serilog;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Reflection;
 
 namespace MainApp
 {
-    public partial class MainAppForm : Form
+    public partial class MainApp : Form
     {
-        // Base directory where executable is located
+        // base directory where executable is located
         private static string BASE_DIR = Directory.GetCurrentDirectory();
-        // Configuration from appsettings.json located in the same directory as the executable
+        // configuration from appsettings.json located in the same directory as the executable
         private static string CONFIG_PATH = Path.Combine(BASE_DIR, "appsettings.json");
         private JObject _config = null;
 
-        // Sensors
+        // sensors
         private List<string> _sensorPaths = new List<string>();
         private int _selectedSensorIndex = 0;
         private BaseSensorForm _sensorForm = null;
         private double _receivedTemperature = 0;
 
-        // Calibration
-        private double _slope = 0;
-        private double _intercept = 0;
-        private string _calibrationFile = "";
-        private CalibrationForm _calibration = null;
-
         // Experiment
-        private string _expDir = "";
-        private string _expFileName = "";
-        private bool _expDirChanged = false;
-        private double _calibratedTemperature = 0;
         // Timer for experiment.
         private Timer _experimentTimer = new Timer()
         {
@@ -54,6 +45,18 @@ namespace MainApp
         private double _propGain = 0;
         private double _intGain = 0;
         private double _diffGain = 0;
+
+        // Timer for calibration.
+        private Timer _calibrationTimer = new Timer()
+        {
+            Interval = 1000
+        };
+
+        // Experiment
+        private string _expDir = "";
+        private string _expFileName = "";
+        private bool _expDirChanged = false;
+        private double _calibratedTemperature = 0;
 
         private bool _expGoing = false;
 
@@ -68,6 +71,10 @@ namespace MainApp
         private CultureInfo _culInfo = CultureInfo.InvariantCulture;
 
         private int _secondsTillEnd = 0;
+
+        //Instances of forms.
+        private Calibration calibration = new Calibration();
+
 
         // Plot models.
         private PlotModel _objTempPlotModel = new PlotModel()
@@ -156,7 +163,7 @@ namespace MainApp
             box.SelectionColor = box.ForeColor;
             box.ScrollToCaret();
         }
-        public MainAppForm()
+        public MainApp()
         {
             InitializeComponent();
 
@@ -180,29 +187,6 @@ namespace MainApp
                 cmbSensors.SelectedIndex = _selectedSensorIndex;
             }
 
-            // calibration
-            _calibrationFile = Path.GetFullPath(Path.Combine(
-                (string)_config["calibration_dir"], 
-                (string)_config["last_calibration"]));
-
-
-            if (File.Exists(_calibrationFile))
-            {
-                // if calibration file exists - load calibration
-                txtCalibration.Text = _calibrationFile;
-                _calibration = new CalibrationForm(_calibrationFile);
-                _slope = _calibration.Slope;
-                _intercept = _calibration.Intercept;
-            }
-            else
-            {
-                // calibration cannot be loaded
-                txtCalibration.Text = "";
-                _calibrationFile = "";
-                _slope = 1;
-                _intercept = 0;
-            }
-
             // get information about experiment and set values
             cmbExperimentType.SelectedIndex = (int)_config["experiment_type_index"] - 1;
             _propGain = (double)_config["pid"]["proportional"];
@@ -214,9 +198,12 @@ namespace MainApp
 
             // Initialization for Experiment
             // directory to save files of the experiment
-            _expDir = Path.GetFullPath(Path.Combine(
-                (string)_config["experiment_dir"], 
-                DateTime.Now.ToString("yyyy-MM-dd")));
+            _expDir = (string)_config["experiment_dir"];
+            if (!(bool)_config["user_experiment_dir"])
+            {
+                // path is relative and needs to be combined
+                _expDir = Path.GetFullPath(Path.Combine(BASE_DIR, _expDir, DateTime.Now.ToString("yyyy-MM-dd")));
+            }
             fbdSelectDir.SelectedPath = _expDir;
             txtExpDir.Text = _expDir;
 
@@ -231,6 +218,7 @@ namespace MainApp
                 .CreateLogger();
 
             _experimentTimer.Tick += new EventHandler(this.experimentTimer_Tick);
+            _calibrationTimer.Tick += new EventHandler(this.calibrationTimer_Tick);
 
             // object temperature plot axes
             _objTempPlotModel.Axes.Add(new LinearAxis()
@@ -337,18 +325,6 @@ namespace MainApp
             gbSensor.Enabled = true;
         }
 
-        private void btnViewCalibration_Click(object sender, EventArgs e)
-        {
-            _calibration.ShowDialog();
-            _slope = _calibration.Slope;
-            _intercept = _calibration.Intercept;
-        }
-
-        /// <summary>
-        /// Disable and enable controls when no calibration checkbox state changes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void cbNoCalibration_CheckedChanged(object sender, EventArgs e)
         {
             if (cbNoCalibration.Checked)
@@ -368,14 +344,13 @@ namespace MainApp
         }
 
         /// <summary>
-        /// Receives temperature from the sensor form.
+        /// Receive temperature from the sensor form.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void sensorForm_TemperatureSent(object sender, TemperatureSentEventArgs e)
         {
             _receivedTemperature = e.Temperature;
-            _calibration.SensorTemperature = _receivedTemperature;
             txtSensorTemp.Text = _receivedTemperature.ToString("#.##");
             if (cbNoCalibration.Checked)
             {
@@ -384,10 +359,12 @@ namespace MainApp
             }
             else
             { 
-                _calibratedTemperature = _receivedTemperature * _slope + _intercept;
+                _calibratedTemperature = _receivedTemperature;
                 txtCalibratedTemp.Text = _calibratedTemperature.ToString("#.##");
             } 
         }
+
+
 
         /// <summary>
         /// Show PID control panel when PID controlled experiment is selected
@@ -645,8 +622,54 @@ namespace MainApp
             }
             File.WriteAllText(CONFIG_PATH, _config.ToString());
 
-            _calibration.Dispose();
+            calibration.Dispose();
             Log.CloseAndFlush();
+        }
+
+        private void BtnCalibration_Click(object sender, EventArgs e)
+        {
+      
+            //if (btnSelectSensor.Enabled == false)
+            //{             
+            //    btnCalibration.Enabled = false;
+            //    Log.Information("Calibration has started.");
+            //    calibration = new CalibrationForm();
+            //    _calibrationTimer.Start();
+            //    calibration._evtForm += new ShowFrm(CalibrationHelper);  // Method for enabling Calibration button from calibration form.            
+            //    calibration.Show();
+            //}
+            //else
+            //    AddError("No Sensor Selected.");           
+        }
+
+        // Calibration timer needed for sending varying temperature value to the calibration form each second.
+        private void calibrationTimer_Tick(object sender, EventArgs e)
+        {
+            //if (cmbSensors.SelectedIndex == 0)
+            //{
+            //    try
+            //    {
+            //        calibration._objTemp = Convert.ToDouble(array.AvgTemperature);
+            //    }
+            //    catch { calibration._objTemp = 0; }
+            //}
+            //else if (cmbSensors.SelectedIndex == 1)
+            //{
+            //    try
+            //    {
+            //        calibration._objTemp = Convert.ToDouble(oneMlxSensor.ObjectTemperature, CultureInfo.InvariantCulture);
+            //    }
+            //    catch { calibration._objTemp = 0; }
+            //}
+            //else if (cmbSensors.SelectedIndex == 2)
+            //{
+            //    try
+            //    {
+            //        calibration._objTemp = Convert.ToDouble(twoMlxSensors.AvgObjTemperature);
+            //    }
+            //    catch { calibration._objTemp = 0; }
+            //}
+            
         }
     }
 }

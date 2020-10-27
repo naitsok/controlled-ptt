@@ -1,6 +1,6 @@
 ﻿namespace MainApp
 {
-    partial class CalibrationForm
+    partial class Calibration
     {
         /// <summary>
         /// Required designer variable.
@@ -28,18 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lblCalibFile = new System.Windows.Forms.Label();
             this.txtCalibFile = new System.Windows.Forms.TextBox();
-            this.nudIntercept = new System.Windows.Forms.NumericUpDown();
+            this.nudSensorCalB = new System.Windows.Forms.NumericUpDown();
             this.label32 = new System.Windows.Forms.Label();
             this.txtCalibratedTemp = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.txtSensorTemp = new System.Windows.Forms.TextBox();
             this.label27 = new System.Windows.Forms.Label();
-            this.nudSlope = new System.Windows.Forms.NumericUpDown();
+            this.nudSensorCalA = new System.Windows.Forms.NumericUpDown();
             this.btnSave = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.dgCalibration = new System.Windows.Forms.DataGridView();
             this.colTempSensor = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RealTemp = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -47,10 +48,8 @@
             this.pltCalibration = new OxyPlot.WindowsForms.PlotView();
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.ofdLoadCalibration = new System.Windows.Forms.OpenFileDialog();
-            this.sfdSaveCalibration = new System.Windows.Forms.SaveFileDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.nudIntercept)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlope)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgCalibration)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,30 +69,30 @@
             this.txtCalibFile.Size = new System.Drawing.Size(243, 20);
             this.txtCalibFile.TabIndex = 47;
             // 
-            // nudIntercept
+            // nudSensorCalB
             // 
-            this.nudIntercept.DecimalPlaces = 2;
-            this.nudIntercept.Increment = new decimal(new int[] {
+            this.nudSensorCalB.DecimalPlaces = 2;
+            this.nudSensorCalB.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.nudIntercept.Location = new System.Drawing.Point(165, 77);
-            this.nudIntercept.Maximum = new decimal(new int[] {
+            this.nudSensorCalB.Location = new System.Drawing.Point(165, 77);
+            this.nudSensorCalB.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.nudIntercept.Minimum = new decimal(new int[] {
+            this.nudSensorCalB.Minimum = new decimal(new int[] {
             1000,
             0,
             0,
             -2147483648});
-            this.nudIntercept.Name = "nudIntercept";
-            this.nudIntercept.Size = new System.Drawing.Size(90, 20);
-            this.nudIntercept.TabIndex = 36;
-            this.nudIntercept.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudIntercept.ValueChanged += new System.EventHandler(this.NudIntercept_ValueChanged);
+            this.nudSensorCalB.Name = "nudSensorCalB";
+            this.nudSensorCalB.Size = new System.Drawing.Size(90, 20);
+            this.nudSensorCalB.TabIndex = 36;
+            this.nudSensorCalB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudSensorCalB.ValueChanged += new System.EventHandler(this.NudSensorCalB_ValueChanged);
             // 
             // label32
             // 
@@ -149,45 +148,55 @@
             this.label27.TabIndex = 30;
             this.label27.Text = "Calibrated Temperature";
             // 
-            // nudSlope
+            // nudSensorCalA
             // 
-            this.nudSlope.DecimalPlaces = 2;
-            this.nudSlope.Increment = new decimal(new int[] {
+            this.nudSensorCalA.DecimalPlaces = 2;
+            this.nudSensorCalA.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.nudSlope.Location = new System.Drawing.Point(38, 77);
-            this.nudSlope.Maximum = new decimal(new int[] {
+            this.nudSensorCalA.Location = new System.Drawing.Point(38, 77);
+            this.nudSensorCalA.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.nudSlope.Minimum = new decimal(new int[] {
+            this.nudSensorCalA.Minimum = new decimal(new int[] {
             1000,
             0,
             0,
             -2147483648});
-            this.nudSlope.Name = "nudSlope";
-            this.nudSlope.Size = new System.Drawing.Size(90, 20);
-            this.nudSlope.TabIndex = 20;
-            this.nudSlope.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudSlope.ValueChanged += new System.EventHandler(this.NudSlope_ValueChanged);
+            this.nudSensorCalA.Name = "nudSensorCalA";
+            this.nudSensorCalA.Size = new System.Drawing.Size(90, 20);
+            this.nudSensorCalA.TabIndex = 20;
+            this.nudSensorCalA.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudSensorCalA.ValueChanged += new System.EventHandler(this.NudSensorCalA_ValueChanged);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(94, 286);
+            this.btnSave.Location = new System.Drawing.Point(74, 287);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(76, 23);
+            this.btnSave.Size = new System.Drawing.Size(55, 23);
             this.btnSave.TabIndex = 36;
-            this.btnSave.Text = "Save As";
+            this.btnSave.Text = "Save as";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(196, 287);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(55, 23);
+            this.btnCancel.TabIndex = 37;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
+            // 
             // dgCalibration
             // 
-            dataGridViewCellStyle1.NullValue = null;
-            this.dgCalibration.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.NullValue = null;
+            this.dgCalibration.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dgCalibration.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
             this.dgCalibration.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dgCalibration.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -199,13 +208,14 @@
             this.dgCalibration.Name = "dgCalibration";
             this.dgCalibration.Size = new System.Drawing.Size(270, 272);
             this.dgCalibration.TabIndex = 38;
-            this.dgCalibration.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCalibration_CellLeave);
+            this.dgCalibration.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgCalibration_CellEnter);
             // 
             // colTempSensor
             // 
             this.colTempSensor.Frozen = true;
             this.colTempSensor.HeaderText = "Temperature from Sensor";
             this.colTempSensor.Name = "colTempSensor";
+            this.colTempSensor.ReadOnly = true;
             this.colTempSensor.Width = 108;
             // 
             // RealTemp
@@ -216,7 +226,7 @@
             // 
             // btnCalculate
             // 
-            this.btnCalculate.Location = new System.Drawing.Point(261, 286);
+            this.btnCalculate.Location = new System.Drawing.Point(261, 287);
             this.btnCalculate.Name = "btnCalculate";
             this.btnCalculate.Size = new System.Drawing.Size(270, 23);
             this.btnCalculate.TabIndex = 39;
@@ -237,9 +247,9 @@
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(175, 286);
+            this.btnLoad.Location = new System.Drawing.Point(135, 287);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(80, 23);
+            this.btnLoad.Size = new System.Drawing.Size(55, 23);
             this.btnLoad.TabIndex = 45;
             this.btnLoad.Text = "Load";
             this.btnLoad.UseVisualStyleBackColor = true;
@@ -247,27 +257,15 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(12, 286);
+            this.btnOK.Location = new System.Drawing.Point(12, 287);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(76, 23);
+            this.btnOK.Size = new System.Drawing.Size(55, 23);
             this.btnOK.TabIndex = 46;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
             // 
-            // ofdLoadCalibration
-            // 
-            this.ofdLoadCalibration.DefaultExt = "json";
-            this.ofdLoadCalibration.Filter = "JSON files (*.json)|*json";
-            this.ofdLoadCalibration.RestoreDirectory = true;
-            // 
-            // sfdSaveCalibration
-            // 
-            this.sfdSaveCalibration.DefaultExt = "json";
-            this.sfdSaveCalibration.Filter = "JSON files (*.json)|*.json";
-            this.sfdSaveCalibration.RestoreDirectory = true;
-            // 
-            // CalibrationForm
+            // Calibration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -275,7 +273,7 @@
             this.Controls.Add(this.lblCalibFile);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtCalibFile);
-            this.Controls.Add(this.nudIntercept);
+            this.Controls.Add(this.nudSensorCalB);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.label32);
             this.Controls.Add(this.pltCalibration);
@@ -284,17 +282,18 @@
             this.Controls.Add(this.label23);
             this.Controls.Add(this.dgCalibration);
             this.Controls.Add(this.label22);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtSensorTemp);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label27);
-            this.Controls.Add(this.nudSlope);
+            this.Controls.Add(this.nudSensorCalA);
             this.MinimumSize = new System.Drawing.Size(1100, 360);
-            this.Name = "CalibrationForm";
+            this.Name = "Calibration";
             this.Text = "Sensor Calibration";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Calibration_FormClosing);
             this.Load += new System.EventHandler(this.Calibration_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.nudIntercept)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlope)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgCalibration)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -302,15 +301,16 @@
         }
 
         #endregion
-        private System.Windows.Forms.NumericUpDown nudIntercept;
+        private System.Windows.Forms.NumericUpDown nudSensorCalB;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.TextBox txtCalibratedTemp;
-        private System.Windows.Forms.NumericUpDown nudSlope;
+        private System.Windows.Forms.NumericUpDown nudSensorCalA;
         private System.Windows.Forms.TextBox txtSensorTemp;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.DataGridView dgCalibration;
         private System.Windows.Forms.Button btnCalculate;
         private OxyPlot.WindowsForms.PlotView pltCalibration;
@@ -320,7 +320,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn RealTemp;
         private System.Windows.Forms.Label lblCalibFile;
         private System.Windows.Forms.TextBox txtCalibFile;
-        private System.Windows.Forms.OpenFileDialog ofdLoadCalibration;
-        private System.Windows.Forms.SaveFileDialog sfdSaveCalibration;
     }
 }
