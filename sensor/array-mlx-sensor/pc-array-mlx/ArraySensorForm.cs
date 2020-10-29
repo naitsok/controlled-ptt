@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Collections.Generic;
 using System.Reflection;
+using System.IO;
 
 namespace ArrayMlxSensor
 {
@@ -43,14 +44,17 @@ namespace ArrayMlxSensor
         private static int TEXT_LEFT_X = 13;
         private static int TEXT_LEFT_Y = 29; // coordinates for the text in the first cell.
 
-        private static Pen NotCelectedCellBorder = new Pen(Color.Black, 3);
-        private static Pen CelectedCellBorder = new Pen(Color.White, 3); // Pens to draw cell borders.
+        private static Pen NotSelectedCellBorder = new Pen(Color.Black, 3);
+        private static Pen SelectedCellBorder = new Pen(Color.White, 3); // Pens to draw cell borders.
 
         private static double MinTemperatureColor = 20;
         private static double MaxTemperatureColor = 50; // Min and max values to draw color for a cell.
 
         private static Font TemperatureFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
         private static Brush TemperatureFontColor = new SolidBrush(Color.White);
+
+        // keep the selected cells
+        private static string SELECTED_CELLS = @".\array_sensor_selected_cells.txt";
 
         // Timer to send temperatures to the main app.
         private Timer _sendTimer = new Timer() { Interval = 1000 };
@@ -61,10 +65,29 @@ namespace ArrayMlxSensor
 
             cbBaudRate.SelectedIndex = 8;
             _sendTimer.Tick += new EventHandler(this.sendDataTimer_Tick);
-            getComPorts();
+            GetComPorts();
+
+            // load previously selected cells
+            bool[] selectedCellsBools = null;
+            if (File.Exists(Path.GetFullPath(SELECTED_CELLS)))
+            {
+                string selectedCells = File.ReadAllText(Path.GetFullPath(SELECTED_CELLS));
+                selectedCellsBools = selectedCells.Split(' ').Select(bool.Parse).ToArray();
+            }
+            else
+                selectedCellsBools = Enumerable.Repeat(false, SENSOR_ROWS * SENSOR_COLS).ToArray();
+
+            for (int i = 0; i < SENSOR_ROWS; i++)
+            {
+                for (int j = 0; j < SENSOR_COLS; j++)
+                {
+                    if (selectedCellsBools[j + SENSOR_COLS * i] == true)
+                        _selectedTemperatures.Add((i, j));
+                }
+            }
         }
 
-        private void getComPorts()
+        private void GetComPorts()
         {
             cbPorts.Items.Clear();
             var comPortNames = SerialPort.GetPortNames();
@@ -77,7 +100,7 @@ namespace ArrayMlxSensor
 
         private void btnGetComPorts_Click(object sender, EventArgs e)
         {
-            getComPorts();
+            GetComPorts();
         }
 
         private void btnConnRedBoard_Click(object sender, EventArgs e)
@@ -134,7 +157,7 @@ namespace ArrayMlxSensor
                 {
                     _receivedData = _comPort.ReadLine(); // One line must contain all the temperatures measured in Celcius.
 
-                    Invoke(new EventHandler(processData)); // Process the reseived data.
+                    Invoke(new EventHandler(ProcessData)); // Process the reseived data.
                 }
                 catch
                 {
@@ -150,7 +173,7 @@ namespace ArrayMlxSensor
             txtAvgTemperature.Text = "0.00";
         }
 
-        private void processData(object sender, EventArgs e)
+        private void ProcessData(object sender, EventArgs e)
         {
             txtAllReceivedData.AppendText(_receivedData);
             txtAllReceivedData.ScrollToCaret();
@@ -162,7 +185,7 @@ namespace ArrayMlxSensor
             {
                 for (int j = 0; j < SENSOR_COLS; j++)
                 {
-                    double temperature = double.Parse(splittedData[j + 4 * i], NumberStyles.Any, CultureInfo.InvariantCulture);
+                    double temperature = double.Parse(splittedData[j + SENSOR_COLS * i], NumberStyles.Any, CultureInfo.InvariantCulture);
                     _temperatures[i, j] = temperature;
 
                     // Visualize temperatures.
@@ -174,9 +197,9 @@ namespace ArrayMlxSensor
                     
                     g.FillRectangle(getCellColor(temperature), cell);
                     if (_selectedTemperatures.Contains((i, j)))
-                        g.DrawRectangle(CelectedCellBorder, cell);
+                        g.DrawRectangle(SelectedCellBorder, cell);
                     else
-                        g.DrawRectangle(NotCelectedCellBorder, cell);
+                        g.DrawRectangle(NotSelectedCellBorder, cell);
 
                     g.DrawString(
                         temperature.ToString("0.##"),
@@ -192,7 +215,7 @@ namespace ArrayMlxSensor
 
         private void gbTemperatures_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(new SolidBrush(NotCelectedCellBorder.Color),
+            e.Graphics.FillRectangle(new SolidBrush(NotSelectedCellBorder.Color),
                 new Rectangle(
                     LEFT_X - SPACE_X, 
                     LEFT_Y - SPACE_Y, 
@@ -241,12 +264,12 @@ namespace ArrayMlxSensor
             if (_selectedTemperatures.Contains((i, j)))
             {
                 _selectedTemperatures.Remove((i, j));
-                g.DrawRectangle(NotCelectedCellBorder, cell);
+                g.DrawRectangle(NotSelectedCellBorder, cell);
             }
             else
             {
                 _selectedTemperatures.Add((i, j));
-                g.DrawRectangle(CelectedCellBorder, cell);
+                g.DrawRectangle(SelectedCellBorder, cell);
             }
             g.Dispose();
         }
@@ -295,6 +318,14 @@ namespace ArrayMlxSensor
                     _comPort = null;
                 }
             }
+
+            // Save indices of selected cells
+            string[] selectedCells = Enumerable.Repeat(false.ToString(), SENSOR_ROWS * SENSOR_COLS).ToArray();
+            foreach ((int, int) cells in _selectedTemperatures)
+            {
+                selectedCells[cells.Item1 * SENSOR_COLS + cells.Item2] = true.ToString();
+            }
+            File.WriteAllText(Path.GetFullPath(SELECTED_CELLS), string.Join(" ", selectedCells));
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)
