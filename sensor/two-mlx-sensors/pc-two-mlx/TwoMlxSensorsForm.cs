@@ -20,18 +20,12 @@ namespace TwoMlxSensors
 
         private double _ambientTemperature = 0.0;
 
-        private Timer _sendTimer = new Timer()
-        {
-            Interval = 1000
-        };
-
         public TwoMlxSensorsForm()
         {
             InitializeComponent();
 
             cbBaudRate.SelectedIndex = 6;
             getComPorts();
-            _sendTimer.Tick += new EventHandler(this.sendDataTimer_Tick);
         }
 
         private void btnGetComPorts_Click(object sender, EventArgs e)
@@ -78,7 +72,6 @@ namespace TwoMlxSensors
                 txtConnectedStatus.Text = "Connected";
                 txtConnectedStatus.BackColor = Color.Green;
                 _comConnected = true;
-                _sendTimer.Start();
             }
             else
             {
@@ -93,7 +86,6 @@ namespace TwoMlxSensors
                 txtConnectedStatus.Text = "Not Connected";
                 txtConnectedStatus.BackColor = Color.Red;
                 _comConnected = false;
-                _sendTimer.Stop();
             }
         }
 
@@ -134,12 +126,9 @@ namespace TwoMlxSensors
             // Calculate average temperature from two sensors.
             _objectTemperature = 0.5 * (double.Parse(temperatures[0]) + double.Parse(temperatures[2]));
             _ambientTemperature = 0.5 * (double.Parse(temperatures[1]) + double.Parse(temperatures[3]));
-        } 
 
-        private void sendDataTimer_Tick(object sender, EventArgs e)
-        {
-            // Sends the data to the MainApp using method in BaseSensorForm class.
-            SendTemperature(_objectTemperature);
+            // Temperature to be sent by BaseSensor
+            _temperature = _objectTemperature;
         }
 
         private void TwoMlxSensorsForm_FormClosing(object sender, FormClosingEventArgs e)

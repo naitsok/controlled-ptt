@@ -33,6 +33,9 @@ namespace MainApp
         private int _selectedSensorIndex = 0;
         private BaseSensorForm _sensorForm = null;
         private double _receivedTemperature = 0;
+        private  static int NUM_LAST_TEMPS = 10;
+        private List<double> _checkTemperatureChanging = Enumerable.Repeat(0.0, NUM_LAST_TEMPS).ToList();
+        private bool _isSensorSendingTemperature = false;
 
         // Calibration
         private double _slope = 0;
@@ -70,10 +73,10 @@ namespace MainApp
         private int _secondsTillEnd = 0;
 
         // Plot models.
-        private PlotModel _objTempPlotModel = new PlotModel()
+        private PlotModel _objTemperaturePM = new PlotModel()
         {
             Title = "Object Temperature",
-            PlotAreaBackground = OxyColors.Black,
+            PlotAreaBackground = OxyColors.White,
             DefaultColors = new List<OxyColor>
             {
                 OxyColors.Red,
@@ -84,7 +87,7 @@ namespace MainApp
             TitleFontWeight = 400,
             LegendFontWeight = 500,
             LegendFontSize = 16,
-            LegendTextColor = OxyColors.White
+            LegendTextColor = OxyColors.Black
         };
 
         // Scaling and setting the Graph.
@@ -233,40 +236,40 @@ namespace MainApp
             _experimentTimer.Tick += new EventHandler(this.experimentTimer_Tick);
 
             // object temperature plot axes
-            _objTempPlotModel.Axes.Add(new LinearAxis()
+            _objTemperaturePM.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
                 Minimum = 0,
                 Maximum = 120,
                 IsAxisVisible = false
             });
-            _objTempPlotModel.Axes.Add(new LinearAxis()
+            _objTemperaturePM.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 Minimum = 17,
                 Maximum = 23
             });
             // object temperature plot series
-            _objTempPlotModel.Series.Add(new LineSeries()
+            _objTemperaturePM.Series.Add(new LineSeries()
             {
                 Title = "Sensor",
                 TextColor = OxyColors.Red
             });
             //series for calibrated temperature
-            _objTempPlotModel.Series.Add(new LineSeries()
+            _objTemperaturePM.Series.Add(new LineSeries()
             {
                 Title = "Calibrated",
                 TextColor = OxyColors.Green,
                 IsVisible = true
             });
             // series for target temperature in PID controller
-            _objTempPlotModel.Series.Add(new LineSeries()
+            _objTemperaturePM.Series.Add(new LineSeries()
             {
                 Title = "Target",
                 TextColor = OxyColors.Blue,
                 IsVisible = true
             });
-            this.pltObjTemp.Model = _objTempPlotModel;
+            this.pltTemperature.Model = _objTemperaturePM;
         }
 
         /// <summary>
@@ -374,6 +377,7 @@ namespace MainApp
         /// <param name="e"></param>
         private void sensorForm_TemperatureSent(object sender, TemperatureSentEventArgs e)
         {
+            // receive temperature from sensor, send it to calibration, update controls in MainApp
             _receivedTemperature = e.Temperature;
             _calibration.SensorTemperature = _receivedTemperature;
             txtSensorTemp.Text = _receivedTemperature.ToString("#.##");
@@ -386,7 +390,32 @@ namespace MainApp
             { 
                 _calibratedTemperature = _receivedTemperature * _slope + _intercept;
                 txtCalibratedTemp.Text = _calibratedTemperature.ToString("#.##");
-            } 
+            }
+
+            // check if temperature from sensor is changing
+            // if it is not changing - something is wrong
+            // for example sensor is not connected to the board
+            checkBox1.Checked = checkSensorIsSendingTemperature(_receivedTemperature);
+        }
+
+        /// <summary>
+        /// Check is sensor is sending temperature. If last ten readings from the sensor
+        /// provide the same temperature, then something is wrong. Experiment should be aborted
+        /// and error should be logged.
+        /// </summary>
+        /// <param name="temperature"></param>
+        /// <returns></returns>
+        private bool checkSensorIsSendingTemperature(double temperature)
+        {
+            _checkTemperatureChanging.Add(temperature);
+            if (_checkTemperatureChanging.Count > NUM_LAST_TEMPS)
+                _checkTemperatureChanging.RemoveAt(0);
+
+            // one distinct value means that all the values are the same
+            if (_checkTemperatureChanging.Distinct().Count() == 1)
+                return false;
+            else
+                return true;
         }
 
         /// <summary>
@@ -528,7 +557,7 @@ namespace MainApp
             //            double calObjTemp = objTemp * calibration._sensorCalA + calibration._sensorCalB;
             //            if (!cbNoCalibration.Checked) 
             //            {
-            //                SetGraphData(pltObjTemp, _time, new double[] { objTemp, calObjTemp }, false);
+            //                SetGraphData(pltTemperature, _time, new double[] { objTemp, calObjTemp }, false);
             //                if (_isTempRecording)
             //                {
             //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo) + "\t" + "\t" + "\t" + "\t" + calObjTemp.ToString("F"));
@@ -536,7 +565,7 @@ namespace MainApp
             //            }
             //            else
             //            {
-            //                SetGraphData(pltObjTemp, _time, new double[] { objTemp }, false);
+            //                SetGraphData(pltTemperature, _time, new double[] { objTemp }, false);
             //                if (_isTempRecording)
             //                {
             //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo));
@@ -555,7 +584,7 @@ namespace MainApp
             //            SetGraphData(pltAmbTemp, _time, new double[] { ambTemp }, false);
             //            if (!cbNoCalibration.Checked)
             //            {
-            //                SetGraphData(pltObjTemp, _time, new double[] { objTemp, calObjTemp }, false);      
+            //                SetGraphData(pltTemperature, _time, new double[] { objTemp, calObjTemp }, false);      
             //                if (_isTempRecording)
             //                {
             //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo) + "\t" + "\t" + "\t" + "\t" + calObjTemp.ToString("F"));
@@ -563,7 +592,7 @@ namespace MainApp
             //            }
             //            else
             //            {
-            //                SetGraphData(pltObjTemp, _time, new double[] { objTemp }, false);
+            //                SetGraphData(pltTemperature, _time, new double[] { objTemp }, false);
             //                if (_isTempRecording)
             //                {
             //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo));
@@ -582,7 +611,7 @@ namespace MainApp
             //            SetGraphData(pltAmbTemp, _time, new double[] { ambTemp }, false);
             //            if (!cbNoCalibration.Checked)
             //            {
-            //                SetGraphData(pltObjTemp, _time, new double[] { objTemp, calObjTemp }, false);
+            //                SetGraphData(pltTemperature, _time, new double[] { objTemp, calObjTemp }, false);
                             
             //                if (_isTempRecording)
             //                {
@@ -591,7 +620,7 @@ namespace MainApp
             //            }
             //            else
             //            {
-            //                SetGraphData(pltObjTemp, _time, new double[] { objTemp }, false);
+            //                SetGraphData(pltTemperature, _time, new double[] { objTemp }, false);
 
             //                if (_isTempRecording)
             //                {

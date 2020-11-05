@@ -20,7 +20,7 @@ namespace ArrayMlxSensor
 
         private bool _comConnected = false; // Variable indicating if connection is open.
 
-        private double _averageTemperature = 0; // Average temperature from the celected cells.
+        private double _averageTemperature = 0; // Average temperature from the selected cells.
 
         // Dimensions of the infrared array sensor;
         private static int SENSOR_ROWS = 4;
@@ -57,14 +57,14 @@ namespace ArrayMlxSensor
         private static string SELECTED_CELLS = @".\array_sensor_selected_cells.txt";
 
         // Timer to send temperatures to the main app.
-        private Timer _sendTimer = new Timer() { Interval = 1000 };
+        // private Timer _sendTimer = new Timer() { Interval = 1000 };
 
         public ArrayMlxSensorForm()
         {
             InitializeComponent();
 
             cbBaudRate.SelectedIndex = 8;
-            _sendTimer.Tick += new EventHandler(this.sendDataTimer_Tick);
+            // _sendTimer.Tick += new EventHandler(this.sendDataTimer_Tick);
             GetComPorts();
 
             // load previously selected cells
@@ -130,7 +130,7 @@ namespace ArrayMlxSensor
                 txtConnectedStatus.Text = "Connected";
                 txtConnectedStatus.BackColor = Color.Green;
                 _comConnected = true;
-                _sendTimer.Start();
+                // _sendTimer.Start();
 
             }
             else
@@ -145,7 +145,7 @@ namespace ArrayMlxSensor
                 txtConnectedStatus.Text = "Not Connected";
                 txtConnectedStatus.BackColor = Color.Red;
                 _comConnected = false;
-                _sendTimer.Stop();
+                // _sendTimer.Stop();
             }
         }
         private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -211,6 +211,10 @@ namespace ArrayMlxSensor
                 }
             }
             g.Dispose();
+
+            // Calculate temperature to store it in the variable of BaseSensorForm
+            _temperature = calculateAvgTemperature();
+            txtAvgTemperature.Text = _temperature.ToString("0.##");
         }
 
         private void gbTemperatures_Paint(object sender, PaintEventArgs e)
@@ -302,12 +306,12 @@ namespace ArrayMlxSensor
             return avgTemperature / _selectedTemperatures.Count;
         }
 
-        private void sendDataTimer_Tick(object sender, EventArgs e)
-        {
-            _averageTemperature = calculateAvgTemperature();
-            txtAvgTemperature.Text = _averageTemperature.ToString("0.##");
-            SendTemperature(_averageTemperature);
-        }
+        //private void sendDataTimer_Tick(object sender, EventArgs e)
+        //{
+        //    _averageTemperature = calculateAvgTemperature();
+        //    txtAvgTemperature.Text = _averageTemperature.ToString("0.##");
+        //    SendTemperature(_averageTemperature);
+        //}
         private void ArraySensor_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_comPort != null)

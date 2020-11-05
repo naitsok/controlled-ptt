@@ -24,18 +24,12 @@ namespace OneMlxSensor
 
         private double _ambientTemperature = 0.0;
 
-        private Timer _sendTimer = new Timer()
-        {
-            Interval = 1000
-        };
-
         public OneMLXForm()
         {
             InitializeComponent();
 
             cbBaudRate.SelectedIndex = 6;
             getComPorts();
-            _sendTimer.Tick += new EventHandler(this.sendDataTimer_Tick);
         }
 
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -98,7 +92,6 @@ namespace OneMlxSensor
                 txtConnectedStatus.Text = "Connected";
                 txtConnectedStatus.BackColor = Color.Green;
                 _comConnected = true;
-                _sendTimer.Start();
             }
             else
             {
@@ -112,7 +105,6 @@ namespace OneMlxSensor
                 txtConnectedStatus.Text = "Not Connected";
                 txtConnectedStatus.BackColor = Color.Red;
                 _comConnected = false;
-                _sendTimer.Stop();
             }          
         }
 
@@ -134,10 +126,9 @@ namespace OneMlxSensor
             _objectTemperature = double.Parse(temperatures[0]);
             _ambientTemperature = double.Parse(temperatures[1]);
 
-        }
-        private void sendDataTimer_Tick(object sender, EventArgs e)
-        {
-            SendTemperature(_objectTemperature);
+            // Temperature to be sent by BaseSensor
+            _temperature = _objectTemperature;
+
         }
 
         private void OneMLXForm_FormClosing(object sender, FormClosingEventArgs e)

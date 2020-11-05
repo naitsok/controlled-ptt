@@ -14,7 +14,6 @@ namespace DummySensor
     public partial class DummySensorForm : BaseSensorForm
     {
         // Generates random temperature
-        private int _generatedTemp = 0;
         private bool _genRunning = false;
         private Random rand = new Random(DateTime.Now.Millisecond);
 
@@ -25,9 +24,9 @@ namespace DummySensor
 
         private void tmGenTemp_Tick(object sender, EventArgs e)
         {
-            _generatedTemp = rand.Next(0, 100);
-            txtTemperature.Text = _generatedTemp.ToString();
-            SendTemperature(Convert.ToDouble(_generatedTemp));
+            // Temperature to be sent by BaseSensor
+            _temperature = rand.Next(0, 100);
+            txtTemperature.Text = _temperature.ToString();
         }
 
         private void btnGenTemp_Click(object sender, EventArgs e)

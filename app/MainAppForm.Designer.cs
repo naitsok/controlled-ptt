@@ -31,7 +31,7 @@
             this.txtExpDir = new System.Windows.Forms.TextBox();
             this.btnSelectDir = new System.Windows.Forms.Button();
             this.txtTempFileName = new System.Windows.Forms.TextBox();
-            this.pltObjTemp = new OxyPlot.WindowsForms.PlotView();
+            this.pltTemperature = new OxyPlot.WindowsForms.PlotView();
             this.gbExperiment = new System.Windows.Forms.GroupBox();
             this.lblFileName = new System.Windows.Forms.Label();
             this.lblFileDir = new System.Windows.Forms.Label();
@@ -83,6 +83,7 @@
             this.txtCalibration = new System.Windows.Forms.TextBox();
             this.ofdSelectSensor = new System.Windows.Forms.OpenFileDialog();
             this.fbdSelectDir = new System.Windows.Forms.FolderBrowserDialog();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.gbExperiment.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpTime)).BeginInit();
             this.gbPID.SuspendLayout();
@@ -119,16 +120,16 @@
             this.txtTempFileName.Size = new System.Drawing.Size(246, 20);
             this.txtTempFileName.TabIndex = 19;
             // 
-            // pltObjTemp
+            // pltTemperature
             // 
-            this.pltObjTemp.Location = new System.Drawing.Point(436, 27);
-            this.pltObjTemp.Name = "pltObjTemp";
-            this.pltObjTemp.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.pltObjTemp.Size = new System.Drawing.Size(433, 240);
-            this.pltObjTemp.TabIndex = 43;
-            this.pltObjTemp.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.pltObjTemp.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.pltObjTemp.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.pltTemperature.Location = new System.Drawing.Point(12, 445);
+            this.pltTemperature.Name = "pltTemperature";
+            this.pltTemperature.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.pltTemperature.Size = new System.Drawing.Size(418, 240);
+            this.pltTemperature.TabIndex = 43;
+            this.pltTemperature.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.pltTemperature.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.pltTemperature.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // gbExperiment
             // 
@@ -685,18 +686,29 @@
             this.ofdSelectSensor.Filter = "Executables (*.exe)|*.exe";
             this.ofdSelectSensor.Title = "Select Sensor Executable";
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(579, 110);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(80, 17);
+            this.checkBox1.TabIndex = 62;
+            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // MainAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(879, 868);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.gbCalibration);
             this.Controls.Add(this.pltAmbTemp);
             this.Controls.Add(this.pltLaserCurrent);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.rtbInfo);
             this.Controls.Add(this.gbExperiment);
-            this.Controls.Add(this.pltObjTemp);
+            this.Controls.Add(this.pltTemperature);
             this.Controls.Add(this.menuMain);
             this.Controls.Add(this.gbSensor);
             this.MainMenuStrip = this.menuMain;
@@ -726,7 +738,7 @@
         private System.Windows.Forms.TextBox txtExpDir;
         private System.Windows.Forms.Button btnSelectDir;
         private System.Windows.Forms.TextBox txtTempFileName;
-        private OxyPlot.WindowsForms.PlotView pltObjTemp;
+        private OxyPlot.WindowsForms.PlotView pltTemperature;
         private System.Windows.Forms.GroupBox gbExperiment;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RichTextBox rtbInfo;
@@ -778,6 +790,7 @@
         private System.Windows.Forms.ToolStripMenuItem selectLogsDirectoryToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem selectCalibrationsDirectoryToolStripMenuItem;
         private System.Windows.Forms.Button btnViewCalibration;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

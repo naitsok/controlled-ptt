@@ -50,7 +50,7 @@ namespace MainApp
         private StreamWriter _tempWriter = null;
 
         // Calibration plot.
-        private PlotModel _calibrationPlotModel = new PlotModel()
+        private PlotModel _calibrationPM = new PlotModel()
         {
             Title = "Calibration",
             PlotAreaBackground = OxyColors.White,
@@ -107,7 +107,7 @@ namespace MainApp
             _calTimer.Tick += new EventHandler(this.CalibrationTimer_Tick);
 
             // Calibration plot.
-            _calibrationPlotModel.Axes.Add(new LinearAxis()
+            _calibrationPM.Axes.Add(new LinearAxis()
             {
                 Title = "Sensor Temperature",
                 Position = AxisPosition.Bottom,
@@ -115,7 +115,7 @@ namespace MainApp
                 Maximum = 50,
 
             });
-            _calibrationPlotModel.Axes.Add(new LinearAxis()
+            _calibrationPM.Axes.Add(new LinearAxis()
             {
                 Title = "Correct Temperature",
                 Position = AxisPosition.Left,
@@ -123,7 +123,7 @@ namespace MainApp
                 Maximum = 50
             });
             // Series for sensor temperature.
-            _calibrationPlotModel.Series.Add(new ScatterSeries()
+            _calibrationPM.Series.Add(new ScatterSeries()
             {
                 Title = "Data Points",
                 MarkerType = MarkerType.Cross,
@@ -131,12 +131,12 @@ namespace MainApp
                 MarkerStrokeThickness = 3,
                 MarkerStroke = OxyColors.Blue,
             });
-            _calibrationPlotModel.Series.Add(new LineSeries()
+            _calibrationPM.Series.Add(new LineSeries()
             {
                 Title = "Fitted Line",
                 TextColor = OxyColors.Red,
             });
-            this.pltCalibration.Model = _calibrationPlotModel;
+            this.pltCalibration.Model = _calibrationPM;
 
             // Load the calibration if file is set
             if (!string.IsNullOrEmpty(calibrationFile))

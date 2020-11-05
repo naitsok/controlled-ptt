@@ -23,12 +23,34 @@ namespace BaseSensor
         public delegate void TemperatureSendHandler(object sender, TemperatureSentEventArgs e);
         public event TemperatureSendHandler OnTemperatureSent;
 
-        protected void SendTemperature(double temperature)
+        // Temperature to be sent by timer
+        // Derived classes must set the _temperature variable so it can be sent to the MainApp
+        protected double _temperature = 0;
+        private Timer _sendTempTimer = new Timer() { Interval = 1000 };
+
+        public BaseSensorForm()
+        {
+            InitializeComponent();
+            _sendTempTimer.Tick += new EventHandler(sendDataTimer_Tick);
+            _sendTempTimer.Start();
+        }
+
+        private void sendDataTimer_Tick(object sender, EventArgs e)
+        {
+            SendTemperature();
+        }
+
+        protected void SendTemperature()
         {
             if (OnTemperatureSent == null) return;
 
-            TemperatureSentEventArgs e = new TemperatureSentEventArgs(temperature);
+            TemperatureSentEventArgs e = new TemperatureSentEventArgs(_temperature);
             OnTemperatureSent(this, e);
+        }
+
+        private void BaseSensorForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _sendTempTimer.Stop();
         }
     }
 

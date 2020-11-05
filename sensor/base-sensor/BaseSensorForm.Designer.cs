@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Name = "BaseSensorForm";
             this.Text = "Base Sensor Form";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BaseSensorForm_FormClosing);
             this.ResumeLayout(false);
 
         }
