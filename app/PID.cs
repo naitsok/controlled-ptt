@@ -7,6 +7,7 @@ using Serilog;
 
 namespace MainApp
 {
+    /*
     public partial class MainAppForm : Form
     {
         //PID controls here.
@@ -24,6 +25,7 @@ namespace MainApp
                 gbPID.Visible = true;
         }
     }
+    */
     class PID
     {
         #region Fields

@@ -17,6 +17,7 @@ using System.IO;
 using Serilog;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace MainApp
 {
@@ -24,8 +25,14 @@ namespace MainApp
     {
         // Base directory where executable is located
         private static string BASE_DIR = Directory.GetCurrentDirectory();
-        // Configuration from appsettings.json located in the same directory as the executable
-        private static string CONFIG_PATH = Path.Combine(BASE_DIR, "appsettings.json");
+        // Configuration from base_settings.json located in the same directory as the executable
+        // base_settings.json contains path for settings saved by user
+        private static string BASE_CONFIG_PATH = Path.Combine(BASE_DIR, "base_settings.json");
+        private JObject _baseConfig = null;
+        // If settings saved by user are not found - load default ones.
+        private static string DEFAULT_CONFIG_PATH = Path.Combine(BASE_DIR, "default_settings.json");
+        // Config path to be loaded from base_settings.json
+        private string _configPath = "";
         private JObject _config = null;
 
         // Sensors
@@ -38,33 +45,35 @@ namespace MainApp
         private bool _isSensorSendingTemperature = false;
 
         // Calibration
-        private double _slope = 0;
-        private double _intercept = 0;
-        private string _calibrationFile = "";
-        private CalibrationForm _calibration = null;
+        private Calibration _calibration = null;
 
         // Experiment
+        private string _expBaseDir = "";
         private string _expDir = "";
         private string _expFileName = "";
-        private bool _expDirChanged = false;
+        private string _expFilePath = "";
         private double _calibratedTemperature = 0;
+        // PID
+        private PID _pid = null;
         // Timer for experiment.
         private Timer _experimentTimer = new Timer()
         {
             Interval = 1000
         };
-        // PID
-        private double _propGain = 0;
-        private double _intGain = 0;
-        private double _diffGain = 0;
-
+        // string with the format to save data depending on the experiment type
+        private string _saveDataLineHeader = "Time (sec)\tRaw Sensor Data\tCalibrated Temperature";
+        private string _saveDataLineFormat = "{0}\t{1:F2}\t{2:F2}";
+        // StreamWriter to save data
+        private StreamWriter _expWriter = null;
+        // Variables to keep track of experiment
         private bool _expGoing = false;
+        private int _elapsedSeconds = 0;
 
         private double _time = 0;
 
         private string _tempSavePath = AppDomain.CurrentDomain.BaseDirectory;
 
-        private StreamWriter _tempWriter = null;
+        
 
         private bool _isTempRecording = false;
 
@@ -86,8 +95,9 @@ namespace MainApp
             TitleFontSize = 10,
             TitleFontWeight = 400,
             LegendFontWeight = 500,
-            LegendFontSize = 16,
-            LegendTextColor = OxyColors.Black
+            LegendFontSize = 14,
+            LegendTextColor = OxyColors.Black,
+            LegendPosition = LegendPosition.RightTop,
         };
 
         // Scaling and setting the Graph.
@@ -159,12 +169,25 @@ namespace MainApp
             box.SelectionColor = box.ForeColor;
             box.ScrollToCaret();
         }
+
         public MainAppForm()
         {
             InitializeComponent();
 
-            // Load configuration from appsettings.json
-            _config = JObject.Parse(File.ReadAllText(Path.GetFullPath(CONFIG_PATH)));
+            // Load settings
+            // First load path to settings from base_settings.json which is in the same folder as .exe
+            _baseConfig = JObject.Parse(File.ReadAllText(Path.GetFullPath(BASE_CONFIG_PATH)));
+            _configPath = (string)_baseConfig["appsettings"];
+            if (!Path.IsPathRooted(_configPath))
+                _configPath = Path.GetFullPath(Path.Combine(BASE_DIR, _configPath));
+            // Load settings either saved by user or default ones
+            if (File.Exists(_configPath))
+                _config = JObject.Parse(File.ReadAllText(_configPath));
+            else
+            {
+                _config = JObject.Parse(File.ReadAllText(Path.GetFullPath(DEFAULT_CONFIG_PATH)));
+                _configPath = DEFAULT_CONFIG_PATH;
+            }
 
             saveCurrentSettingsWhenClosingToolStripMenuItem.Checked = (bool)_config["save_settings_on_closing"];
 
@@ -184,48 +207,66 @@ namespace MainApp
             }
 
             // calibration
-            _calibrationFile = Path.GetFullPath(Path.Combine(
-                (string)_config["calibration_dir"], 
-                (string)_config["last_calibration"]));
-
-
-            if (File.Exists(_calibrationFile))
+            string calibrationFile = (string)_config["calibration"];
+            try
             {
-                // if calibration file exists - load calibration
-                txtCalibration.Text = _calibrationFile;
-                _calibration = new CalibrationForm(_calibrationFile);
-                _slope = _calibration.Slope;
-                _intercept = _calibration.Intercept;
+                calibrationFile = Path.GetFullPath(calibrationFile);
+                _calibration = new Calibration(calibrationFile);
             }
-            else
+            catch (ArgumentException)
             {
-                // calibration cannot be loaded
-                txtCalibration.Text = "";
-                _calibrationFile = "";
-                _slope = 1;
-                _intercept = 0;
+                // file does not exist of path is in the wrong format
+                _calibration = new Calibration();
             }
+            displayCalibration();
+            cbUseCalibration.Checked = (bool)_config["use_calibration"];
+            cbUseCalibration_CheckedChanged(cbUseCalibration, new EventArgs());
 
             // get information about experiment and set values
+            nudTargetTemp.Minimum = (decimal)_config["min_target_temperature"];
+            nudTargetTemp.Maximum = (decimal)_config["max_target_temperature"];
             cmbExperimentType.SelectedIndex = (int)_config["experiment_type_index"] - 1;
-            _propGain = (double)_config["pid"]["proportional"];
-            _intGain = (double)_config["pid"]["integral"];
-            _diffGain = (double)_config["pid"]["differential"];
-            nudPropGain.Value = (decimal)_propGain;
-            nudIntGain.Value = (decimal)_intGain;
-            nudDiffGain.Value = (decimal)_diffGain;
+            _pid = new PID(
+                (double)_config["pid"]["proportional"],
+                (double)_config["pid"]["integral"],
+                (double)_config["pid"]["differential"],
+                (double)nudTargetTemp.Maximum, // Max temperature that can be set and achieved
+                (double)nudTargetTemp.Minimum, // Min temperature that can be set and achieved
+                1.0, // PID gives output in the [0, 1] interval of relative laser power
+                0); // The final laser power to be calculated by the laser part
+            nudPropGain.Value = (decimal)_pid.PGain;
+            nudIntGain.Value = (decimal)_pid.IGain;
+            nudDiffGain.Value = (decimal)_pid.DGain;
 
             // Initialization for Experiment
             // directory to save files of the experiment
-            _expDir = Path.GetFullPath(Path.Combine(
-                (string)_config["experiment_dir"], 
-                DateTime.Now.ToString("yyyy-MM-dd")));
-            fbdSelectDir.SelectedPath = _expDir;
+            _expBaseDir = Path.GetFullPath((string)_config["experiment_dir"]);
+            if ((bool)_config["create_experiment_folder_with_current_date"])
+                _expDir = Path.Combine(_expBaseDir, DateTime.Now.ToString("yyyy-MM-dd"));
+            else
+                _expDir = _expBaseDir;
             txtExpDir.Text = _expDir;
+            txtExpDir.SelectionStart = txtExpDir.Text.Length;
+            txtExpDir.ScrollToCaret();
+
+            // if header needs to be saved
+            cbSaveHeader.Checked = (bool)_config["save_header_data"];
+
+            // if data needs to be saved
+            cbSaveData.Checked = (bool)_config["save_experiment_data"];
+            txtExpFileName.Enabled = cbSaveData.Checked;
+            txtExpDir.Enabled = cbSaveData.Checked;
+            btnSelectExpDir.Enabled = cbSaveData.Checked;
+            txtDescription.Enabled = cbSaveData.Checked;
+            txtOperator.Enabled = cbSaveData.Checked;
+            cbSaveHeader.Enabled = cbSaveData.Checked;
 
             // generate file name
-            _expFileName = "Record_" + DateTime.Now.ToString("hh-mm-ss") + ".txt";
-            txtTempFileName.Text = _expFileName;
+            if ((bool)_config["create_experiment_file_with_current_time"])
+                _expFileName = "Record_" + DateTime.Now.ToString("hh-mm-ss") + ".txt";
+            else
+                _expFileName = "";
+            txtExpFileName.Text = _expFileName;
 
             // To log information.
             Log.Logger = new LoggerConfiguration()
@@ -338,36 +379,59 @@ namespace MainApp
             _sensorForm.FormClosed -= sensorForm_FormClosed;
             _sensorForm.OnTemperatureSent -= sensorForm_TemperatureSent;
             gbSensor.Enabled = true;
+            _isSensorSendingTemperature = false;
         }
 
-        private void btnViewCalibration_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Get the calibration parameters, such as Slope and Intersept, and displays them
+        /// on the controls.
+        /// </summary>
+        private void displayCalibration()
+        {
+            txtCalibration.Text = _calibration.CalibrationFile;
+            txtCalibration.SelectionStart = txtCalibration.Text.Length;
+            txtCalibration.ScrollToCaret();
+            txtSlope.Text = _calibration.Slope.ToString("F3");
+            txtIntercept.Text = _calibration.Intercept.ToString("F3");
+        }
+
+        private void btnModifyCalibration_Click(object sender, EventArgs e)
         {
             _calibration.ShowDialog();
-            _slope = _calibration.Slope;
-            _intercept = _calibration.Intercept;
+            displayCalibration();
         }
+
+        private void btnNewCalibration_Click(object sender, EventArgs e)
+        {
+            _calibration = new Calibration();
+            _calibration.ShowDialog();
+            displayCalibration();
+        }
+
+
 
         /// <summary>
         /// Disable and enable controls when no calibration checkbox state changes.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cbNoCalibration_CheckedChanged(object sender, EventArgs e)
+        private void cbUseCalibration_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbNoCalibration.Checked)
+            txtCalibration.Enabled = cbUseCalibration.Checked;
+            btnNewCalibration.Enabled = cbUseCalibration.Checked;
+            btnLoadCalibration.Enabled = cbUseCalibration.Checked;
+            btnModifyCalibration.Enabled = cbUseCalibration.Checked;
+
+            if (cbUseCalibration.Checked)
             {
-                txtCalibration.Enabled = false;
-                btnCalibrate.Enabled = false;
-                btnLoadCalibration.Enabled = false;
-                btnViewCalibration.Enabled = false;
+                _calibration = new Calibration(txtCalibration.Text);
             }
             else
             {
-                txtCalibration.Enabled = true;
-                btnCalibrate.Enabled = true;
-                btnLoadCalibration.Enabled = true;
-                btnViewCalibration.Enabled = true;
+                _calibration = new Calibration();
             }
+            txtSlope.Text = _calibration.Slope.ToString("F3");
+            txtIntercept.Text = _calibration.Intercept.ToString("F3");
         }
 
         /// <summary>
@@ -380,22 +444,22 @@ namespace MainApp
             // receive temperature from sensor, send it to calibration, update controls in MainApp
             _receivedTemperature = e.Temperature;
             _calibration.SensorTemperature = _receivedTemperature;
-            txtSensorTemp.Text = _receivedTemperature.ToString("#.##");
-            if (cbNoCalibration.Checked)
+            txtSensorTemp.Text = _receivedTemperature.ToString("F2");
+            if (cbUseCalibration.Checked)
+            {
+                _calibratedTemperature = _receivedTemperature * _calibration.Slope + _calibration.Intercept;
+                txtCalibratedTemp.Text = _calibratedTemperature.ToString("F2");
+            }
+            else
             {
                 _calibratedTemperature = _receivedTemperature;
                 txtCalibratedTemp.Text = txtSensorTemp.Text;
-            }
-            else
-            { 
-                _calibratedTemperature = _receivedTemperature * _slope + _intercept;
-                txtCalibratedTemp.Text = _calibratedTemperature.ToString("#.##");
             }
 
             // check if temperature from sensor is changing
             // if it is not changing - something is wrong
             // for example sensor is not connected to the board
-            checkBox1.Checked = checkSensorIsSendingTemperature(_receivedTemperature);
+            _isSensorSendingTemperature = CheckSensorIsSendingTemperature(_receivedTemperature);
         }
 
         /// <summary>
@@ -405,7 +469,7 @@ namespace MainApp
         /// </summary>
         /// <param name="temperature"></param>
         /// <returns></returns>
-        private bool checkSensorIsSendingTemperature(double temperature)
+        private bool CheckSensorIsSendingTemperature(double temperature)
         {
             _checkTemperatureChanging.Add(temperature);
             if (_checkTemperatureChanging.Count > NUM_LAST_TEMPS)
@@ -419,20 +483,26 @@ namespace MainApp
         }
 
         /// <summary>
-        /// Show PID control panel when PID controlled experiment is selected
+        /// Show PID control panel when PID controlled experiment is selected.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void cmbExperimentType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbExperimentType.SelectedIndex == 1)
+            switch (cmbExperimentType.SelectedIndex)
             {
-                // PID control is selected
-                gbPID.Visible = true;
-            }
-            else
-            {
-                gbPID.Visible = false;
+                case 0:
+                    gbLaser.Visible = false;
+                    gbPID.Visible = false;
+                    break;
+                case 1:
+                    gbLaser.Visible = true;
+                    gbPID.Visible = false;
+                    break;
+                case 2:
+                    gbLaser.Visible = true;
+                    gbPID.Visible = true;
+                    break;
             }
         }
 
@@ -441,94 +511,239 @@ namespace MainApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnSelectTempPath_Click(object sender, EventArgs e)
+        private void btnSelectExpDir_Click(object sender, EventArgs e)
         {
+            fbdSelectDir.SelectedPath = _expBaseDir;
             DialogResult result = fbdSelectDir.ShowDialog();
             if (result == DialogResult.OK)
             {
-                _expDirChanged = true;
-                txtExpDir.Text = fbdSelectDir.SelectedPath;
+                _expDir = fbdSelectDir.SelectedPath;
+                _expBaseDir = _expDir;
+                txtExpDir.Text = _expDir;
+                txtExpDir.SelectionStart = txtExpDir.Text.Length;
+                txtExpDir.ScrollToCaret();
+            }
+        }
+
+        private void cbSaveData_CheckedChanged(object sender, EventArgs e)
+        {
+            txtExpFileName.Enabled = cbSaveData.Checked;
+            txtExpDir.Enabled = cbSaveData.Checked;
+            btnSelectExpDir.Enabled = cbSaveData.Checked;
+            txtDescription.Enabled = cbSaveData.Checked;
+            txtOperator.Enabled = cbSaveData.Checked;
+            cbSaveHeader.Enabled = cbSaveData.Checked;
+        }
+
+        /// <summary>
+        /// Checks everything before the experiment. If everything is ok, returns true.
+        /// </summary>
+        private bool PrepareExperiment()
+        {
+            // Sensor is not sending temperature
+            if (!_isSensorSendingTemperature)
+            {
+                MessageBox.Show("The sensor is not sending temperature. Check if it is connected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            // TODO: Check laser connection!
+            // TODO: Laser API and laser base class to be developed!
+
+            // Prepare PID
+            _pid.Reset();
+
+            // Experiment directory
+            if (!Directory.Exists(_expDir))
+            {
+                Directory.CreateDirectory(_expDir);
+            }
+            // Experiment file
+            _expFileName = txtExpFileName.Text;
+            // Check filename contains correct characters
+            Regex checkFileName = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
+            if (checkFileName.IsMatch(_expFileName))
+            {
+                MessageBox.Show("File name contains invalid characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            _expFilePath = Path.Combine(_expDir, _expFileName);
+            if (!Path.HasExtension(_expFilePath))
+                _expFilePath = _expFilePath + ".txt";
+
+            if (File.Exists(_expFileName))
+            {
+                DialogResult result = MessageBox.Show("File with the selected name already exists. Do you want to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.No)
+                    return false;
+            }
+
+            // Generate the tempalte string for saving the data depending on the selected experimental parameters
+            _saveDataLineHeader = "Time (sec)\tRaw Sensor Data\tCalibrated Temperature";
+            _saveDataLineFormat = "{0}\t{1:F2}\t{2:F2}";
+            if (cmbExperimentType.SelectedIndex > 0)
+            {
+                // Laser will be used in the experiment
+                _saveDataLineHeader = _saveDataLineHeader + "\tLaser Power";
+                _saveDataLineFormat = _saveDataLineFormat + "\t{3:F2}";
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Disables and changes controls when experiment is running
+        /// </summary>
+        private void DisableControlsExperimentStarted()
+        {
+            btnStartExperiment.Text = "Stop Experiment";
+            txtExperimentStarted.Text = "Experiment Going";
+            txtExperimentStarted.BackColor = Color.Green;
+            nudExpTime.ReadOnly = true;
+            cbSaveData.Enabled = false;
+            txtExpFileName.Enabled = false;
+            btnSelectExpDir.Enabled = false;
+            txtDescription.Enabled = false;
+            txtOperator.Enabled = false;
+            cbSaveHeader.Enabled = false;
+            gbLaser.Enabled = false;
+            nudTargetTemp.Enabled = false;
+        }
+
+        /// <summary>
+        /// Enables and changes controls so that a new experiment can be started
+        /// </summary>
+        private void EnableControlsExperimentFinished()
+        {
+            btnStartExperiment.Text = "Start Experiment";
+            txtExperimentStarted.Text = "Experiment Not Going";
+            txtExperimentStarted.BackColor = Color.Red;
+            nudExpTime.ReadOnly = false;
+            cbSaveData.Enabled = true;
+            txtExpFileName.Enabled = true;
+            btnSelectExpDir.Enabled = true;
+            txtDescription.Enabled = true;
+            txtOperator.Enabled = true;
+            cbSaveHeader.Enabled = true;
+            gbLaser.Enabled = true;
+            nudTargetTemp.Enabled = true;
+        }
+
+        private void btnStartExperiment_Click(object sender, EventArgs e)
+        {
+            if (_expGoing)
+            {
+                EnableControlsExperimentFinished();
+
+                _expGoing = false;
+                _experimentTimer.Stop();
+            }
+            else
+            {
+                if (PrepareExperiment())
+                {
+                    if (cbSaveData.Checked)
+                    {
+                        _expWriter = new StreamWriter(_expFilePath);
+                        if (cbSaveHeader.Checked)
+                        {
+                            // Save header data
+                            string laser = "No Laser";
+                            string pidParams = "No PID control";
+                            if (cmbExperimentType.SelectedIndex > 0)
+                                laser = cmbLasers.SelectedText;
+                            if (cmbExperimentType.SelectedIndex == 2)
+                            {
+                                // PID Controlled PTT selected
+                                pidParams = "proportional = " + nudPropGain.Value.ToString("F2") + "; integral = " +
+                                    nudIntGain.Value.ToString("F2") + "; differential = " + nudDiffGain.Value.ToString("F2");
+                            }
+                            string header =
+                                "File Name: " + _expFileName + Environment.NewLine +
+                                "File Directory: " + _expDir + Environment.NewLine +
+                                "Experiment: " + cmbExperimentType.SelectedText + Environment.NewLine +
+                                "Description: " + txtDescription.Text + Environment.NewLine +
+                                "Operator: " + txtOperator.Text + Environment.NewLine +
+                                "Settings: " + _configPath + Environment.NewLine +
+                                "Sensor: " + cmbSensors.SelectedText + Environment.NewLine +
+                                "Calibration: " + _calibration.CalibrationFile + Environment.NewLine +
+                                "PID parameters: " + pidParams + Environment.NewLine +
+                                "Laser: " + laser + Environment.NewLine +
+                                "Experiment time: " + nudExpTime.Value.ToString("F2") + " min";
+                            _expWriter.WriteLine(header);
+                        }
+
+                        // Save first lines
+                        _expWriter.WriteLine(_saveDataLineHeader);
+                        _expWriter.WriteLine(string.Format(_saveDataLineFormat, 0, _receivedTemperature, _calibratedTemperature /* , _laser.GetLaserPower() */));
+
+                        
+                    }
+
+                    DisableControlsExperimentStarted();
+
+                    // TODO: switch on laser (possibly disable laser controls as well, but maybe not needed)
+                    
+
+                    _elapsedSeconds = 0;
+                    txtElapsedTime.Text = TimeSpan.FromSeconds(_elapsedSeconds).ToString("HH:mm:ss");
+
+                    _expGoing = true;
+                    _experimentTimer.Start();
+                }
             }
         }
 
         /// <summary>
-        /// Checks everything before the experiment
+        /// Main method to perform the measurement, control the laser and write the data.
         /// </summary>
-        private void PrepareExperiment()
-        {
-
-        }
-
-        private void BtnStartExperiment_Click(object sender, EventArgs e)
-        {          
-            //if (!_expGoing)
-            //{
-            //    Log.Information("Experiment started. Timer set to {0} minutes.", nudExpTime.Value);
-            //    if (btnSelectSensor.Enabled == false) // To see if sensor has been selected.
-            //    {
-            //        // To see if send button is enabled on sensor's interface.
-            //        if (array.AvgTemperature != null || oneMlxSensor.ObjectTemperature != null || twoMlxSensors.AvgObjTemperature != null)  
-            //        {
-            //            _expGoing = true;
-            //            btnStartExperiment.Text = "Stop Experiment";
-            //            txtExperimentStarted.Text = "Experiment Going";
-            //            txtExperimentStarted.BackColor = Color.Green;
-            //            _experimentTimer.Start();
-            //            _secondsTillEnd = (int)(nudExpTime.Value * 60);
-            //            txtExpTime.Visible = true;
-            //            nudExpTime.Visible = false;
-            //            txtExpTime.Text = TimeSpan.FromSeconds(_secondsTillEnd).ToString();
-            //            if (cbSaveData.Checked)
-            //            {
-            //                _isTempRecording = true;
-            //                string fileName = txtTempFileName.Text;
-            //                if (string.IsNullOrWhiteSpace(fileName) || fileName.StartsWith("Record_"))
-            //                {
-            //                    fileName = "Record_" + DateTime.Now.ToString("dd-MM-yy-hh-mm-ss") + ".txt";
-            //                }
-            //                if (!fileName.ToUpper().EndsWith(".TXT"))
-            //                    fileName = fileName + ".txt";
-            //                txtTempFileName.Text = fileName;
-            //                string filePath = Path.Combine(tbTempFilePath.Text, fileName);
-            //                _tempWriter = new StreamWriter(filePath);
-            //                _tempWriter.WriteLine("Time (s)\tObject temperature \t Calibrated object temperature");
-                            
-            //            }
-            //        }
-            //        else
-            //        {
-            //            AddError("No data received. Please, verify that sending is enabled on the sensor's interface.");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        AddError("No sensor selected.");
-            //    }
-            //}
-            //else
-            //{
-            //    Log.Information("Experiment has ended.");
-            //    _expGoing = false;
-            //    btnStartExperiment.Text = "Start Experiment";
-            //    txtExperimentStarted.Text = "Experiment Not Going";
-            //    txtExperimentStarted.BackColor = Color.Red;
-            //    _experimentTimer.Stop();
-            //    array.AvgTemperature = null;
-            //    oneMlxSensor.ObjectTemperature = null;
-            //    twoMlxSensors.AvgObjTemperature = null;
-            //    txtExpTime.Visible = false;
-            //    nudExpTime.Visible = true;
-            //    if (_isTempRecording)
-            //    {
-            //        _tempWriter.Flush();
-            //        _tempWriter.Close();
-            //        _isTempRecording = false;
-            //    }
-            //}
-        }
-
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void experimentTimer_Tick(object sender, EventArgs e)
         {
+            if (_expGoing)
+            {
+                if (_elapsedSeconds > (int)(nudExpTime.Value * 60))
+                {
+                    // Stop the experiment when the time is over. Write all the data if specified.
+                    if (cbSaveData.Checked)
+                    {
+                        _expWriter.Flush();
+                        _expWriter.Close();
+                    }
+
+                    EnableControlsExperimentFinished();
+
+                    _expGoing = false;
+                    _experimentTimer.Stop();
+                }
+                else
+                {
+                    // Experiment is going
+                    _elapsedSeconds += 1;
+                    _expWriter.WriteLine(string.Format(_saveDataLineFormat, _elapsedSeconds, _receivedTemperature, _calibratedTemperature /* , _laser.GetLaserPower() */));
+                    if (cmbExperimentType.SelectedIndex == 2)
+                    {
+                        // PID Controled PTT is on
+                        _pid
+                    }
+                }
+            }
+            else
+            {
+                // Experiment is stopped manually by clicking the button
+                if (cbSaveData.Checked)
+                {
+                    _expWriter.Flush();
+                    _expWriter.Close();
+                }
+
+                EnableControlsExperimentFinished();
+
+                _expGoing = false;
+                _experimentTimer.Stop();
+            }
             //if (_secondsTillEnd <= 0)   // If the time selected for the experiment has elapsed.
             //{
             //    Log.Information("Experiment has ended.");
@@ -612,7 +827,7 @@ namespace MainApp
             //            if (!cbNoCalibration.Checked)
             //            {
             //                SetGraphData(pltTemperature, _time, new double[] { objTemp, calObjTemp }, false);
-                            
+
             //                if (_isTempRecording)
             //                {
             //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo) + "\t" + "\t" + "\t" + "\t" + calObjTemp.ToString("F"));
@@ -635,8 +850,7 @@ namespace MainApp
             //}                                   
         }
 
-        // Disposes all the forms when closing the main form. (Not sure if necessary).
-        private void MainApp_FormClosing(object sender, FormClosingEventArgs e)
+        private void SaveSettings()
         {
             // Settings from menu should be always saved
             _config["save_settings_on_closing"] = saveCurrentSettingsWhenClosingToolStripMenuItem.Checked;
@@ -656,26 +870,70 @@ namespace MainApp
                 // Save sensor selected index
                 _config["selected_sensor_index"] = cmbSensors.SelectedIndex + 1;
 
+                // Save calibration
+                _config["calibration"] = txtCalibration.Text;               
+                _config["use_calibration"] = cbUseCalibration.Checked;
+
                 // Save experiment type
                 _config["experiment_type_index"] = cmbExperimentType.SelectedIndex + 1;
 
                 // Save PID values
-                _config["pid"]["proportional"] = _propGain;
-                _config["pid"]["integral"] = _intGain;
-                _config["pid"]["differential"] = _diffGain;
+                _config["pid"]["proportional"] = _pid.PGain;
+                _config["pid"]["integral"] = _pid.IGain;
+                _config["pid"]["differential"] = _pid.DGain;
 
                 // Save experiment dir
-                if (_expDirChanged)
-                {
-                    _config["user_experiment_dir"] = true;
-                    _config["experiment_dir"] = fbdSelectDir.SelectedPath;
-                }
+                _config["experiment_dir"] = _expBaseDir;
+
+                // Save experiment settings
+                _config["save_header_data"] = cbSaveHeader.Checked;
+                _config["save_experiment_data"] = cbSaveData.Checked;
+                _config["create_experiment_folder_with_current_date"] = createDirectoryWithCurrentDateToolStripMenuItem.Checked;
+                _config["create_experiment_file_with_current_time"] = createFileWithCurrentTimeToolStripMenuItem.Checked;
 
             }
-            File.WriteAllText(CONFIG_PATH, _config.ToString());
+            // Saves main settings file
+            File.WriteAllText(_configPath, _config.ToString());
+
+            // Saves base settings file
+            _baseConfig["appsettings"] = _configPath;
+            File.WriteAllText(BASE_CONFIG_PATH, _baseConfig.ToString());
+        }
+
+        /// <summary>
+        /// Save settings upon closing if necessary.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainApp_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveSettings();
 
             _calibration.Dispose();
-            Log.CloseAndFlush();
+            // Log.CloseAndFlush();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveSettings();
+        }
+
+        private void nudPropGain_ValueChanged(object sender, EventArgs e)
+        {
+            _pid.PGain = (double)nudPropGain.Value;
+            _pid.Reset();
+        }
+
+        private void nudIntGain_ValueChanged(object sender, EventArgs e)
+        {
+            _pid.IGain = (double)nudIntGain.Value;
+            _pid.Reset();
+        }
+
+        private void nudDiffGain_ValueChanged(object sender, EventArgs e)
+        {
+            _pid.DGain = (double)nudDiffGain.Value;
+            _pid.Reset();
         }
     }
 }

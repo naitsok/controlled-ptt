@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
 using Serilog;
@@ -13,9 +8,9 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.WindowsForms;
 using OxyPlot.Series;
-using CenterSpace.NMath.Core;
 using Newtonsoft.Json;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace MainApp
 {
@@ -27,22 +22,29 @@ namespace MainApp
     public partial class Calibration : Form
     {
         public string CalibrationFile { get; set; } = "";
+        private JObject _calibration = null;
 
-        public double CoefficientA { get; set; } = 0;
+        public double Slope { get; set; } = 1;
+        public double Intercept { get; set; } = 0;
 
-        public double CoefficientB { get; set; } = 0;
+        private List<double> _sensorTemps = new List<double>();
+        private List<double> _correctTemps = new List<double>();
 
-        // Timer for calibration.
+        // helpers
+        private bool _cancelClicked = false;
+
+        // Keeps the value of current sensor temperature
+        // Value is set in the MainAppForm when recieved from sensor
+        public double SensorTemperature { get; set; }
+
+        // Timer for calibration
+        // On each tick reads temperature from SensorTemperature variable
+        // and updated dgCalibration as well as the sensor
+        // and calibrated temperature cotrols
         private Timer _calTimer = new Timer()
         {
             Interval = 1000
         };
-
-        public double _objTemp { get; set; }
-
-        private double _slope = 0;
-
-        private double _intercept = 0;
 
         public double _sensorCalA { get; set; }
 
@@ -51,214 +53,238 @@ namespace MainApp
         private StreamWriter _tempWriter = null;
 
         // Calibration plot.
-        private PlotModel _calibrationPlotModel = new PlotModel()
+        private PlotModel _calibrationPM = new PlotModel()
         {
             Title = "Calibration",
-            PlotAreaBackground = OxyColors.Black,
+            PlotAreaBackground = OxyColors.White,
             DefaultColors = new List<OxyColor>
             {
+                OxyColors.Blue,
                 OxyColors.Red,
-                OxyColors.Green,
-                OxyColors.Blue
             },
-            TitleFontSize = 10,
+            TitleFontSize = 12,
             TitleFontWeight = 400,
             LegendFontWeight = 500,
-            LegendFontSize = 10,
+            LegendFontSize = 12,
             LegendPosition = LegendPosition.LeftTop,
-            LegendTextColor = OxyColors.White,
+            LegendTextColor = OxyColors.Black,
         };
 
-        // Scaling and setting the Graph.
-        private void SetGraphData(PlotView pw, double x, double y)
-        {
-            var xAxis = pw.Model.Axes[0];
-            var yAxis = pw.Model.Axes[1];
-
-            //Scaling the axes.
-            xAxis.Maximum = x + 10;
-            yAxis.Maximum = y + 10;
-
-            (pw.Model.Series[0] as ScatterSeries).Points.Add(new ScatterPoint(x, y, 3, 1));
-            (pw.Model.Series[1] as LineSeries).Points.Add(new DataPoint(xAxis.Minimum, _intercept));
-            (pw.Model.Series[1] as LineSeries).Points.Add(new DataPoint(xAxis.Maximum, _slope*xAxis.Maximum + _intercept));
-            pw.InvalidatePlot(false);
-        }
-        
         // Function to make linear least squares estimation.
         private void LeastSquares()
         {
-            // Arrays for datagrid's values. Makes matrix and vector creating easier.
-            double[] realtempArray = new double[dgCalibration.Rows.Count];
-            double[] sensorTempArray = new double[dgCalibration.Rows.Count];
-
-            for (int i = 0; i < dgCalibration.Rows.Count; i++)
+            // check there is data to do calculation
+            if (_sensorTemps.Count == 0 || _correctTemps.Count == 0)
             {
-                if (dgCalibration.Rows[i].Cells[1].Value != null)   // Includes only values that has been set by user.
-                {
-                    double sensorTemp = Convert.ToDouble(dgCalibration.Rows[i].Cells[0].Value);
-                    double realTemp = Convert.ToDouble(dgCalibration.Rows[i].Cells[1].Value);
-                    realtempArray[i] = realTemp;
-                    sensorTempArray[i] = sensorTemp;
-                }
+                MessageBox.Show("There is not enough data to calculate least squares. Check the data table.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (_sensorTemps.Count != _correctTemps.Count)
+            {
+                MessageBox.Show("There is not enough data to calculate least squares. Check the data table.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
-            // Fitting a straight on Data Points with LS-method.
-            DoubleVector y = new DoubleVector(realtempArray);
-            DoubleMatrix m = new DoubleMatrix(dgCalibration.Rows.Count, 1, sensorTempArray, StorageType.ColumnMajor);
-            var lsq = new DoubleLeastSquares(m, y, true);
+            // Caluclate least squares
+            int numPoints = _sensorTemps.Count;
+            double sumX = 0;
+            double sumY = 0;
+            double sumXsquared = 0;
+            double sumXY = 0;
+            for (int i = 0; i < numPoints; i++)
+            {
+                sumX += _sensorTemps[i];
+                sumY += _correctTemps[i];
+                sumXsquared += _sensorTemps[i] * _sensorTemps[i];
+                sumXY += _sensorTemps[i] * _correctTemps[i];
+            }
 
-            _intercept = lsq.X[0];
-            _slope = lsq.X[1];
-
-            nudSensorCalA.Value = (decimal)lsq.X[1];
-            nudSensorCalB.Value = (decimal)lsq.X[0];
-            
+            Slope = (sumXY * numPoints - sumX * sumY) / (sumXsquared * numPoints - sumX * sumX);
+            Intercept = (sumXY * sumX - sumXsquared * sumY) / (sumX * sumX - numPoints * sumXsquared);
         }
 
         public Calibration()
         {
             InitializeComponent();
 
-
-
             _calTimer.Tick += new EventHandler(this.CalibrationTimer_Tick);
-          
-            // To log information.
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.File("C:/Users/mikke/controlledptt-sensor/MainApp/bin/Debug/logfile.json", shared: true)
-                .CreateLogger();
 
             // Calibration plot.
-            _calibrationPlotModel.Axes.Add(new LinearAxis()
+            _calibrationPM.Axes.Add(new LinearAxis()
             {
                 Title = "Sensor Temperature",
                 Position = AxisPosition.Bottom,
-                // Minimum = 0,
-                // Maximum = 50,
-                
-            }) ;
-            _calibrationPlotModel.Axes.Add(new LinearAxis()
-            {
-                Title = "Real Temperature",
-                Position = AxisPosition.Left,
-                // Minimum = 0,
-                // Maximum = 50
+                Minimum = 0,
+                Maximum = 50,
+
             });
-            //// Series for sensor temperature.
-            _calibrationPlotModel.Series.Add(new ScatterSeries()
+            _calibrationPM.Axes.Add(new LinearAxis()
+            {
+                Title = "Correct Temperature",
+                Position = AxisPosition.Left,
+                Minimum = 0,
+                Maximum = 50
+            });
+            // Series for sensor temperature.
+            _calibrationPM.Series.Add(new ScatterSeries()
             {
                 Title = "Data Points",
-                MarkerType = MarkerType.Circle,
-                TextColor = OxyColors.Red
-
+                MarkerType = MarkerType.Cross,
+                MarkerSize = 5,
+                MarkerStrokeThickness = 3,
+                MarkerStroke = OxyColors.Blue,
             });
-            _calibrationPlotModel.Series.Add(new LineSeries()
-            {              
+            _calibrationPM.Series.Add(new LineSeries()
+            {
                 Title = "Fitted Line",
-                TextColor = OxyColors.Green,
+                TextColor = OxyColors.Red,
             });
-
-            this.pltCalibration.Model = _calibrationPlotModel;
-
+            this.pltCalibration.Model = _calibrationPM;
         }
 
-        private void NudSensorCalA_ValueChanged(object sender, EventArgs e)
+        public Calibration(string calibrationFile = "") : this()
         {
-            _sensorCalA = (double)nudSensorCalA.Value;
+            // Load the calibration if file is set
+            if (!string.IsNullOrEmpty(calibrationFile))
+            {
+                CalibrationFile = Path.GetFullPath(calibrationFile);
+                txtCalibFile.Text = CalibrationFile;
+                txtCalibFile.SelectionStart = txtCalibFile.Text.Length;
+                txtCalibFile.ScrollToCaret();
+            }
+            LoadCalibration();
         }
 
-        private void NudSensorCalB_ValueChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Sets the graph data.
+        /// </summary>
+        /// <param name="pw"></param>
+        /// <param name="sensorTemps"></param>
+        /// <param name="correctTemps"></param>
+        /// <param name="drawFit"></param>
+        private void SetGraph()
         {
-            _sensorCalB = (double)nudSensorCalB.Value;
+            PlotView pw = pltCalibration;
+            var xAxis = pw.Model.Axes[0];
+            var yAxis = pw.Model.Axes[1];
+
+            // Get and clear plot series
+            ScatterSeries tempsSeries = pw.Model.Series[0] as ScatterSeries;
+            tempsSeries.Points.Clear();
+            LineSeries calibSeries = pw.Model.Series[1] as LineSeries;
+            calibSeries.Points.Clear();
+
+            // check there is something to plot
+            if (_sensorTemps.Count == 0 || _correctTemps.Count == 0)
+            {
+                pw.InvalidatePlot(true);
+                return;
+            }
+
+            // Scaling the axes
+            xAxis.Maximum = _sensorTemps.Max() + 2;
+            xAxis.Minimum = _sensorTemps.Min() - 2;
+            yAxis.Maximum = _correctTemps.Max() + 2;
+            yAxis.Minimum = _correctTemps.Min() - 2;
+
+            // Add new points
+            for (int i = 0; i < _sensorTemps.Count; i++)
+            {
+                tempsSeries.Points.Add(new ScatterPoint(_sensorTemps[i], _correctTemps[i]));
+            }
+
+            // Add fitted line
+            calibSeries.Points.Add(new DataPoint(xAxis.Minimum, this.Slope * xAxis.Minimum + this.Intercept));
+            calibSeries.Points.Add(new DataPoint(xAxis.Maximum, this.Slope * xAxis.Maximum + this.Intercept));
+
+            pw.InvalidatePlot(true);
+        }
+
+        private void LoadCalibration()
+        {
+            if (string.IsNullOrEmpty(this.CalibrationFile))
+                return;
+
+            _calibration = JObject.Parse(File.ReadAllText(this.CalibrationFile));
+            this.Slope = (double)_calibration["slope"];
+            this.Intercept = (double)_calibration["intercept"];
+            _sensorTemps = _calibration["sensor_temperatures"].ToObject<List<double>>();
+            _correctTemps = _calibration["correct_temperatures"].ToObject<List<double>>();
+
+            // Set up the controls
+            SetGraph();
+            nudSlope.Value = (decimal)Slope;
+            nudIntercept.Value = (decimal)Intercept;
+            dgCalibration.Rows.Clear();
+            for (int i = 0; i < _sensorTemps.Count; i++)
+            {
+                dgCalibration.Rows.Add(new string[] { _sensorTemps[i].ToString("F2"), _correctTemps[i].ToString("F2") });
+            }
+        }
+
+        private void NudSlope_ValueChanged(object sender, EventArgs e)
+        {
+            Slope = (double)nudSlope.Value;
+            SetGraph();
+        }
+
+        private void NudIntercept_ValueChanged(object sender, EventArgs e)
+        {
+            Intercept = (double)nudIntercept.Value;
+            SetGraph();
         }
 
         private void CalibrationTimer_Tick(object sender, EventArgs e)
         {       
-            txtSensorTemp.Text = _objTemp.ToString();
-            txtCalibratedTemp.Text = (_sensorCalA * _objTemp + _sensorCalB).ToString();
+            txtSensorTemp.Text = SensorTemperature.ToString("#.##");
+            txtCalibratedTemp.Text = (Slope * SensorTemperature + Intercept).ToString("#.##");
 
-            // Sets the measured temperature from sensor to DataGrid's selected row's first index. 
-            if (dgCalibration.CurrentCell != null)
-            {
-                string address = dgCalibration.CurrentCellAddress.Y.ToString();     //To see which row is selected.
-                dgCalibration.Rows[Convert.ToInt32(address)].Cells[0].Value = _objTemp.ToString();
-            }
-        }
-
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            Log.Information("Calibration cancelled.");
-            _calTimer.Stop();
-            this.Hide();
-            // _evtForm();
-            if (_tempWriter != null)
-            {
-                _tempWriter.Flush();
-                _tempWriter.Close();
-            }
-            _sensorCalA = 0;
-            _sensorCalB = 0;
+            dgCalibration.Rows[dgCalibration.Rows.Count - 1].Cells[0].Value = this.SensorTemperature.ToString("#.##");
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            Log.Information("Calibration saved.");
-
-            // Saving the coefficients to file.
-            Stream myStream;
-            using (var sfd = new SaveFileDialog())
+            DialogResult result = sfdSaveCalibration.ShowDialog();
+            if (result == DialogResult.OK)
             {
-                sfd.Filter = "json files (*.json)|*.json";
-                sfd.FilterIndex = 2;
-                sfd.RestoreDirectory = true;
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    if ((myStream = sfd.OpenFile()) != null)
-                    {                     
-                        myStream.Close();
-                    }              
-                }
-                try
-                {
-                    List<double> coefficients = new List<double>
-                    {
-                        _slope,
-                        _intercept
-                    };
-                    string json = JsonConvert.SerializeObject(coefficients.ToArray(), Formatting.Indented);
-                    File.WriteAllText(sfd.FileName, json);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message);
-                }
-            }     
+                SaveCalibration();
+            }  
         }
+
+        /// <summary>
+        /// Saves current calibaration to the selected file.s
+        /// </summary>
+        private void SaveCalibration()
+        {
+            _calibration["slope"] = this.Slope;
+            _calibration["intercept"] = this.Intercept;
+            _calibration["sensor_temperatures"] = new JArray(_sensorTemps.ToArray());
+            _calibration["correct_temperatures"] = new JArray(_correctTemps.ToArray());
+
+            CalibrationFile = sfdSaveCalibration.FileName;
+            txtCalibFile.Text = CalibrationFile;
+            txtCalibFile.SelectionStart = txtCalibFile.Text.Length;
+            txtCalibFile.ScrollToCaret();
+
+            File.WriteAllText(CalibrationFile, _calibration.ToString());
+        }
+
+        /// <summary>
+        /// Loads calibration file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnLoad_Click(object sender, EventArgs e)
         {
-            Log.Information("Calibration coefficiets loaded.");
-
-            //Loads previously saved coefficients. 
-            using (var ofd = new OpenFileDialog())
+            DialogResult result = ofdLoadCalibration.ShowDialog();
+            if (result == DialogResult.OK)
             {
-                DialogResult result = ofd.ShowDialog();
-                try
-                {
-                    string json = File.ReadAllText(ofd.FileName);
-                    List<double> coefficients = JsonConvert.DeserializeObject<List<double>>(json);
-                    _slope = Convert.ToDouble(coefficients[0]);
-                    _intercept = Convert.ToDouble(coefficients[1]);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message);
-                }                                     
+                CalibrationFile = ofdLoadCalibration.FileName;
+                txtCalibFile.Text = CalibrationFile;
+                txtCalibFile.SelectionStart = txtCalibFile.Text.Length;
+                txtCalibFile.ScrollToCaret();
+                LoadCalibration();
             }
-       
-            nudSensorCalA.Value = (decimal)_slope;
-            nudSensorCalB.Value = (decimal)_intercept;
-
         }
 
         private void Calibration_Load(object sender, EventArgs e)
@@ -268,38 +294,81 @@ namespace MainApp
 
         private void Calibration_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _calTimer.Stop();
-            // _evtForm();
+            if (_cancelClicked)
+            {
+                _cancelClicked = false;
+                _calTimer.Stop();
+                return;
+            }
+
+            DialogResult result = MessageBox.Show("All unsaved changes will be lost when exiting the Main App. Would you like to save changes to calibration?",
+                "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                result = sfdSaveCalibration.ShowDialog();
+                if (result == DialogResult.OK)
+                    SaveCalibration();
+            }
+            else
+                _calTimer.Stop();
         }
 
-        // Value in cell cannot be changed when value has been set.
-        private void DgCalibration_CellEnter(object sender, DataGridViewCellEventArgs e)
+        /// <summary>
+        /// Updates _sensorTemps and _correctTemps if the last row contains data in both columns
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgCalibration_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgCalibration.CurrentCell.Value != null)
+            dgCalibration.EndEdit();
+
+            _sensorTemps.Clear();
+            _correctTemps.Clear();
+
+            // update arrays with temperatures and graph
+            // check that data is in number format
+            for (int i = 0; i < dgCalibration.Rows.Count - 1; i++)
             {
-                dgCalibration.CurrentCell.ReadOnly = true;
+                try
+                {
+                    if (dgCalibration.Rows[i].Cells[0].Value == null)
+                        _sensorTemps.Add(0);
+                    else
+                        _sensorTemps.Add(Convert.ToDouble(dgCalibration.Rows[i].Cells[0].Value.ToString()));
+
+                    if (dgCalibration.Rows[i].Cells[1].Value == null)
+                        _correctTemps.Add(0);
+                    else
+                        _correctTemps.Add(Convert.ToDouble(dgCalibration.Rows[i].Cells[1].Value.ToString()));
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("The value entered in the cell is not a number. Check '.' and ',' when entering number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    _sensorTemps.Clear();
+                    _correctTemps.Clear();
+                    break;
+                }
             }
+            SetGraph();
         }
 
         private void BtnCalculate_Click(object sender, EventArgs e)
         {
             LeastSquares();
-            for (int i = 0; i < dgCalibration.Rows.Count; i++)
-            {
-                if (dgCalibration.Rows[i].Cells[1].Value != null)   
-                {
-                    double sensorTemp = Convert.ToDouble(dgCalibration.Rows[i].Cells[0].Value);
-                    double realTemp = Convert.ToDouble(dgCalibration.Rows[i].Cells[1].Value);
-                    SetGraphData(pltCalibration, sensorTemp, realTemp);
-                }
-            }
+            nudSlope.Value = (decimal)Slope;
+            nudIntercept.Value = (decimal)Intercept;
+            SetGraph();
         }
         private void BtnOK_Click(object sender, EventArgs e)
         {
-            Log.Information("Calibration performed.");
-            _calTimer.Stop();
-            this.Hide();
-            // _evtForm();
+            Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            LoadCalibration();
+            _cancelClicked = true;
+            Close();
         }
     }
 }

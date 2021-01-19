@@ -31,16 +31,15 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lblCalibFile = new System.Windows.Forms.Label();
             this.txtCalibFile = new System.Windows.Forms.TextBox();
-            this.nudSensorCalB = new System.Windows.Forms.NumericUpDown();
+            this.nudIntercept = new System.Windows.Forms.NumericUpDown();
             this.label32 = new System.Windows.Forms.Label();
             this.txtCalibratedTemp = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.txtSensorTemp = new System.Windows.Forms.TextBox();
             this.label27 = new System.Windows.Forms.Label();
-            this.nudSensorCalA = new System.Windows.Forms.NumericUpDown();
+            this.nudSlope = new System.Windows.Forms.NumericUpDown();
             this.btnSave = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
             this.dgCalibration = new System.Windows.Forms.DataGridView();
             this.colTempSensor = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RealTemp = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -48,8 +47,11 @@
             this.pltCalibration = new OxyPlot.WindowsForms.PlotView();
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalA)).BeginInit();
+            this.ofdLoadCalibration = new System.Windows.Forms.OpenFileDialog();
+            this.sfdSaveCalibration = new System.Windows.Forms.SaveFileDialog();
+            this.btnCancel = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntercept)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlope)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgCalibration)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,33 +68,34 @@
             // 
             this.txtCalibFile.Location = new System.Drawing.Point(12, 25);
             this.txtCalibFile.Name = "txtCalibFile";
+            this.txtCalibFile.ReadOnly = true;
             this.txtCalibFile.Size = new System.Drawing.Size(243, 20);
             this.txtCalibFile.TabIndex = 47;
             // 
-            // nudSensorCalB
+            // nudIntercept
             // 
-            this.nudSensorCalB.DecimalPlaces = 2;
-            this.nudSensorCalB.Increment = new decimal(new int[] {
+            this.nudIntercept.DecimalPlaces = 3;
+            this.nudIntercept.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.nudSensorCalB.Location = new System.Drawing.Point(165, 77);
-            this.nudSensorCalB.Maximum = new decimal(new int[] {
-            1000,
+            this.nudIntercept.Location = new System.Drawing.Point(165, 77);
+            this.nudIntercept.Maximum = new decimal(new int[] {
+            1000000,
             0,
             0,
             0});
-            this.nudSensorCalB.Minimum = new decimal(new int[] {
-            1000,
+            this.nudIntercept.Minimum = new decimal(new int[] {
+            1000000,
             0,
             0,
             -2147483648});
-            this.nudSensorCalB.Name = "nudSensorCalB";
-            this.nudSensorCalB.Size = new System.Drawing.Size(90, 20);
-            this.nudSensorCalB.TabIndex = 36;
-            this.nudSensorCalB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudSensorCalB.ValueChanged += new System.EventHandler(this.NudSensorCalB_ValueChanged);
+            this.nudIntercept.Name = "nudIntercept";
+            this.nudIntercept.Size = new System.Drawing.Size(90, 20);
+            this.nudIntercept.TabIndex = 36;
+            this.nudIntercept.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudIntercept.ValueChanged += new System.EventHandler(this.NudIntercept_ValueChanged);
             // 
             // label32
             // 
@@ -148,50 +151,45 @@
             this.label27.TabIndex = 30;
             this.label27.Text = "Calibrated Temperature";
             // 
-            // nudSensorCalA
+            // nudSlope
             // 
-            this.nudSensorCalA.DecimalPlaces = 2;
-            this.nudSensorCalA.Increment = new decimal(new int[] {
+            this.nudSlope.DecimalPlaces = 3;
+            this.nudSlope.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.nudSensorCalA.Location = new System.Drawing.Point(38, 77);
-            this.nudSensorCalA.Maximum = new decimal(new int[] {
-            1000,
+            this.nudSlope.Location = new System.Drawing.Point(38, 77);
+            this.nudSlope.Maximum = new decimal(new int[] {
+            1000000,
             0,
             0,
             0});
-            this.nudSensorCalA.Minimum = new decimal(new int[] {
-            1000,
+            this.nudSlope.Minimum = new decimal(new int[] {
+            1000000,
             0,
             0,
             -2147483648});
-            this.nudSensorCalA.Name = "nudSensorCalA";
-            this.nudSensorCalA.Size = new System.Drawing.Size(90, 20);
-            this.nudSensorCalA.TabIndex = 20;
-            this.nudSensorCalA.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudSensorCalA.ValueChanged += new System.EventHandler(this.NudSensorCalA_ValueChanged);
+            this.nudSlope.Name = "nudSlope";
+            this.nudSlope.Size = new System.Drawing.Size(90, 20);
+            this.nudSlope.TabIndex = 20;
+            this.nudSlope.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudSlope.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSlope.ValueChanged += new System.EventHandler(this.NudSlope_ValueChanged);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(74, 287);
+            this.btnSave.Location = new System.Drawing.Point(75, 286);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(55, 23);
+            this.btnSave.Size = new System.Drawing.Size(56, 23);
             this.btnSave.TabIndex = 36;
-            this.btnSave.Text = "Save as";
+            this.btnSave.Text = "Save As";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Location = new System.Drawing.Point(196, 287);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(55, 23);
-            this.btnCancel.TabIndex = 37;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // dgCalibration
             // 
@@ -208,14 +206,13 @@
             this.dgCalibration.Name = "dgCalibration";
             this.dgCalibration.Size = new System.Drawing.Size(270, 272);
             this.dgCalibration.TabIndex = 38;
-            this.dgCalibration.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgCalibration_CellEnter);
+            this.dgCalibration.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCalibration_CellLeave);
             // 
             // colTempSensor
             // 
             this.colTempSensor.Frozen = true;
             this.colTempSensor.HeaderText = "Temperature from Sensor";
             this.colTempSensor.Name = "colTempSensor";
-            this.colTempSensor.ReadOnly = true;
             this.colTempSensor.Width = 108;
             // 
             // RealTemp
@@ -226,7 +223,7 @@
             // 
             // btnCalculate
             // 
-            this.btnCalculate.Location = new System.Drawing.Point(261, 287);
+            this.btnCalculate.Location = new System.Drawing.Point(261, 286);
             this.btnCalculate.Name = "btnCalculate";
             this.btnCalculate.Size = new System.Drawing.Size(270, 23);
             this.btnCalculate.TabIndex = 39;
@@ -247,9 +244,9 @@
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(135, 287);
+            this.btnLoad.Location = new System.Drawing.Point(137, 286);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(55, 23);
+            this.btnLoad.Size = new System.Drawing.Size(56, 23);
             this.btnLoad.TabIndex = 45;
             this.btnLoad.Text = "Load";
             this.btnLoad.UseVisualStyleBackColor = true;
@@ -257,23 +254,46 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(12, 287);
+            this.btnOK.Location = new System.Drawing.Point(12, 286);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(55, 23);
+            this.btnOK.Size = new System.Drawing.Size(56, 23);
             this.btnOK.TabIndex = 46;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
+            // 
+            // ofdLoadCalibration
+            // 
+            this.ofdLoadCalibration.DefaultExt = "json";
+            this.ofdLoadCalibration.Filter = "JSON files (*.json)|*json";
+            this.ofdLoadCalibration.RestoreDirectory = true;
+            // 
+            // sfdSaveCalibration
+            // 
+            this.sfdSaveCalibration.DefaultExt = "json";
+            this.sfdSaveCalibration.Filter = "JSON files (*.json)|*.json";
+            this.sfdSaveCalibration.RestoreDirectory = true;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(199, 286);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(56, 23);
+            this.btnCancel.TabIndex = 48;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // Calibration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1084, 321);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblCalibFile);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtCalibFile);
-            this.Controls.Add(this.nudSensorCalB);
+            this.Controls.Add(this.nudIntercept);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.label32);
             this.Controls.Add(this.pltCalibration);
@@ -282,18 +302,17 @@
             this.Controls.Add(this.label23);
             this.Controls.Add(this.dgCalibration);
             this.Controls.Add(this.label22);
-            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtSensorTemp);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label27);
-            this.Controls.Add(this.nudSensorCalA);
+            this.Controls.Add(this.nudSlope);
             this.MinimumSize = new System.Drawing.Size(1100, 360);
             this.Name = "Calibration";
             this.Text = "Sensor Calibration";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Calibration_FormClosing);
             this.Load += new System.EventHandler(this.Calibration_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSensorCalA)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntercept)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlope)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgCalibration)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -301,16 +320,15 @@
         }
 
         #endregion
-        private System.Windows.Forms.NumericUpDown nudSensorCalB;
+        private System.Windows.Forms.NumericUpDown nudIntercept;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.TextBox txtCalibratedTemp;
-        private System.Windows.Forms.NumericUpDown nudSensorCalA;
+        private System.Windows.Forms.NumericUpDown nudSlope;
         private System.Windows.Forms.TextBox txtSensorTemp;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.DataGridView dgCalibration;
         private System.Windows.Forms.Button btnCalculate;
         private OxyPlot.WindowsForms.PlotView pltCalibration;
@@ -320,5 +338,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn RealTemp;
         private System.Windows.Forms.Label lblCalibFile;
         private System.Windows.Forms.TextBox txtCalibFile;
+        private System.Windows.Forms.OpenFileDialog ofdLoadCalibration;
+        private System.Windows.Forms.SaveFileDialog sfdSaveCalibration;
+        private System.Windows.Forms.Button btnCancel;
     }
 }
