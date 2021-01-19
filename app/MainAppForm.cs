@@ -55,6 +55,7 @@ namespace MainApp
         private double _calibratedTemperature = 0;
         // PID
         private PID _pid = null;
+        private double _targetTemperature = 50;
         // Timer for experiment.
         private Timer _experimentTimer = new Timer()
         {
@@ -551,6 +552,7 @@ namespace MainApp
             // TODO: Laser API and laser base class to be developed!
 
             // Prepare PID
+            _targetTemperature = (double)nudTargetTemp.Value;
             _pid.Reset();
 
             // Experiment directory
@@ -715,6 +717,7 @@ namespace MainApp
 
                     EnableControlsExperimentFinished();
 
+                    // TODO: Laser off
                     _expGoing = false;
                     _experimentTimer.Stop();
                 }
@@ -722,12 +725,17 @@ namespace MainApp
                 {
                     // Experiment is going
                     _elapsedSeconds += 1;
-                    _expWriter.WriteLine(string.Format(_saveDataLineFormat, _elapsedSeconds, _receivedTemperature, _calibratedTemperature /* , _laser.GetLaserPower() */));
+                    txtElapsedTime.Text = TimeSpan.FromSeconds(_elapsedSeconds).ToString("HH:mm:ss");
+
                     if (cmbExperimentType.SelectedIndex == 2)
                     {
                         // PID Controled PTT is on
-                        _pid
+                        // TODO: uncomment
+                        // _laser.SetPower(_pid.Compute(_calibratedTemperature, _targetTemperature));
                     }
+
+                    if (cbSaveData.Checked)
+                        _expWriter.WriteLine(string.Format(_saveDataLineFormat, _elapsedSeconds, _receivedTemperature, _calibratedTemperature /* , _laser.GetLaserPower() */));
                 }
             }
             else
@@ -741,113 +749,10 @@ namespace MainApp
 
                 EnableControlsExperimentFinished();
 
+                // TODO: Laser off
                 _expGoing = false;
                 _experimentTimer.Stop();
-            }
-            //if (_secondsTillEnd <= 0)   // If the time selected for the experiment has elapsed.
-            //{
-            //    Log.Information("Experiment has ended.");
-            //    _expGoing = false;
-            //    btnStartExperiment.Text = "Start Experiment";
-            //    txtExperimentStarted.Text = "Experiment Not Going";
-            //    txtExperimentStarted.BackColor = Color.Red;
-            //    txtExpTime.Visible = false;
-            //    nudExpTime.Visible = true;
-            //    _experimentTimer.Stop();
-            //    if (_isTempRecording)
-            //    {
-            //        _tempWriter.Flush();
-            //        _tempWriter.Close();
-            //        _isTempRecording = false;
-            //    }
-            //}
-            //else    // Else plots and records temperature every timer tick.
-            //{
-            //    _time += 1;
-            //    if (cmbSensors.SelectedIndex == 0)
-            //    {
-            //        try
-            //        {                      
-            //            double objTemp = Convert.ToDouble(array.AvgTemperature);
-            //            double calObjTemp = objTemp * calibration._sensorCalA + calibration._sensorCalB;
-            //            if (!cbNoCalibration.Checked) 
-            //            {
-            //                SetGraphData(pltTemperature, _time, new double[] { objTemp, calObjTemp }, false);
-            //                if (_isTempRecording)
-            //                {
-            //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo) + "\t" + "\t" + "\t" + "\t" + calObjTemp.ToString("F"));
-            //                }
-            //            }
-            //            else
-            //            {
-            //                SetGraphData(pltTemperature, _time, new double[] { objTemp }, false);
-            //                if (_isTempRecording)
-            //                {
-            //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo));
-            //                }
-            //            }
-            //        }
-            //        catch (FormatException ex) { Log.Error(ex.ToString()); }
-            //    }
-            //    else if (cmbSensors.SelectedIndex == 1)
-            //    {
-            //        try
-            //        {
-            //            double objTemp = Convert.ToDouble(oneMlxSensor.ObjectTemperature, CultureInfo.InvariantCulture);
-            //            double ambTemp = Convert.ToDouble(oneMlxSensor.AmbientTemperature, CultureInfo.InvariantCulture);
-            //            double calObjTemp = objTemp * calibration._sensorCalA + calibration._sensorCalB;
-            //            SetGraphData(pltAmbTemp, _time, new double[] { ambTemp }, false);
-            //            if (!cbNoCalibration.Checked)
-            //            {
-            //                SetGraphData(pltTemperature, _time, new double[] { objTemp, calObjTemp }, false);      
-            //                if (_isTempRecording)
-            //                {
-            //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo) + "\t" + "\t" + "\t" + "\t" + calObjTemp.ToString("F"));
-            //                }
-            //            }
-            //            else
-            //            {
-            //                SetGraphData(pltTemperature, _time, new double[] { objTemp }, false);
-            //                if (_isTempRecording)
-            //                {
-            //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo));
-            //                }
-            //            }
-            //        }
-            //        catch (FormatException ex) { Log.Error(ex.ToString()); }
-            //    }
-            //    else if (cmbSensors.SelectedIndex == 2)
-            //    {
-            //        try
-            //        {
-            //            double objTemp = Convert.ToDouble(twoMlxSensors.AvgObjTemperature);
-            //            double ambTemp = Convert.ToDouble(twoMlxSensors.AvgAmbTemperature);
-            //            double calObjTemp = objTemp * calibration._sensorCalA + calibration._sensorCalB;
-            //            SetGraphData(pltAmbTemp, _time, new double[] { ambTemp }, false);
-            //            if (!cbNoCalibration.Checked)
-            //            {
-            //                SetGraphData(pltTemperature, _time, new double[] { objTemp, calObjTemp }, false);
-
-            //                if (_isTempRecording)
-            //                {
-            //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo) + "\t" + "\t" + "\t" + "\t" + calObjTemp.ToString("F"));
-            //                }
-            //            }
-            //            else
-            //            {
-            //                SetGraphData(pltTemperature, _time, new double[] { objTemp }, false);
-
-            //                if (_isTempRecording)
-            //                {
-            //                    _tempWriter.WriteLine(_time.ToString(_culInfo) + "\t" + "\t" + "\t" + objTemp.ToString(_culInfo));
-            //                }
-            //            }
-            //        }
-            //        catch (FormatException ex) { Log.Error(ex.ToString()); }
-            //    }
-            //    txtExpTime.Text = TimeSpan.FromSeconds(_secondsTillEnd).ToString();
-            //    _secondsTillEnd -= 1;
-            //}                                   
+            }                             
         }
 
         private void SaveSettings()

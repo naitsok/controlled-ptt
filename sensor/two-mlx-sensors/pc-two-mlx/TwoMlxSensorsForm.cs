@@ -25,15 +25,15 @@ namespace TwoMlxSensors
             InitializeComponent();
 
             cbBaudRate.SelectedIndex = 6;
-            getComPorts();
+            GetComPorts();
         }
 
         private void btnGetComPorts_Click(object sender, EventArgs e)
         {
-            getComPorts();
+            GetComPorts();
         }
 
-        void getComPorts()
+        void GetComPorts()
         {
             cbPorts.Items.Clear();
             var comPortNames = SerialPort.GetPortNames();
@@ -103,7 +103,7 @@ namespace TwoMlxSensors
                 {
                     _receivedData = _comPort.ReadLine(); // One line must contain all the temperatures measured in Celcius.
 
-                    Invoke(new EventHandler(processData)); // Process received temperatures.
+                    Invoke(new EventHandler(ProcessData)); // Process received temperatures.
                 }
                 catch
                 {
@@ -112,7 +112,7 @@ namespace TwoMlxSensors
             }
         }
 
-        private void processData(object sender, EventArgs e)
+        private void ProcessData(object sender, EventArgs e)
         {
             txtAllRecievedData.AppendText(_receivedData);
             txtAllRecievedData.ScrollToCaret();
