@@ -1,6 +1,7 @@
-﻿namespace BaseSensor
+﻿
+namespace ControlledPTT.Sensors
 {
-    partial class BaseSensorForm
+    partial class BaseSensor
     {
         /// <summary>
         /// Required designer variable.
@@ -30,14 +31,13 @@
         {
             this.SuspendLayout();
             // 
-            // BaseSensorForm
+            // BaseSensor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Name = "BaseSensorForm";
-            this.Text = "Base Sensor Form";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BaseSensorForm_FormClosing);
+            this.Name = "BaseSensor";
+            this.Text = "BaseSensor";
             this.ResumeLayout(false);
 
         }
@@ -45,4 +45,3 @@
         #endregion
     }
 }
-

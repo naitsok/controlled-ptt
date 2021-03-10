@@ -34,6 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <Version>2.0.0</Version>
+    <AssemblyVersion>2.0.*</AssemblyVersion>
+    <Deterministic>false</Deterministic>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BaseSensor">
       <HintPath>..\sensor\base-sensor\bin\Release\BaseSensor.dll</HintPath>
@@ -133,29 +139,14 @@
     <EmbeddedResource Include="MainAppForm.resx">
       <DependentUpon>MainAppForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="App.config" />
+    <None Include="calibrations\dummy_calibration.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="default_settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <None Include="base_settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -168,4 +159,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\CenterSpace.NMath.Premium.6.2.0.58\build\CenterSpace.NMath.Premium.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CenterSpace.NMath.Premium.6.2.0.58\build\CenterSpace.NMath.Premium.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y  "$(TargetDir)$(TargetName).exe" "$(SolutionDir)..\build\$(TargetName).exe"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

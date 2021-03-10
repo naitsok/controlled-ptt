@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BaseLaser
 {
-    [ContractClass(typeof(ILaserAPIContract))]
-    public interface ILaserAPI
+    public interface ILaser
     {
         /// <summary>
         /// Sets the maximum power that can be directed to laser. 
@@ -55,43 +49,5 @@ namespace BaseLaser
         /// <returns>False if switching off failed.</returns>
         bool SwitchOff();
 
-    }
-
-    /// <summary>
-    /// ILaserAPIContract class implements constraints for the ILaserAPI interface.
-    /// </summary>
-    [ContractClassFor(typeof(ILaserAPI))]
-    internal abstract class ILaserAPIContract : ILaserAPI
-    {
-        double ILaserAPI.MinPower
-        {
-            get { return default(double); }
-            set
-            {
-                Contract.Requires(value >= 0.0);
-            }
-        }
-
-        double ILaserAPI.MaxPower
-        {
-            get { return default(double); }
-            set
-            {
-                Contract.Requires(value > 0.0);
-            }
-        }
-
-        bool ILaserAPI.Initialize() { return default(bool); }
-
-        void ILaserAPI.SetPower(double power)
-        {
-            Contract.Requires(power >= 0.0 && power <= 1.0);
-        }
-
-        double ILaserAPI.GetPower() { return default(double); }
-
-        bool ILaserAPI.SwitchOn() { return default(bool); }
-
-        bool ILaserAPI.SwitchOff() { return default(bool); }
     }
 }

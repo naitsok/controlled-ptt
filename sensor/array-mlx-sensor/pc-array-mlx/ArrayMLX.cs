@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Windows.Forms;
-using BaseSensor;
 using System.Globalization;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Collections.Generic;
-using System.Reflection;
-using System.IO;
 
-namespace ArrayMlxSensor
+namespace ControlledPTT.Sensors
 {
-    public partial class ArrayMlxSensorForm : BaseSensorForm
+    public partial class ArrayMLX : BaseSensor
     {
-        private SerialPort _comPort = null; // COM port connection.
+        // COM port connection.
+        private SerialPort _comPort = null;
 
-        private string _receivedData = string.Empty; // String to keep received data.
+        // String to keep received data.
+        private string _receivedData = string.Empty;
 
-        private bool _comConnected = false; // Variable indicating if connection is open.
+        // Variable indicating if connection is open.
+        private bool _comConnected = false;
 
-        private double _averageTemperature = 0; // Average temperature from the selected cells.
+        // Keeps average temperature calculated by averagin temperatures from the selected cells
+        private double _temperature = 0.0;
 
         // Dimensions of the infrared array sensor;
         private static int SENSOR_ROWS = 4;
@@ -56,10 +57,18 @@ namespace ArrayMlxSensor
         // keep the selected cells
         private static string SELECTED_CELLS = @".\array_sensor_selected_cells.txt";
 
-        // Timer to send temperatures to the main app.
-        // private Timer _sendTimer = new Timer() { Interval = 1000 };
+        /// <summary>
+        /// Override from BaseSensor to return title of the sensor
+        /// </summary>
+        public override string Title { get { return "Array MLX Sensor"; } }
 
-        public ArrayMlxSensorForm()
+        /// <summary>
+        /// Override from BaseSensor to get the temperature to be sent to MainApp
+        /// </summary>
+        /// <returns>Temperature to be sent to MainApp by BaseSensor</returns>
+        protected override double GetTemperature() { return _temperature; }
+
+        public ArrayMLX()
         {
             InitializeComponent();
 
@@ -213,7 +222,7 @@ namespace ArrayMlxSensor
             g.Dispose();
 
             // Calculate temperature to store it in the variable of BaseSensorForm
-            _temperature = calculateAvgTemperature();
+            _temperature = CalculateAvgTemperature();
             txtAvgTemperature.Text = _temperature.ToString("0.##");
         }
 
@@ -293,7 +302,7 @@ namespace ArrayMlxSensor
             return (i, j);
         }
 
-        private double calculateAvgTemperature()
+        private double CalculateAvgTemperature()
         {
             if (_selectedTemperatures.Count == 0)
                 return 0;

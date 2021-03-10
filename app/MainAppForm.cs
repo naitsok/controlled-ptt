@@ -171,6 +171,36 @@ namespace MainApp
             box.ScrollToCaret();
         }
 
+        /// <summary>
+        /// Finds through Sensor ot Laser parts that can be connected to the MainApp
+        /// </summary>
+        /// <param name="partsPath"></param>
+        private void FindSesnsorLaserParts(string partsPath)
+        {
+            if (!Path.IsPathRooted(partsPath))
+            {
+                partsPath = Path.GetFullPath(Path.Combine(BASE_DIR, partsPath));
+            }
+
+            string debugRelease = @"bin\Release";
+#if DEBUG
+            debugRelease = @"bin\Debug";
+#endif
+
+            string[] allPartExes = Directory.GetFiles(partsPath, "*.exe", SearchOption.AllDirectories);
+            List<string> partExecs = new List<string>();
+            foreach (string partExe in allPartExes)
+            {
+                if (partExe.Contains(debugRelease) && !partExe.Contains("ref"))
+                {
+                    partExecs.Add(partExe);
+                }
+            }
+            // string[] subDirs = Directory.GetDirectories(partsPath, "*", SearchOption.AllDirectories);
+
+            
+        }
+
         public MainAppForm()
         {
             InitializeComponent();
@@ -200,6 +230,7 @@ namespace MainApp
             foreach (JToken token in _config["sensors"])
             {
                 cmbSensors.Items.Add(token["title"]);
+                FindSesnsorLaserParts(base_sensor_path);
                 _sensorPaths.Add(Path.GetFullPath(Path.Combine(base_sensor_path, (string)token["path"])));
             }
             if (_selectedSensorIndex >= 0 && _selectedSensorIndex < cmbSensors.Items.Count)

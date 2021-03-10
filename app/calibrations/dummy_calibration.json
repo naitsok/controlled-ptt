@@ -1,0 +1,6 @@
+﻿{
+	"slope": 1.5,
+	"intercept": 10,
+	"sensor_temperatures": [10, 20, 30, 40],
+	"correct_temperatures": [25, 40, 55, 70]
+}

@@ -1,6 +1,6 @@
-﻿namespace ArrayMlxSensor
+﻿namespace ControlledPTT.Sensors
 {
-    partial class ArrayMlxSensorForm
+    partial class ArrayMLX
     {
         /// <summary>
         /// Required designer variable.
@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.gbArduino = new System.Windows.Forms.GroupBox();
+            this.btnDeselectAll = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnAvgTemperature = new System.Windows.Forms.Button();
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.txtAvgTemperature = new System.Windows.Forms.TextBox();
             this.txtAllReceivedData = new System.Windows.Forms.TextBox();
@@ -41,9 +44,6 @@
             this.cbBaudRate = new System.Windows.Forms.ComboBox();
             this.btnConnRedBoard = new System.Windows.Forms.Button();
             this.gbTemperatures = new System.Windows.Forms.GroupBox();
-            this.btnAvgTemperature = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btnDeselectAll = new System.Windows.Forms.Button();
             this.gbArduino.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +69,35 @@
             this.gbArduino.TabIndex = 36;
             this.gbArduino.TabStop = false;
             this.gbArduino.Text = "Sensor controller connection";
+            // 
+            // btnDeselectAll
+            // 
+            this.btnDeselectAll.Location = new System.Drawing.Point(6, 377);
+            this.btnDeselectAll.Name = "btnDeselectAll";
+            this.btnDeselectAll.Size = new System.Drawing.Size(130, 23);
+            this.btnDeselectAll.TabIndex = 39;
+            this.btnDeselectAll.Text = "Deselect All";
+            this.btnDeselectAll.UseVisualStyleBackColor = true;
+            this.btnDeselectAll.Click += new System.EventHandler(this.btnDeselectAll_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 277);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(242, 39);
+            this.label2.TabIndex = 38;
+            this.label2.Text = "Select or deselect cells for calculation of average \r\ntemperature by clicking on " +
+    "them. \r\nOr use \"Select All\" or \"Deselect All\" buttons.";
+            // 
+            // btnAvgTemperature
+            // 
+            this.btnAvgTemperature.Location = new System.Drawing.Point(6, 319);
+            this.btnAvgTemperature.Name = "btnAvgTemperature";
+            this.btnAvgTemperature.Size = new System.Drawing.Size(130, 23);
+            this.btnAvgTemperature.TabIndex = 32;
+            this.btnAvgTemperature.Text = "Average Temperature";
+            this.btnAvgTemperature.UseVisualStyleBackColor = true;
             // 
             // btnSelectAll
             // 
@@ -121,7 +150,6 @@
             // txtConnectedStatus
             // 
             this.txtConnectedStatus.BackColor = System.Drawing.Color.Red;
-            this.txtConnectedStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtConnectedStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtConnectedStatus.Location = new System.Drawing.Point(142, 81);
             this.txtConnectedStatus.Name = "txtConnectedStatus";
@@ -204,36 +232,7 @@
             this.gbTemperatures.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gbTemperatures_MouseClick);
             this.gbTemperatures.Paint += new System.Windows.Forms.PaintEventHandler(this.gbTemperatures_Paint);
             // 
-            // btnAvgTemperature
-            // 
-            this.btnAvgTemperature.Location = new System.Drawing.Point(6, 319);
-            this.btnAvgTemperature.Name = "btnAvgTemperature";
-            this.btnAvgTemperature.Size = new System.Drawing.Size(130, 23);
-            this.btnAvgTemperature.TabIndex = 32;
-            this.btnAvgTemperature.Text = "Average Temperature";
-            this.btnAvgTemperature.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 277);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(242, 39);
-            this.label2.TabIndex = 38;
-            this.label2.Text = "Select or deselect cells for calculation of average \r\ntemperature by clicking on " +
-    "them. \r\nOr use \"Select All\" or \"Deselect All\" buttons.";
-            // 
-            // btnDeselectAll
-            // 
-            this.btnDeselectAll.Location = new System.Drawing.Point(6, 377);
-            this.btnDeselectAll.Name = "btnDeselectAll";
-            this.btnDeselectAll.Size = new System.Drawing.Size(130, 23);
-            this.btnDeselectAll.TabIndex = 39;
-            this.btnDeselectAll.Text = "Deselect All";
-            this.btnDeselectAll.UseVisualStyleBackColor = true;
-            this.btnDeselectAll.Click += new System.EventHandler(this.btnDeselectAll_Click);
-            // 
-            // ArraySensorForm
+            // ArrayMLX
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -241,8 +240,8 @@
             this.Controls.Add(this.gbTemperatures);
             this.Controls.Add(this.gbArduino);
             this.MinimumSize = new System.Drawing.Size(565, 600);
-            this.Name = "ArraySensorForm";
-            this.Text = "Array MLX sensor";
+            this.Name = "ArrayMLX";
+            this.Text = "Array MLX Sensor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ArraySensor_FormClosing);
             this.gbArduino.ResumeLayout(false);
             this.gbArduino.PerformLayout();

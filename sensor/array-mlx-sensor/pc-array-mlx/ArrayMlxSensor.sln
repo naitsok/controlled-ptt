@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArrayMlxSensor", "ArrayMlxSensor.csproj", "{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlledPTT.Sensors.ArrayMLX", "ControlledPTT.Sensors.ArrayMLX.csproj", "{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
