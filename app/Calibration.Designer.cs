@@ -1,4 +1,4 @@
-﻿namespace MainApp
+﻿namespace ControlledPTT
 {
     partial class Calibration
     {

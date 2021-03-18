@@ -1,6 +1,6 @@
 ﻿namespace ControlledPTT.Sensors
 {
-    partial class ArrayMLX
+    partial class ArrayMLXSensor
     {
         /// <summary>
         /// Required designer variable.

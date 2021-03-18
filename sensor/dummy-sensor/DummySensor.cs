@@ -7,17 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BaseSensor;
+using ControlledPTT.Sensors;
 
-namespace DummySensor
+namespace ControlledPTT.Sensors
 {
-    public partial class DummySensorForm : BaseSensorForm
+    public partial class DummySensor : BaseSensor
     {
         // Generates random temperature
+        private double _temperature = 0;
         private bool _genRunning = false;
         private Random rand = new Random(DateTime.Now.Millisecond);
 
-        public DummySensorForm()
+        // Must override from BaseSensor
+        public override string Title { get { return "Dummy Sensor"; } }
+
+        protected override double GetTemperature() { return _temperature; }
+
+        public DummySensor()
         {
             InitializeComponent();
         }

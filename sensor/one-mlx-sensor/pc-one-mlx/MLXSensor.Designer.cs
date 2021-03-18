@@ -1,6 +1,6 @@
-﻿namespace OneMlxSensor
+﻿namespace ControlledPTT.Sensors
 {
-    partial class OneMLXForm
+    partial class MLXSensor
     {
         /// <summary>
         /// Required designer variable.

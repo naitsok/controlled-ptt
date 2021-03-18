@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BaseLaser")]
+[assembly: AssemblyTitle("ControlledPTT.Lasers.BaseLaser")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("University of Eastern Finland")]
-[assembly: AssemblyProduct("BaseLaser")]
+[assembly: AssemblyProduct("ControlledPTT")]
 [assembly: AssemblyCopyright("Copyright © Konstantin Tamarov 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

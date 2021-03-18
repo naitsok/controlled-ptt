@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B2F33C8D-9AA3-4031-B697-773DF7DC5236}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>OneMlxSensor</RootNamespace>
-    <AssemblyName>OneMlxSensor</AssemblyName>
+    <RootNamespace>ControlledPTT.Sensors</RootNamespace>
+    <AssemblyName>ControlledPTT.Sensors.MLXSensor</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -38,11 +38,10 @@
     <AssemblyVersion>2.0.*</AssemblyVersion>
     <Deterministic>false</Deterministic>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ControlledPTT.Sensors.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BaseSensor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\base-sensor\bin\Release\BaseSensor.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,20 +55,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OneMLXForm.cs">
+    <Compile Include="MLXSensor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OneMLXForm.Designer.cs">
-      <DependentUpon>OneMLXForm.cs</DependentUpon>
+    <Compile Include="MLXSensor.Designer.cs">
+      <DependentUpon>MLXSensor.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="OneMLXForm.resx">
-      <DependentUpon>OneMLXForm.cs</DependentUpon>
+    <EmbeddedResource Include="MLXSensor.resx">
+      <DependentUpon>MLXSensor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\base-sensor\ControlledPTT.Sensors.BaseSensor.csproj">
+      <Project>{949dad28-5f74-443c-92a7-6383998b1b43}</Project>
+      <Name>ControlledPTT.Sensors.BaseSensor</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)" mkdir "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)"
+xcopy "$(TargetDir)*MLXSensor.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\"  /Y /I
+xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+  </PropertyGroup>
 </Project>

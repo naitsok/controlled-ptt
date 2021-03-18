@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using BaseSensor;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.WindowsForms;
@@ -16,33 +13,18 @@ using OxyPlot.Series;
 using System.IO;
 using Serilog;
 using Newtonsoft.Json.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
+using ControlledPTT.Lasers;
 
-namespace MainApp
+
+namespace ControlledPTT
 {
-    public partial class MainAppForm : Form
+    public partial class App : Form
     {
         // Base directory where executable is located
         private static string BASE_DIR = Directory.GetCurrentDirectory();
-        // Configuration from base_settings.json located in the same directory as the executable
-        // base_settings.json contains path for settings saved by user
-        private static string BASE_CONFIG_PATH = Path.Combine(BASE_DIR, "base_settings.json");
-        private JObject _baseConfig = null;
-        // If settings saved by user are not found - load default ones.
-        private static string DEFAULT_CONFIG_PATH = Path.Combine(BASE_DIR, "default_settings.json");
-        // Config path to be loaded from base_settings.json
+        // Config path to be loaded from settings
         private string _configPath = "";
         private JObject _config = null;
-
-        // Sensors
-        private List<string> _sensorPaths = new List<string>();
-        private int _selectedSensorIndex = 0;
-        private BaseSensorForm _sensorForm = null;
-        private double _receivedTemperature = 0;
-        private  static int NUM_LAST_TEMPS = 10;
-        private List<double> _checkTemperatureChanging = Enumerable.Repeat(0.0, NUM_LAST_TEMPS).ToList();
-        private bool _isSensorSendingTemperature = false;
 
         // Calibration
         private Calibration _calibration = null;
@@ -57,10 +39,7 @@ namespace MainApp
         private PID _pid = null;
         private double _targetTemperature = 50;
         // Timer for experiment.
-        private Timer _experimentTimer = new Timer()
-        {
-            Interval = 1000
-        };
+        private Timer _experimentTimer = new Timer() { Interval = 1000 };
         // string with the format to save data depending on the experiment type
         private string _saveDataLineHeader = "Time (sec)\tRaw Sensor Data\tCalibrated Temperature";
         private string _saveDataLineFormat = "{0}\t{1:F2}\t{2:F2}";
@@ -171,44 +150,13 @@ namespace MainApp
             box.ScrollToCaret();
         }
 
-        /// <summary>
-        /// Finds through Sensor ot Laser parts that can be connected to the MainApp
-        /// </summary>
-        /// <param name="partsPath"></param>
-        private void FindSesnsorLaserParts(string partsPath)
-        {
-            if (!Path.IsPathRooted(partsPath))
-            {
-                partsPath = Path.GetFullPath(Path.Combine(BASE_DIR, partsPath));
-            }
-
-            string debugRelease = @"bin\Release";
-#if DEBUG
-            debugRelease = @"bin\Debug";
-#endif
-
-            string[] allPartExes = Directory.GetFiles(partsPath, "*.exe", SearchOption.AllDirectories);
-            List<string> partExecs = new List<string>();
-            foreach (string partExe in allPartExes)
-            {
-                if (partExe.Contains(debugRelease) && !partExe.Contains("ref"))
-                {
-                    partExecs.Add(partExe);
-                }
-            }
-            // string[] subDirs = Directory.GetDirectories(partsPath, "*", SearchOption.AllDirectories);
-
-            
-        }
-
-        public MainAppForm()
+        public App()
         {
             InitializeComponent();
 
             // Load settings
-            // First load path to settings from base_settings.json which is in the same folder as .exe
-            _baseConfig = JObject.Parse(File.ReadAllText(Path.GetFullPath(BASE_CONFIG_PATH)));
-            _configPath = (string)_baseConfig["appsettings"];
+            // First get the settings file to load
+            _configPath = Properties.Settings.Default.AppSettings;
             if (!Path.IsPathRooted(_configPath))
                 _configPath = Path.GetFullPath(Path.Combine(BASE_DIR, _configPath));
             // Load settings either saved by user or default ones
@@ -216,27 +164,20 @@ namespace MainApp
                 _config = JObject.Parse(File.ReadAllText(_configPath));
             else
             {
-                _config = JObject.Parse(File.ReadAllText(Path.GetFullPath(DEFAULT_CONFIG_PATH)));
-                _configPath = DEFAULT_CONFIG_PATH;
+                // config file was not found - load default one
+                _configPath = Path.GetFullPath(Path.Combine(BASE_DIR, (string)Properties.Settings.Default.Properties["AppSettings"].DefaultValue));
+                _config = JObject.Parse(File.ReadAllText(_configPath));
             }
 
-            saveCurrentSettingsWhenClosingToolStripMenuItem.Checked = (bool)_config["save_settings_on_closing"];
+            saveCurrentConfigWhenClosingToolStripMenuItem.Checked = (bool)_config["save_settings_on_closing"];
 
-            // get base_sensor_path if necessary
-            string base_sensor_path = (string)_config["base_sensor_path"];
-
-            // get information about sensors and selected the indicated one
+            // get information about sensors and select the indicated one
             _selectedSensorIndex = (int)_config["selected_sensor_index"] - 1;
-            foreach (JToken token in _config["sensors"])
-            {
-                cmbSensors.Items.Add(token["title"]);
-                FindSesnsorLaserParts(base_sensor_path);
-                _sensorPaths.Add(Path.GetFullPath(Path.Combine(base_sensor_path, (string)token["path"])));
-            }
-            if (_selectedSensorIndex >= 0 && _selectedSensorIndex < cmbSensors.Items.Count)
-            {
-                cmbSensors.SelectedIndex = _selectedSensorIndex;
-            }
+            FindSensors((string)_config["sensors_path"], (JArray)_config["user_added_sensors"], _selectedSensorIndex);
+
+            // get information about lasers and select the indicated one
+            _selectedLaserIndex = (int)_config["selected_laser_index"] - 1;
+            FindLasers((string)_config["lasers_path"], (JArray)_config["user_added_lasers"], _selectedLaserIndex);
 
             // calibration
             string calibrationFile = (string)_config["calibration"];
@@ -250,9 +191,10 @@ namespace MainApp
                 // file does not exist of path is in the wrong format
                 _calibration = new Calibration();
             }
-            displayCalibration();
             cbUseCalibration.Checked = (bool)_config["use_calibration"];
+            DisplayCalibration();
             cbUseCalibration_CheckedChanged(cbUseCalibration, new EventArgs());
+
 
             // get information about experiment and set values
             nudTargetTemp.Minimum = (decimal)_config["min_target_temperature"];
@@ -292,6 +234,7 @@ namespace MainApp
             txtDescription.Enabled = cbSaveData.Checked;
             txtOperator.Enabled = cbSaveData.Checked;
             cbSaveHeader.Enabled = cbSaveData.Checked;
+            txtExpFileName.Text = _expFileName;
 
             // generate file name
             if ((bool)_config["create_experiment_file_with_current_time"])
@@ -342,83 +285,14 @@ namespace MainApp
                 TextColor = OxyColors.Blue,
                 IsVisible = true
             });
-            this.pltTemperature.Model = _objTemperaturePM;
-        }
-
-        /// <summary>
-        /// Opens dialog to select sensor executable manually.
-        /// Gets the filename of selected executable and adds it to the list of sensors to be loaded.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnLoadSensor_Click(object sender, EventArgs e)
-        {
-            DialogResult result = ofdSelectSensor.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                // get sensor executable name and add it to list
-                string fileName = Path.GetFileNameWithoutExtension(ofdSelectSensor.FileName);
-                if (!cmbSensors.Items.Contains(fileName))
-                {
-                    cmbSensors.Items.Add(fileName);
-                    _sensorPaths.Add(ofdSelectSensor.FileName);
-                    cmbSensors.SelectedIndex = cmbSensors.Items.Count - 1;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Starts the sensor part.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnStartSensor_Click(object sender, EventArgs e)
-        {
-            // check the sensor part to exists
-            if (!File.Exists(_sensorPaths[cmbSensors.SelectedIndex]))
-            {
-                MessageBox.Show("The sensor part is not found on path " +
-                    _sensorPaths[cmbSensors.SelectedIndex] +
-                    ". Check the settings file or load the part manually using \"Load from file\" button.",
-                    "Sensor part not found.",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // load the sensor part
-            Assembly sensorAssembly = Assembly.LoadFrom(_sensorPaths[cmbSensors.SelectedIndex]);
-            var types = sensorAssembly.GetExportedTypes();
-            _sensorForm = Activator.CreateInstance(types[0]) as BaseSensorForm;
-            _sensorForm.FormClosed += sensorForm_FormClosed;
-            _sensorForm.OnTemperatureSent += sensorForm_TemperatureSent;
-            _sensorForm.Show();
-
-            // Organize windows
-            _sensorForm.Location = new Point(5, 10);
-            this.Location = new Point(10 + _sensorForm.Size.Width, 10);
-
-            // Disable controls
-            gbSensor.Enabled = false;
-        }
-
-        /// <summary>
-        /// When sensor form is closed, the resources must be released.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void sensorForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            _sensorForm.FormClosed -= sensorForm_FormClosed;
-            _sensorForm.OnTemperatureSent -= sensorForm_TemperatureSent;
-            gbSensor.Enabled = true;
-            _isSensorSendingTemperature = false;
+            pltTemperature.Model = _objTemperaturePM;
         }
 
         /// <summary>
         /// Get the calibration parameters, such as Slope and Intersept, and displays them
         /// on the controls.
         /// </summary>
-        private void displayCalibration()
+        private void DisplayCalibration()
         {
             txtCalibration.Text = _calibration.CalibrationFile;
             txtCalibration.SelectionStart = txtCalibration.Text.Length;
@@ -427,20 +301,28 @@ namespace MainApp
             txtIntercept.Text = _calibration.Intercept.ToString("F3");
         }
 
+        private void btnLoadCalibration_Click(object sender, EventArgs e)
+        {
+            DialogResult result = ofdLoadCalibration.ShowDialog();
+            if (result == DialogResult.OK)
+                _calibration = new Calibration(ofdLoadCalibration.FileName);
+            DisplayCalibration();
+        }
+
         private void btnModifyCalibration_Click(object sender, EventArgs e)
         {
             _calibration.ShowDialog();
-            displayCalibration();
+            DisplayCalibration();
         }
 
         private void btnNewCalibration_Click(object sender, EventArgs e)
         {
-            _calibration = new Calibration();
-            _calibration.ShowDialog();
-            displayCalibration();
+            Calibration newCalibration = new Calibration();
+            DialogResult result = newCalibration.ShowDialog();
+            if (result == DialogResult.OK)
+                _calibration = newCalibration;
+            DisplayCalibration();
         }
-
-
 
         /// <summary>
         /// Disable and enable controls when no calibration checkbox state changes.
@@ -464,54 +346,6 @@ namespace MainApp
             }
             txtSlope.Text = _calibration.Slope.ToString("F3");
             txtIntercept.Text = _calibration.Intercept.ToString("F3");
-        }
-
-        /// <summary>
-        /// Receives temperature from the sensor form.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void sensorForm_TemperatureSent(object sender, TemperatureSentEventArgs e)
-        {
-            // receive temperature from sensor, send it to calibration, update controls in MainApp
-            _receivedTemperature = e.Temperature;
-            _calibration.SensorTemperature = _receivedTemperature;
-            txtSensorTemp.Text = _receivedTemperature.ToString("F2");
-            if (cbUseCalibration.Checked)
-            {
-                _calibratedTemperature = _receivedTemperature * _calibration.Slope + _calibration.Intercept;
-                txtCalibratedTemp.Text = _calibratedTemperature.ToString("F2");
-            }
-            else
-            {
-                _calibratedTemperature = _receivedTemperature;
-                txtCalibratedTemp.Text = txtSensorTemp.Text;
-            }
-
-            // check if temperature from sensor is changing
-            // if it is not changing - something is wrong
-            // for example sensor is not connected to the board
-            _isSensorSendingTemperature = CheckSensorIsSendingTemperature(_receivedTemperature);
-        }
-
-        /// <summary>
-        /// Check is sensor is sending temperature. If last ten readings from the sensor
-        /// provide the same temperature, then something is wrong. Experiment should be aborted
-        /// and error should be logged.
-        /// </summary>
-        /// <param name="temperature"></param>
-        /// <returns></returns>
-        private bool CheckSensorIsSendingTemperature(double temperature)
-        {
-            _checkTemperatureChanging.Add(temperature);
-            if (_checkTemperatureChanging.Count > NUM_LAST_TEMPS)
-                _checkTemperatureChanging.RemoveAt(0);
-
-            // one distinct value means that all the values are the same
-            if (_checkTemperatureChanging.Distinct().Count() == 1)
-                return false;
-            else
-                return true;
         }
 
         /// <summary>
@@ -786,25 +620,34 @@ namespace MainApp
             }                             
         }
 
-        private void SaveSettings()
+        private void SaveAppConfiguration()
         {
             // Settings from menu should be always saved
-            _config["save_settings_on_closing"] = saveCurrentSettingsWhenClosingToolStripMenuItem.Checked;
+            _config["save_settings_on_closing"] = saveCurrentConfigWhenClosingToolStripMenuItem.Checked;
 
-            if (saveCurrentSettingsWhenClosingToolStripMenuItem.Checked)
+            if (saveCurrentConfigWhenClosingToolStripMenuItem.Checked)
             {
-                // Check new sensors were added
-                if (_config["sensors"].Count() < cmbSensors.Items.Count)
-                {
-                    JArray sensors = (JArray)_config["sensors"];
-                    for (int i = sensors.Count(); i < cmbSensors.Items.Count; i++)
-                        sensors.Add(new JObject(
-                            new JProperty("title", cmbSensors.Items[i].ToString()),
-                            new JProperty("path", _sensorPaths[i])
-                            ));
-                }
+                // Check new sensors were added by user
+                JArray sensors = new JArray();
+                for (int i = _numInstalledSensors; i < cmbSensors.Items.Count; i++)
+                    sensors.Add(new JObject(
+                        new JProperty("title", cmbSensors.Items[i].ToString()),
+                        new JProperty("path", _sensorPaths[i])
+                        ));
+                _config["user_added_sensors"] = sensors;
                 // Save sensor selected index
                 _config["selected_sensor_index"] = cmbSensors.SelectedIndex + 1;
+
+                // Check new lasers were added by user
+                JArray lasers = new JArray();
+                for (int i = _numInstalledLasers; i < cmbLasers.Items.Count; i++)
+                    lasers.Add(new JObject(
+                        new JProperty("title", cmbLasers.Items[i].ToString()),
+                        new JProperty("path", _laserPaths[i])
+                        ));
+                _config["user_added_lasers"] = lasers;
+                // Save sensor selected index
+                _config["selected_laser_index"] = cmbLasers.SelectedIndex + 1;
 
                 // Save calibration
                 _config["calibration"] = txtCalibration.Text;               
@@ -832,8 +675,8 @@ namespace MainApp
             File.WriteAllText(_configPath, _config.ToString());
 
             // Saves base settings file
-            _baseConfig["appsettings"] = _configPath;
-            File.WriteAllText(BASE_CONFIG_PATH, _baseConfig.ToString());
+            Properties.Settings.Default.AppSettings = _configPath;
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>
@@ -841,9 +684,9 @@ namespace MainApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MainApp_FormClosing(object sender, FormClosingEventArgs e)
+        private void App_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveSettings();
+            SaveAppConfiguration();
 
             _calibration.Dispose();
             // Log.CloseAndFlush();
@@ -851,7 +694,7 @@ namespace MainApp
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveSettings();
+            SaveAppConfiguration();
         }
 
         private void nudPropGain_ValueChanged(object sender, EventArgs e)

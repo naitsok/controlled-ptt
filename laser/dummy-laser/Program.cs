@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DummyLaser
+namespace ControlledPTT.Lasers
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace DummyLaser
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DummyLaserForm());
+            Application.Run(new DummyLaser());
         }
     }
 }

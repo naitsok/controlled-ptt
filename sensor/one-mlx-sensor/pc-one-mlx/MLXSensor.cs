@@ -1,30 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using BaseSensor;
 
-namespace OneMlxSensor
+namespace ControlledPTT.Sensors
 {
-    public partial class OneMLXForm : BaseSensorForm
+    public partial class MLXSensor : BaseSensor
     {
-        private SerialPort _comPort = null; // Com port connection.
+        // Com port connection.
+        private SerialPort _comPort = null;
 
-        private string _receivedData = string.Empty; // String to keep recieved data.
+        // String to keep recieved data.
+        private string _receivedData = string.Empty;
 
-        private bool _comConnected = false; // Variable indicating if connection is open.
+        // Variable indicating if connection is open.
+        private bool _comConnected = false; 
 
         private double _objectTemperature = 0.0;
 
         private double _ambientTemperature = 0.0;
 
-        public OneMLXForm()
+        // Methods to be overriden from BaseSensor
+        public override string Title { get { return "One MLX Sensor"; } }
+
+        protected override double GetTemperature() { return _objectTemperature; }
+
+        public MLXSensor()
         {
             InitializeComponent();
 
@@ -125,9 +126,6 @@ namespace OneMlxSensor
 
             _objectTemperature = double.Parse(temperatures[0]);
             _ambientTemperature = double.Parse(temperatures[1]);
-
-            // Temperature to be sent by BaseSensor
-            _temperature = _objectTemperature;
 
         }
 

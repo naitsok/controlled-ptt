@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OneMlxSensor
+namespace ControlledPTT.Sensors
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace OneMlxSensor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new OneMLXForm());
+            Application.Run(new MLXSensor());
         }
     }
 }

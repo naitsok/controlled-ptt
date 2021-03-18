@@ -1,9 +1,15 @@
 ﻿using System;
 
-namespace BaseLaser
+namespace ControlledPTT.Lasers
 {
-    public interface ILaser
+    public interface IBaseLaser
     {
+        /// <summary>
+        /// Gets the title of the laser to be displayed in the App's 
+        /// dropdown list for selection.
+        /// </summary>
+        string Title { get; }
+
         /// <summary>
         /// Sets the maximum power that can be directed to laser. 
         /// The value depends on the particular laser control implementation.

@@ -2,17 +2,17 @@
 using System.Drawing;
 using System.IO.Ports;
 using System.Windows.Forms;
-using BaseSensor;
-using System.Globalization;
 
-namespace TwoMlxSensors
+namespace ControlledPTT.Sensors
 
 {
-    public partial class TwoMlxSensorsForm : BaseSensorForm
+    public partial class TwoMLXSensors : BaseSensor
     {
-        private SerialPort _comPort = null; // COM port connection.
+        // COM port connection.
+        private SerialPort _comPort = null;
 
-        private bool _comConnected = false; // Variable indicating if connection is open.
+        // Variable indicating if connection is open.
+        private bool _comConnected = false; 
 
         private string _receivedData = string.Empty;
 
@@ -20,7 +20,12 @@ namespace TwoMlxSensors
 
         private double _ambientTemperature = 0.0;
 
-        public TwoMlxSensorsForm()
+        // Methods to be overridden from BaseSensor
+        public override string Title { get { return "Two MLX Sensors"; } }
+
+        protected override double GetTemperature() { return _objectTemperature; }
+
+        public TwoMLXSensors()
         {
             InitializeComponent();
 
@@ -126,9 +131,6 @@ namespace TwoMlxSensors
             // Calculate average temperature from two sensors.
             _objectTemperature = 0.5 * (double.Parse(temperatures[0]) + double.Parse(temperatures[2]));
             _ambientTemperature = 0.5 * (double.Parse(temperatures[1]) + double.Parse(temperatures[3]));
-
-            // Temperature to be sent by BaseSensor
-            _temperature = _objectTemperature;
         }
 
         private void TwoMlxSensorsForm_FormClosing(object sender, FormClosingEventArgs e)

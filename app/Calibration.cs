@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Linq;
 
-namespace MainApp
+namespace ControlledPTT
 {
     public delegate void ShowFrm();
 
@@ -362,6 +362,7 @@ namespace MainApp
         private void BtnOK_Click(object sender, EventArgs e)
         {
             Close();
+            DialogResult = DialogResult.OK;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -369,6 +370,7 @@ namespace MainApp
             LoadCalibration();
             _cancelClicked = true;
             Close();
+            DialogResult = DialogResult.Cancel;
         }
     }
 }

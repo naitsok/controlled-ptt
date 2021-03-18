@@ -1,6 +1,6 @@
-﻿namespace MainApp
+﻿namespace ControlledPTT
 {
-    partial class MainAppForm
+    partial class App
     {
         /// <summary>
         /// Required designer variable.
@@ -36,6 +36,7 @@
             this.gbExperiment = new System.Windows.Forms.GroupBox();
             this.cbSaveHeader = new System.Windows.Forms.CheckBox();
             this.gbLaser = new System.Windows.Forms.GroupBox();
+            this.btnRemoveLaser = new System.Windows.Forms.Button();
             this.btnStartLaser = new System.Windows.Forms.Button();
             this.btnLoadLaser = new System.Windows.Forms.Button();
             this.cmbLasers = new System.Windows.Forms.ComboBox();
@@ -69,6 +70,7 @@
             this.txtCalibratedTemp = new System.Windows.Forms.TextBox();
             this.txtSensorTemp = new System.Windows.Forms.TextBox();
             this.gbSensor = new System.Windows.Forms.GroupBox();
+            this.btnRemoveSensor = new System.Windows.Forms.Button();
             this.btnStartSensor = new System.Windows.Forms.Button();
             this.btnLoadSensor = new System.Windows.Forms.Button();
             this.cmbSensors = new System.Windows.Forms.ComboBox();
@@ -79,10 +81,10 @@
             this.pltAmbTemp = new OxyPlot.WindowsForms.PlotView();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.appSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveCurrentSettingsWhenClosingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveConfigAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveCurrentConfigWhenClosingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectLogsDirectoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.selectCalibrationsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.experimentSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,6 +106,8 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.sfdSaveSettingsAs = new System.Windows.Forms.SaveFileDialog();
             this.ttSaveHeader = new System.Windows.Forms.ToolTip(this.components);
+            this.ofdSelectLaser = new System.Windows.Forms.OpenFileDialog();
+            this.ofdLoadCalibration = new System.Windows.Forms.OpenFileDialog();
             this.gbExperiment.SuspendLayout();
             this.gbLaser.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpTime)).BeginInit();
@@ -185,6 +189,8 @@
             // cbSaveHeader
             // 
             this.cbSaveHeader.AutoSize = true;
+            this.cbSaveHeader.Checked = true;
+            this.cbSaveHeader.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbSaveHeader.Location = new System.Drawing.Point(221, 128);
             this.cbSaveHeader.Name = "cbSaveHeader";
             this.cbSaveHeader.Size = new System.Drawing.Size(89, 17);
@@ -195,6 +201,7 @@
             // 
             // gbLaser
             // 
+            this.gbLaser.Controls.Add(this.btnRemoveLaser);
             this.gbLaser.Controls.Add(this.btnStartLaser);
             this.gbLaser.Controls.Add(this.btnLoadLaser);
             this.gbLaser.Controls.Add(this.cmbLasers);
@@ -205,23 +212,35 @@
             this.gbLaser.TabStop = false;
             this.gbLaser.Text = "Laser";
             // 
+            // btnRemoveLaser
+            // 
+            this.btnRemoveLaser.Location = new System.Drawing.Point(280, 14);
+            this.btnRemoveLaser.Name = "btnRemoveLaser";
+            this.btnRemoveLaser.Size = new System.Drawing.Size(60, 23);
+            this.btnRemoveLaser.TabIndex = 64;
+            this.btnRemoveLaser.Text = "Remove";
+            this.btnRemoveLaser.UseVisualStyleBackColor = true;
+            this.btnRemoveLaser.Click += new System.EventHandler(this.btnRemoveLaser_Click);
+            // 
             // btnStartLaser
             // 
-            this.btnStartLaser.Location = new System.Drawing.Point(306, 14);
+            this.btnStartLaser.Location = new System.Drawing.Point(346, 14);
             this.btnStartLaser.Name = "btnStartLaser";
-            this.btnStartLaser.Size = new System.Drawing.Size(94, 23);
+            this.btnStartLaser.Size = new System.Drawing.Size(54, 23);
             this.btnStartLaser.TabIndex = 63;
-            this.btnStartLaser.Text = "Start Laser";
+            this.btnStartLaser.Text = "Start";
             this.btnStartLaser.UseVisualStyleBackColor = true;
+            this.btnStartLaser.Click += new System.EventHandler(this.btnStartLaser_Click);
             // 
             // btnLoadLaser
             // 
             this.btnLoadLaser.Location = new System.Drawing.Point(215, 14);
             this.btnLoadLaser.Name = "btnLoadLaser";
-            this.btnLoadLaser.Size = new System.Drawing.Size(85, 23);
+            this.btnLoadLaser.Size = new System.Drawing.Size(60, 23);
             this.btnLoadLaser.TabIndex = 63;
-            this.btnLoadLaser.Text = "Load from file";
+            this.btnLoadLaser.Text = "Load";
             this.btnLoadLaser.UseVisualStyleBackColor = true;
+            this.btnLoadLaser.Click += new System.EventHandler(this.btnLoadLaser_Click);
             // 
             // cmbLasers
             // 
@@ -231,6 +250,7 @@
             this.cmbLasers.Name = "cmbLasers";
             this.cmbLasers.Size = new System.Drawing.Size(203, 21);
             this.cmbLasers.TabIndex = 63;
+            this.cmbLasers.SelectedIndexChanged += new System.EventHandler(this.cmbLasers_SelectedIndexChanged);
             // 
             // txtOperator
             // 
@@ -267,6 +287,8 @@
             // cbSaveData
             // 
             this.cbSaveData.AutoSize = true;
+            this.cbSaveData.Checked = true;
+            this.cbSaveData.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbSaveData.Location = new System.Drawing.Point(312, 128);
             this.cbSaveData.Name = "cbSaveData";
             this.cbSaveData.Size = new System.Drawing.Size(77, 17);
@@ -585,6 +607,7 @@
             // 
             // gbSensor
             // 
+            this.gbSensor.Controls.Add(this.btnRemoveSensor);
             this.gbSensor.Controls.Add(this.btnStartSensor);
             this.gbSensor.Controls.Add(this.btnLoadSensor);
             this.gbSensor.Controls.Add(this.cmbSensors);
@@ -595,13 +618,23 @@
             this.gbSensor.TabStop = false;
             this.gbSensor.Text = "Sensor Selection";
             // 
+            // btnRemoveSensor
+            // 
+            this.btnRemoveSensor.Location = new System.Drawing.Point(287, 18);
+            this.btnRemoveSensor.Name = "btnRemoveSensor";
+            this.btnRemoveSensor.Size = new System.Drawing.Size(60, 23);
+            this.btnRemoveSensor.TabIndex = 63;
+            this.btnRemoveSensor.Text = "Remove";
+            this.btnRemoveSensor.UseVisualStyleBackColor = true;
+            this.btnRemoveSensor.Click += new System.EventHandler(this.btnRemoveSensor_Click);
+            // 
             // btnStartSensor
             // 
-            this.btnStartSensor.Location = new System.Drawing.Point(312, 18);
+            this.btnStartSensor.Location = new System.Drawing.Point(352, 18);
             this.btnStartSensor.Name = "btnStartSensor";
-            this.btnStartSensor.Size = new System.Drawing.Size(100, 23);
+            this.btnStartSensor.Size = new System.Drawing.Size(60, 23);
             this.btnStartSensor.TabIndex = 62;
-            this.btnStartSensor.Text = "Start Sensor";
+            this.btnStartSensor.Text = "Start";
             this.btnStartSensor.UseVisualStyleBackColor = true;
             this.btnStartSensor.Click += new System.EventHandler(this.btnStartSensor_Click);
             // 
@@ -609,9 +642,9 @@
             // 
             this.btnLoadSensor.Location = new System.Drawing.Point(221, 18);
             this.btnLoadSensor.Name = "btnLoadSensor";
-            this.btnLoadSensor.Size = new System.Drawing.Size(85, 23);
+            this.btnLoadSensor.Size = new System.Drawing.Size(60, 23);
             this.btnLoadSensor.TabIndex = 60;
-            this.btnLoadSensor.Text = "Load from file";
+            this.btnLoadSensor.Text = "Load";
             this.btnLoadSensor.UseVisualStyleBackColor = true;
             this.btnLoadSensor.Click += new System.EventHandler(this.btnLoadSensor_Click);
             // 
@@ -623,10 +656,13 @@
             this.cmbSensors.Name = "cmbSensors";
             this.cmbSensors.Size = new System.Drawing.Size(209, 21);
             this.cmbSensors.TabIndex = 57;
+            this.cmbSensors.SelectedIndexChanged += new System.EventHandler(this.cmbSensors_SelectedIndexChanged);
             // 
             // cbUseCalibration
             // 
             this.cbUseCalibration.AutoSize = true;
+            this.cbUseCalibration.Checked = true;
+            this.cbUseCalibration.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbUseCalibration.Location = new System.Drawing.Point(6, 19);
             this.cbUseCalibration.Name = "cbUseCalibration";
             this.cbUseCalibration.Size = new System.Drawing.Size(96, 17);
@@ -689,54 +725,54 @@
             // appSettingsToolStripMenuItem
             // 
             this.appSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem,
-            this.loadToolStripMenuItem,
-            this.saveCurrentSettingsWhenClosingToolStripMenuItem,
+            this.saveConfigToolStripMenuItem,
+            this.saveConfigAsToolStripMenuItem,
+            this.loadConfigToolStripMenuItem,
+            this.saveCurrentConfigWhenClosingToolStripMenuItem,
             this.selectLogsDirectoryToolStripMenuItem1,
             this.selectCalibrationsDirectoryToolStripMenuItem});
             this.appSettingsToolStripMenuItem.Name = "appSettingsToolStripMenuItem";
-            this.appSettingsToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
-            this.appSettingsToolStripMenuItem.Text = "App Settings";
+            this.appSettingsToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
+            this.appSettingsToolStripMenuItem.Text = "App Configuration";
             // 
-            // saveToolStripMenuItem
+            // saveConfigToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
-            this.saveToolStripMenuItem.Text = "Save Settings";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            this.saveConfigToolStripMenuItem.Name = "saveConfigToolStripMenuItem";
+            this.saveConfigToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
+            this.saveConfigToolStripMenuItem.Text = "Save Configuration";
+            this.saveConfigToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
-            // saveAsToolStripMenuItem
+            // saveConfigAsToolStripMenuItem
             // 
-            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
-            this.saveAsToolStripMenuItem.Text = "Save Settings As";
+            this.saveConfigAsToolStripMenuItem.Name = "saveConfigAsToolStripMenuItem";
+            this.saveConfigAsToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
+            this.saveConfigAsToolStripMenuItem.Text = "Save Configuration As";
             // 
-            // loadToolStripMenuItem
+            // loadConfigToolStripMenuItem
             // 
-            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
-            this.loadToolStripMenuItem.Text = "Load Settings";
+            this.loadConfigToolStripMenuItem.Name = "loadConfigToolStripMenuItem";
+            this.loadConfigToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
+            this.loadConfigToolStripMenuItem.Text = "Load Configuration";
             // 
-            // saveCurrentSettingsWhenClosingToolStripMenuItem
+            // saveCurrentConfigWhenClosingToolStripMenuItem
             // 
-            this.saveCurrentSettingsWhenClosingToolStripMenuItem.Checked = true;
-            this.saveCurrentSettingsWhenClosingToolStripMenuItem.CheckOnClick = true;
-            this.saveCurrentSettingsWhenClosingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.saveCurrentSettingsWhenClosingToolStripMenuItem.Name = "saveCurrentSettingsWhenClosingToolStripMenuItem";
-            this.saveCurrentSettingsWhenClosingToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
-            this.saveCurrentSettingsWhenClosingToolStripMenuItem.Text = "Save Current Settings When Closing";
+            this.saveCurrentConfigWhenClosingToolStripMenuItem.Checked = true;
+            this.saveCurrentConfigWhenClosingToolStripMenuItem.CheckOnClick = true;
+            this.saveCurrentConfigWhenClosingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.saveCurrentConfigWhenClosingToolStripMenuItem.Name = "saveCurrentConfigWhenClosingToolStripMenuItem";
+            this.saveCurrentConfigWhenClosingToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
+            this.saveCurrentConfigWhenClosingToolStripMenuItem.Text = "Save Current Configuration When Closing";
             // 
             // selectLogsDirectoryToolStripMenuItem1
             // 
             this.selectLogsDirectoryToolStripMenuItem1.Name = "selectLogsDirectoryToolStripMenuItem1";
-            this.selectLogsDirectoryToolStripMenuItem1.Size = new System.Drawing.Size(263, 22);
+            this.selectLogsDirectoryToolStripMenuItem1.Size = new System.Drawing.Size(295, 22);
             this.selectLogsDirectoryToolStripMenuItem1.Text = "Select Logs Directory";
             // 
             // selectCalibrationsDirectoryToolStripMenuItem
             // 
             this.selectCalibrationsDirectoryToolStripMenuItem.Name = "selectCalibrationsDirectoryToolStripMenuItem";
-            this.selectCalibrationsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
+            this.selectCalibrationsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
             this.selectCalibrationsDirectoryToolStripMenuItem.Text = "Select Calibrations Directory";
             // 
             // experimentSettingsToolStripMenuItem
@@ -838,9 +874,9 @@
             // 
             // btnModifyCalibration
             // 
-            this.btnModifyCalibration.Location = new System.Drawing.Point(312, 40);
+            this.btnModifyCalibration.Location = new System.Drawing.Point(287, 40);
             this.btnModifyCalibration.Name = "btnModifyCalibration";
-            this.btnModifyCalibration.Size = new System.Drawing.Size(47, 23);
+            this.btnModifyCalibration.Size = new System.Drawing.Size(60, 23);
             this.btnModifyCalibration.TabIndex = 64;
             this.btnModifyCalibration.Text = "Modify";
             this.btnModifyCalibration.UseVisualStyleBackColor = true;
@@ -848,9 +884,9 @@
             // 
             // btnNewCalibration
             // 
-            this.btnNewCalibration.Location = new System.Drawing.Point(365, 40);
+            this.btnNewCalibration.Location = new System.Drawing.Point(352, 40);
             this.btnNewCalibration.Name = "btnNewCalibration";
-            this.btnNewCalibration.Size = new System.Drawing.Size(47, 23);
+            this.btnNewCalibration.Size = new System.Drawing.Size(60, 23);
             this.btnNewCalibration.TabIndex = 63;
             this.btnNewCalibration.Text = "New";
             this.btnNewCalibration.UseVisualStyleBackColor = true;
@@ -860,10 +896,11 @@
             // 
             this.btnLoadCalibration.Location = new System.Drawing.Point(221, 40);
             this.btnLoadCalibration.Name = "btnLoadCalibration";
-            this.btnLoadCalibration.Size = new System.Drawing.Size(85, 23);
+            this.btnLoadCalibration.Size = new System.Drawing.Size(60, 23);
             this.btnLoadCalibration.TabIndex = 62;
-            this.btnLoadCalibration.Text = "Load from file";
+            this.btnLoadCalibration.Text = "Load";
             this.btnLoadCalibration.UseVisualStyleBackColor = true;
+            this.btnLoadCalibration.Click += new System.EventHandler(this.btnLoadCalibration_Click);
             // 
             // txtCalibration
             // 
@@ -895,7 +932,19 @@
             this.sfdSaveSettingsAs.Filter = "JSON files (*.json)|*.json";
             this.sfdSaveSettingsAs.Title = "Save Settings As";
             // 
-            // MainAppForm
+            // ofdSelectLaser
+            // 
+            this.ofdSelectLaser.DefaultExt = "exe";
+            this.ofdSelectLaser.Filter = "Executables (*.exe)|*.exe";
+            this.ofdSelectLaser.Title = "Select Laser Executable";
+            // 
+            // ofdLoadCalibration
+            // 
+            this.ofdLoadCalibration.DefaultExt = "exe";
+            this.ofdLoadCalibration.Filter = "JSON files (*.json)|*json";
+            this.ofdLoadCalibration.Title = "Select Laser Executable";
+            // 
+            // App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -910,10 +959,12 @@
             this.Controls.Add(this.pltTemperature);
             this.Controls.Add(this.menuMain);
             this.Controls.Add(this.gbSensor);
+            this.Location = new System.Drawing.Point(100, 10);
             this.MainMenuStrip = this.menuMain;
-            this.Name = "MainAppForm";
+            this.Name = "App";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Controlled Photothermal Therapy 2";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainApp_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.App_FormClosing);
             this.gbExperiment.ResumeLayout(false);
             this.gbExperiment.PerformLayout();
             this.gbLaser.ResumeLayout(false);
@@ -964,10 +1015,10 @@
         private System.Windows.Forms.Button btnStartExperiment;
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.ToolStripMenuItem appSettingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveCurrentSettingsWhenClosingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveConfigToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveConfigAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadConfigToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveCurrentConfigWhenClosingToolStripMenuItem;
         private System.Windows.Forms.Button btnLoadSensor;
         private System.Windows.Forms.GroupBox gbCalibration;
         private System.Windows.Forms.TextBox txtCalibration;
@@ -1010,6 +1061,10 @@
         private System.Windows.Forms.ComboBox cmbLasers;
         private System.Windows.Forms.CheckBox cbSaveHeader;
         private System.Windows.Forms.ToolTip ttSaveHeader;
+        private System.Windows.Forms.OpenFileDialog ofdSelectLaser;
+        private System.Windows.Forms.Button btnRemoveSensor;
+        private System.Windows.Forms.Button btnRemoveLaser;
+        private System.Windows.Forms.OpenFileDialog ofdLoadCalibration;
     }
 }
 

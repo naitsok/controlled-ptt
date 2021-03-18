@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4F3D5B99-37D6-49B9-81B1-FE701414DBB8}</ProjectGuid>
+    <ProjectGuid>{73116093-3F23-4384-9D63-D89E1B030B67}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TwoMlxSensors</RootNamespace>
-    <AssemblyName>TwoMlxSensors</AssemblyName>
+    <RootNamespace>ControlledPTT.Lasers</RootNamespace>
+    <AssemblyName>ControlledPTT.Lasers.DummyLaser</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,9 +39,6 @@
     <Deterministic>false</Deterministic>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BaseSensor">
-      <HintPath>..\..\base-sensor\bin\Release\BaseSensor.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,20 +52,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TwoMlxSensorsForm.cs">
+    <Compile Include="DummyLaser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TwoMlxSensorsForm.Designer.cs">
-      <DependentUpon>TwoMlxSensorsForm.cs</DependentUpon>
+    <Compile Include="DummyLaser.Designer.cs">
+      <DependentUpon>DummyLaser.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="TwoMlxSensorsForm.resx">
-      <DependentUpon>TwoMlxSensorsForm.cs</DependentUpon>
+    <EmbeddedResource Include="DummyLaser.resx">
+      <DependentUpon>DummyLaser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\base-laser\ControlledPTT.Lasers.BaseLaser.csproj">
+      <Project>{3ad3b4d6-07a5-4613-958f-3cd0dc18dafb}</Project>
+      <Name>ControlledPTT.Lasers.BaseLaser</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)" mkdir "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)"
+xcopy "$(TargetDir)*DummyLaser.*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\"  /Y /I
+xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+  </PropertyGroup>
 </Project>

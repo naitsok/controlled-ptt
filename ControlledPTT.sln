@@ -1,0 +1,83 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sensor", "Sensor", "{AE4364DE-DB18-41C3-8A1E-7D1063D43DB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Laser", "Laser", "{C1E783DD-8059-4279-96EC-14972762413B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MainApp", "MainApp", "{4DD7B88E-D3BD-4A0B-8D75-6C674D1212F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlledPTT.Sensors.BaseSensor", "sensor\base-sensor\ControlledPTT.Sensors.BaseSensor.csproj", "{949DAD28-5F74-443C-92A7-6383998B1B43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlledPTT.Sensors.ArrayMLXSensor", "sensor\array-mlx-sensor\pc-array-mlx\ControlledPTT.Sensors.ArrayMLXSensor.csproj", "{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlledPTT.Sensors.DummySensor", "sensor\dummy-sensor\ControlledPTT.Sensors.DummySensor.csproj", "{69400459-A263-4557-BBC2-CA161BA0DF81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlledPTT.Sensors.MLXSensor", "sensor\one-mlx-sensor\pc-one-mlx\ControlledPTT.Sensors.MLXSensor.csproj", "{B2F33C8D-9AA3-4031-B697-773DF7DC5236}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlledPTT.Sensors.TwoMLXSensors", "sensor\two-mlx-sensors\pc-two-mlx\ControlledPTT.Sensors.TwoMLXSensors.csproj", "{4F3D5B99-37D6-49B9-81B1-FE701414DBB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlledPTT.Lasers.BaseLaser", "laser\base-laser\ControlledPTT.Lasers.BaseLaser.csproj", "{3AD3B4D6-07A5-4613-958F-3CD0DC18DAFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlledPTT.Lasers.DummyLaser", "laser\dummy-laser\ControlledPTT.Lasers.DummyLaser.csproj", "{73116093-3F23-4384-9D63-D89E1B030B67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlledPTT.App", "app\ControlledPTT.App.csproj", "{A150BAA0-5996-478E-88C9-71E55C42B9A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{949DAD28-5F74-443C-92A7-6383998B1B43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{949DAD28-5F74-443C-92A7-6383998B1B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{949DAD28-5F74-443C-92A7-6383998B1B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{949DAD28-5F74-443C-92A7-6383998B1B43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69400459-A263-4557-BBC2-CA161BA0DF81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69400459-A263-4557-BBC2-CA161BA0DF81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69400459-A263-4557-BBC2-CA161BA0DF81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69400459-A263-4557-BBC2-CA161BA0DF81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2F33C8D-9AA3-4031-B697-773DF7DC5236}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2F33C8D-9AA3-4031-B697-773DF7DC5236}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2F33C8D-9AA3-4031-B697-773DF7DC5236}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2F33C8D-9AA3-4031-B697-773DF7DC5236}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F3D5B99-37D6-49B9-81B1-FE701414DBB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F3D5B99-37D6-49B9-81B1-FE701414DBB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F3D5B99-37D6-49B9-81B1-FE701414DBB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F3D5B99-37D6-49B9-81B1-FE701414DBB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AD3B4D6-07A5-4613-958F-3CD0DC18DAFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AD3B4D6-07A5-4613-958F-3CD0DC18DAFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AD3B4D6-07A5-4613-958F-3CD0DC18DAFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AD3B4D6-07A5-4613-958F-3CD0DC18DAFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73116093-3F23-4384-9D63-D89E1B030B67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73116093-3F23-4384-9D63-D89E1B030B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73116093-3F23-4384-9D63-D89E1B030B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73116093-3F23-4384-9D63-D89E1B030B67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A150BAA0-5996-478E-88C9-71E55C42B9A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A150BAA0-5996-478E-88C9-71E55C42B9A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A150BAA0-5996-478E-88C9-71E55C42B9A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A150BAA0-5996-478E-88C9-71E55C42B9A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{949DAD28-5F74-443C-92A7-6383998B1B43} = {AE4364DE-DB18-41C3-8A1E-7D1063D43DB4}
+		{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F} = {AE4364DE-DB18-41C3-8A1E-7D1063D43DB4}
+		{69400459-A263-4557-BBC2-CA161BA0DF81} = {AE4364DE-DB18-41C3-8A1E-7D1063D43DB4}
+		{B2F33C8D-9AA3-4031-B697-773DF7DC5236} = {AE4364DE-DB18-41C3-8A1E-7D1063D43DB4}
+		{4F3D5B99-37D6-49B9-81B1-FE701414DBB8} = {AE4364DE-DB18-41C3-8A1E-7D1063D43DB4}
+		{3AD3B4D6-07A5-4613-958F-3CD0DC18DAFB} = {C1E783DD-8059-4279-96EC-14972762413B}
+		{73116093-3F23-4384-9D63-D89E1B030B67} = {C1E783DD-8059-4279-96EC-14972762413B}
+		{A150BAA0-5996-478E-88C9-71E55C42B9A5} = {4DD7B88E-D3BD-4A0B-8D75-6C674D1212F5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EF993D55-925F-4AE7-B896-32E471258636}
+	EndGlobalSection
+EndGlobal

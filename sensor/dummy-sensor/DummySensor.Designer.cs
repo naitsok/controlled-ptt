@@ -1,6 +1,6 @@
-﻿namespace DummySensor
+﻿namespace ControlledPTT.Sensors
 {
-    partial class DummySensorForm
+    partial class DummySensor
     {
         /// <summary>
         /// Required designer variable.

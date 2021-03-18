@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("One MLX Sensor")]
+[assembly: AssemblyTitle("ControlledPTT.Sensors.MLXSensor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("University of Eastern Finland")]
-[assembly: AssemblyProduct("One MLX Sensor")]
+[assembly: AssemblyProduct("ControlledPTT")]
 [assembly: AssemblyCopyright("Copyright © Konstantin Tamarov 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace ControlledPTT.Sensors
 {
-    public partial class ArrayMLX : BaseSensor
+    public partial class ArrayMLXSensor : BaseSensor
     {
         // COM port connection.
         private SerialPort _comPort = null;
@@ -55,7 +55,7 @@ namespace ControlledPTT.Sensors
         private static Brush TemperatureFontColor = new SolidBrush(Color.White);
 
         // keep the selected cells
-        private static string SELECTED_CELLS = @".\array_sensor_selected_cells.txt";
+        private static string SELECTED_CELLS = @".\ArrayMLX_selected_cells.txt";
 
         /// <summary>
         /// Override from BaseSensor to return title of the sensor
@@ -68,7 +68,7 @@ namespace ControlledPTT.Sensors
         /// <returns>Temperature to be sent to MainApp by BaseSensor</returns>
         protected override double GetTemperature() { return _temperature; }
 
-        public ArrayMLX()
+        public ArrayMLXSensor()
         {
             InitializeComponent();
 

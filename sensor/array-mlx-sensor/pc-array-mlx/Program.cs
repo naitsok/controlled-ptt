@@ -16,7 +16,7 @@ namespace ControlledPTT.Sensors
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ArrayMLX());
+            Application.Run(new ArrayMLXSensor());
         }
     }
 }

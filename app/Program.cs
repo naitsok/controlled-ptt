@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Serilog;
 
-namespace MainApp
+namespace ControlledPTT
 {
     static class Program
     {
@@ -23,7 +23,7 @@ namespace MainApp
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainAppForm());
+            Application.Run(new App());
         }
     }
 }

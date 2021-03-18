@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using Serilog;
 
-namespace MainApp
+namespace ControlledPTT
 {
     /*
     public partial class MainAppForm : Form

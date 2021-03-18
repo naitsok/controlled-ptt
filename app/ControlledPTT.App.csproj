@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A150BAA0-5996-478E-88C9-71E55C42B9A5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>MainApp</RootNamespace>
-    <AssemblyName>MainApp</AssemblyName>
+    <RootNamespace>ControlledPTT</RootNamespace>
+    <AssemblyName>ControlledPTT.App</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -41,9 +41,6 @@
     <Deterministic>false</Deterministic>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BaseSensor">
-      <HintPath>..\sensor\base-sensor\bin\Release\BaseSensor.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -118,38 +115,63 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App.Laser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App.Sensor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Calibration.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Calibration.Designer.cs">
       <DependentUpon>Calibration.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainAppForm.cs">
+    <Compile Include="App.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainAppForm.Designer.cs">
-      <DependentUpon>MainAppForm.cs</DependentUpon>
+    <Compile Include="App.Designer.cs">
+      <DependentUpon>App.cs</DependentUpon>
     </Compile>
     <Compile Include="PID.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Calibration.resx">
       <DependentUpon>Calibration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainAppForm.resx">
-      <DependentUpon>MainAppForm.cs</DependentUpon>
+    <EmbeddedResource Include="App.resx">
+      <DependentUpon>App.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
     <None Include="calibrations\dummy_calibration.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="default_settings.json">
+    <None Include="configurations\build_config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="configurations\default_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="base_settings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\laser\base-laser\ControlledPTT.Lasers.BaseLaser.csproj">
+      <Project>{3ad3b4d6-07a5-4613-958f-3cd0dc18dafb}</Project>
+      <Name>ControlledPTT.Lasers.BaseLaser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\sensor\base-sensor\ControlledPTT.Sensors.BaseSensor.csproj">
+      <Project>{949dad28-5f74-443c-92a7-6383998b1b43}</Project>
+      <Name>ControlledPTT.Sensors.BaseSensor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\CenterSpace.NMath.Premium.6.2.0.58\build\CenterSpace.NMath.Premium.targets" Condition="Exists('packages\CenterSpace.NMath.Premium.6.2.0.58\build\CenterSpace.NMath.Premium.targets')" />
@@ -160,6 +182,16 @@
     <Error Condition="!Exists('packages\CenterSpace.NMath.Premium.6.2.0.58\build\CenterSpace.NMath.Premium.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CenterSpace.NMath.Premium.6.2.0.58\build\CenterSpace.NMath.Premium.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>copy /Y  "$(TargetDir)$(TargetName).exe" "$(SolutionDir)..\build\$(TargetName).exe"</PostBuildEvent>
+    <PostBuildEvent>if not exist "$(SolutionDir)build\$(ConfigurationName)" mkdir "$(SolutionDir)build\$(ConfigurationName)"
+xcopy "$(TargetDir)Microsoft.*" "$(SolutionDir)build\$(ConfigurationName)\lib\"  /Y /I
+xcopy "$(TargetDir)Newtonsoft.*" "$(SolutionDir)build\$(ConfigurationName)\lib\"  /Y /I
+xcopy "$(TargetDir)Oxyplot.*" "$(SolutionDir)build\$(ConfigurationName)\lib\"  /Y /I
+xcopy "$(TargetDir)Serilog.*" "$(SolutionDir)build\$(ConfigurationName)\lib\"  /Y /I
+xcopy "$(TargetDir)System.*" "$(SolutionDir)build\$(ConfigurationName)\lib\"  /Y /I
+xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)build\$(ConfigurationName)\lib\"  /Y /I
+xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)build\$(ConfigurationName)\lib\"  /Y /I
+xcopy "$(TargetDir)*App.*" "$(SolutionDir)build\$(ConfigurationName)\"  /Y /I
+xcopy "$(TargetDir)calibrations" "$(SolutionDir)build\$(ConfigurationName)\calibrations\"  /Y /I
+xcopy "$(TargetDir)configurations\build_config.json" "$(SolutionDir)build\$(ConfigurationName)\configurations\default_config.json"  /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>
