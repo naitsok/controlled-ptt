@@ -1,9 +1,9 @@
 {
   "discretization_ms": 1000,
   "save_settings_on_closing": true,
-  "calibration": "C:\\Users\\konstt\\Documents\\Research\\Development\\Controlled_PTT_2.0\\controlled-ptt\\build\\Debug\\calibrations\\dummy_calibration2.json",
+  "calibration": ".\\calibrations\\dummy_calibration.json",
   "use_calibration": true,
-  "experiment_dir": "C:\\Users\\konstt\\Documents\\Research\\Development\\Controlled_PTT_2.0\\controlled-ptt\\app\\bin\\Debug\\experiments\\",
+  "experiment_dir": ".\\experiments\\",
   "experiment_type_index": 1,
   "save_header_data": true,
   "save_experiment_data": true,
@@ -13,19 +13,16 @@
   "min_target_temperature": 0,
   "max_target_temperature": 100,
   "pid": {
-    "proportional": 200.0,
-    "integral": 50.0,
-    "differential": 50.0
+    "proportional": 200,
+    "integral": 50,
+    "differential": 50
   },
   "sensors_path": ".\\sensors\\",
   "user_added_sensors": [
-    {
-      "title": "Array MLX Sensor (1)",
-      "path": "C:\\Users\\konstt\\Documents\\Research\\Development\\Controlled_PTT_2.0\\controlled-ptt\\build\\Debug\\sensors\\ControlledPTT.Sensors.ArrayMLXSensor\\ControlledPTT.Sensors.ArrayMLXSensor.exe"
-    }
   ],
-  "selected_sensor_index": 5,
+  "selected_sensor_index": 3,
   "lasers_path": ".\\lasers\\",
-  "user_added_lasers": [],
+  "user_added_lasers": [
+  ],
   "selected_laser_index": 1
 }

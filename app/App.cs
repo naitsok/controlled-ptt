@@ -30,6 +30,7 @@ namespace ControlledPTT
         private Calibration _calibration = null;
 
         // Experiment
+        private int _discretizationTime = 1000; // ms, discretization time of timers
         private string _expBaseDir = "";
         private string _expDir = "";
         private string _expFileName = "";
@@ -39,104 +40,119 @@ namespace ControlledPTT
         private PID _pid = null;
         private double _targetTemperature = 50;
         // Timer for experiment.
-        private Timer _experimentTimer = new Timer() { Interval = 1000 };
+        private Timer _expTimer = new Timer() { Interval = 1000 };
         // string with the format to save data depending on the experiment type
-        private string _saveDataLineHeader = "Time (sec)\tRaw Sensor Data\tCalibrated Temperature";
+        private string _saveDataLineHeader = "Time (ms)\tRaw Sensor Data\tCalibrated Temperature";
         private string _saveDataLineFormat = "{0}\t{1:F2}\t{2:F2}";
         // StreamWriter to save data
         private StreamWriter _expWriter = null;
         // Variables to keep track of experiment
         private bool _expGoing = false;
-        private int _elapsedSeconds = 0;
+        private int _elapsedMilliseconds = 0;
+        // Indicates if the message box with error is already open when sensor is not sending temperature
+        private bool _errNotSendingTemperatureShown = false;
 
-        private double _time = 0;
-
-        private string _tempSavePath = AppDomain.CurrentDomain.BaseDirectory;
-
-        
-
-        private bool _isTempRecording = false;
-
-        private CultureInfo _culInfo = CultureInfo.InvariantCulture;
-
-        private int _secondsTillEnd = 0;
-
-        // Plot models.
-        private PlotModel _objTemperaturePM = new PlotModel()
+        /// <summary>
+        /// Removes all graph data by creating a new PlotModel for the graph
+        /// </summary>
+        private void ResetGraphData()
         {
-            Title = "Object Temperature",
-            PlotAreaBackground = OxyColors.White,
-            DefaultColors = new List<OxyColor>
+            PlotModel pm = new PlotModel()
             {
-                OxyColors.Red,
-                OxyColors.Green,
-                OxyColors.Blue
-            },
-            TitleFontSize = 10,
-            TitleFontWeight = 400,
-            LegendFontWeight = 500,
-            LegendFontSize = 14,
-            LegendTextColor = OxyColors.Black,
-            LegendPosition = LegendPosition.RightTop,
-        };
+                Title = "Object Temperature",
+                PlotAreaBackground = OxyColors.White,
+                DefaultColors = new List<OxyColor>
+                {
+                    OxyColors.Red,
+                    OxyColors.Green,
+                    OxyColors.Blue
+                },
+                TitleFontSize = 12,
+                TitleFontWeight = 400,
+                LegendFontWeight = 500,
+                LegendFontSize = 12,
+                LegendTextColor = OxyColors.Black,
+                LegendPosition = LegendPosition.RightTop,
+            };
+            pm.Axes.Add(new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Minimum = 0,
+                Maximum = 120,
+                Title = "Elapsed Time (s)"
+            });
+            pm.Axes.Add(new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Minimum = 17,
+                Maximum = 23,
+                Title = "Temperature (Celcius)"
+            });
+            // object temperature plot series
+            pm.Series.Add(new LineSeries()
+            {
+                Title = "Raw data",
+                TextColor = OxyColors.Red,
+                IsVisible = false // Raw data is only shown when the calibration is on
+            });
+            //series for calibrated temperature
+            pm.Series.Add(new LineSeries()
+            {
+                Title = "Calibrated",
+                TextColor = OxyColors.Green,
+                IsVisible = true
+            });
+            // series for target temperature in PID controller
+            pm.Series.Add(new LineSeries()
+            {
+                Title = "Target",
+                TextColor = OxyColors.Blue,
+                IsVisible = false
+            });
+            pltTemperature.Model = pm;
+            cmbExperimentType_SelectedIndexChanged(cmbExperimentType, new EventArgs());
+        }
 
-        // Scaling and setting the Graph.
-        private void SetGraphData(PlotView pw, double x, double[] ys, bool isLaserGraph)
+        /// <summary>
+        /// Sets the graph values and scales the axis during the experiment.
+        /// </summary>
+        private void SetGraphData()
         {
-            var xAxis = pw.Model.Axes[0];
-            var yAxis = pw.Model.Axes[1];
+            double[] tempData = new double[] { _receivedTemperature, _calibratedTemperature, _targetTemperature };
+            List<double> visibleData = new List<double>();
+            double elapsedSeconds = (double)_elapsedMilliseconds / 1000;
+            Axis xAxis = pltTemperature.Model.Axes[0];
+            Axis yAxis = pltTemperature.Model.Axes[1];
 
-            double minY = ys.Min();
-            double maxY = ys.Max();
-
-            // Scale X axis.
-            if (x > xAxis.Maximum - 30)
+            for (int i = 0; i < pltTemperature.Model.Series.Count; i++)
+            {
+                LineSeries series = pltTemperature.Model.Series[i] as LineSeries;
+                if (series.IsVisible)
+                {
+                    visibleData.Add(tempData[i]);
+                }
+                series.Points.Add(new DataPoint(elapsedSeconds, tempData[i]));
+            }
+            // Scale X axis
+            if (elapsedSeconds > xAxis.Maximum - 30)
             {
                 xAxis.Maximum += 50;
                 xAxis.Minimum += 50;
             }
 
-            // Scale Y axis.
-            if (isLaserGraph)
-            {
-                if (yAxis.Maximum - 0.1 < maxY)
-                    yAxis.Maximum += 0.1;
-                if (yAxis.Maximum - 0.3 > maxY)
-                    yAxis.Maximum -= 0.1;
-                if (yAxis.Minimum + 0.1 > minY)
-                    yAxis.Minimum -= 0.1;
-                if (yAxis.Minimum + 0.3 < minY)
-                    yAxis.Minimum += 0.1;
-            }
-            else
-            {
-                if (yAxis.Maximum - 1 < maxY)
-                    yAxis.Maximum += 1;
-                if (yAxis.Maximum - 3 > maxY)
-                    yAxis.Maximum -= 1;
-                if (yAxis.Minimum + 1 > minY)
-                    yAxis.Minimum -= 1;
-                if (yAxis.Minimum + 3 < minY)
-                    yAxis.Minimum += 1;
-            }
+            // Scale Y axis
+            double yMax = visibleData.Max();
+            if (yAxis.Maximum - 1 < yMax)
+                yAxis.Maximum += 1;
+            if (yAxis.Maximum - 3 > yMax)
+                yAxis.Maximum -= 1;
+            double yMin = visibleData.Min();
+            if (yAxis.Minimum + 1 > yMin)
+                yAxis.Minimum -= 1;
+            if (yAxis.Minimum + 3 < yMin)
+                yAxis.Minimum += 1;
 
-            // Set data.
-            for (int i = 0; i < ys.Length; i++)
-            {
-                (pw.Model.Series[i] as LineSeries).Points.Add(new DataPoint(x, ys[i]));
-            }
-            pw.InvalidatePlot(false);
-        }
-
-        // Info methods
-        private void AddInfo(string txt)
-        {
-            AppendText(rtbInfo, txt + "\n", Color.Black);
-        }
-
-        private void AddError(string txt)
-        {
-            AppendText(rtbInfo, txt + "\n", Color.Red);
+            pltTemperature.Model.InvalidatePlot(false);
         }
 
         private void AppendText(RichTextBox box, string txt, Color color)
@@ -153,8 +169,10 @@ namespace ControlledPTT
         public App()
         {
             InitializeComponent();
+            // Initialize graph
+            ResetGraphData();
 
-            // Load settings
+            // Load configuration
             // First get the settings file to load
             _configPath = Properties.Settings.Default.AppSettings;
             if (!Path.IsPathRooted(_configPath))
@@ -169,7 +187,7 @@ namespace ControlledPTT
                 _config = JObject.Parse(File.ReadAllText(_configPath));
             }
 
-            saveCurrentConfigWhenClosingToolStripMenuItem.Checked = (bool)_config["save_settings_on_closing"];
+            saveCurrentConfigWhenClosingToolStripMenuItem.Checked = (bool)_config["save_settings_on_closing"];            
 
             // get information about sensors and select the indicated one
             _selectedSensorIndex = (int)_config["selected_sensor_index"] - 1;
@@ -195,8 +213,6 @@ namespace ControlledPTT
             DisplayCalibration();
             cbUseCalibration_CheckedChanged(cbUseCalibration, new EventArgs());
 
-
-            // get information about experiment and set values
             nudTargetTemp.Minimum = (decimal)_config["min_target_temperature"];
             nudTargetTemp.Maximum = (decimal)_config["max_target_temperature"];
             cmbExperimentType.SelectedIndex = (int)_config["experiment_type_index"] - 1;
@@ -208,9 +224,9 @@ namespace ControlledPTT
                 (double)nudTargetTemp.Minimum, // Min temperature that can be set and achieved
                 1.0, // PID gives output in the [0, 1] interval of relative laser power
                 0); // The final laser power to be calculated by the laser part
-            nudPropGain.Value = (decimal)_pid.PGain;
-            nudIntGain.Value = (decimal)_pid.IGain;
-            nudDiffGain.Value = (decimal)_pid.DGain;
+            nudPropGain.Value = (decimal)_pid.PropGain;
+            nudIntGain.Value = (decimal)_pid.IntGain;
+            nudDiffGain.Value = (decimal)_pid.DiffGain;
 
             // Initialization for Experiment
             // directory to save files of the experiment
@@ -243,49 +259,10 @@ namespace ControlledPTT
                 _expFileName = "";
             txtExpFileName.Text = _expFileName;
 
-            // To log information.
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File("logfile.json", shared: true)
-                .CreateLogger();
-
-            _experimentTimer.Tick += new EventHandler(this.experimentTimer_Tick);
-
-            // object temperature plot axes
-            _objTemperaturePM.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                Minimum = 0,
-                Maximum = 120,
-                IsAxisVisible = false
-            });
-            _objTemperaturePM.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                Minimum = 17,
-                Maximum = 23
-            });
-            // object temperature plot series
-            _objTemperaturePM.Series.Add(new LineSeries()
-            {
-                Title = "Sensor",
-                TextColor = OxyColors.Red
-            });
-            //series for calibrated temperature
-            _objTemperaturePM.Series.Add(new LineSeries()
-            {
-                Title = "Calibrated",
-                TextColor = OxyColors.Green,
-                IsVisible = true
-            });
-            // series for target temperature in PID controller
-            _objTemperaturePM.Series.Add(new LineSeries()
-            {
-                Title = "Target",
-                TextColor = OxyColors.Blue,
-                IsVisible = true
-            });
-            pltTemperature.Model = _objTemperaturePM;
+            // get information about experiment and set values
+            _discretizationTime = (int)_config["discretization_ms"];
+            _expTimer.Interval = _discretizationTime;
+            _expTimer.Tick += new EventHandler(this.experimentTimer_Tick);
         }
 
         /// <summary>
@@ -311,17 +288,33 @@ namespace ControlledPTT
 
         private void btnModifyCalibration_Click(object sender, EventArgs e)
         {
+            // Show the raw data series
+            (pltTemperature.Model.Series[0] as LineSeries).IsVisible = true;
+            pltTemperature.Model.InvalidatePlot(false);
+
             _calibration.ShowDialog();
             DisplayCalibration();
+
+            // Hide the raw data series
+            (pltTemperature.Model.Series[0] as LineSeries).IsVisible = false;
+            pltTemperature.Model.InvalidatePlot(false);
         }
 
         private void btnNewCalibration_Click(object sender, EventArgs e)
         {
+            // Show the raw data series
+            (pltTemperature.Model.Series[0] as LineSeries).IsVisible = true;
+            pltTemperature.Model.InvalidatePlot(false);
+
             Calibration newCalibration = new Calibration();
             DialogResult result = newCalibration.ShowDialog();
             if (result == DialogResult.OK)
                 _calibration = newCalibration;
             DisplayCalibration();
+
+            // Hide the raw data series
+            (pltTemperature.Model.Series[0] as LineSeries).IsVisible = false;
+            pltTemperature.Model.InvalidatePlot(false);
         }
 
         /// <summary>
@@ -355,6 +348,7 @@ namespace ControlledPTT
         /// <param name="e"></param>
         private void cmbExperimentType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            (pltTemperature.Model.Series[2] as LineSeries).IsVisible = false;
             switch (cmbExperimentType.SelectedIndex)
             {
                 case 0:
@@ -368,8 +362,10 @@ namespace ControlledPTT
                 case 2:
                     gbLaser.Visible = true;
                     gbPID.Visible = true;
+                    (pltTemperature.Model.Series[2] as LineSeries).IsVisible = true;
                     break;
             }
+            pltTemperature.Model.InvalidatePlot(false);
         }
 
         /// <summary>
@@ -413,9 +409,21 @@ namespace ControlledPTT
                 return false;
             }
 
-            // TODO: Check laser connection!
-            // TODO: Laser API and laser base class to be developed!
-
+            if (cmbExperimentType.SelectedIndex > 0)
+            {
+                // Experiment type selected requires the connection to laser. Check the connection
+                if (_laser == null)
+                {
+                    MessageBox.Show("No laser is started. Select the laser to proceed with the chosen experiment.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                if (!_laser.IsLaserInitialized())
+                {
+                    MessageBox.Show("The laser hardware was not properly initialized. Check if laser is connected and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+            
             // Prepare PID
             _targetTemperature = (double)nudTargetTemp.Value;
             _pid.Reset();
@@ -439,7 +447,7 @@ namespace ControlledPTT
             if (!Path.HasExtension(_expFilePath))
                 _expFilePath = _expFilePath + ".txt";
 
-            if (File.Exists(_expFileName))
+            if (File.Exists(_expFilePath))
             {
                 DialogResult result = MessageBox.Show("File with the selected name already exists. Do you want to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.No)
@@ -447,7 +455,7 @@ namespace ControlledPTT
             }
 
             // Generate the tempalte string for saving the data depending on the selected experimental parameters
-            _saveDataLineHeader = "Time (sec)\tRaw Sensor Data\tCalibrated Temperature";
+            _saveDataLineHeader = "Time (ms)\tRaw Sensor Data\tCalibrated Temperature";
             _saveDataLineFormat = "{0}\t{1:F2}\t{2:F2}";
             if (cmbExperimentType.SelectedIndex > 0)
             {
@@ -455,6 +463,8 @@ namespace ControlledPTT
                 _saveDataLineHeader = _saveDataLineHeader + "\tLaser Power";
                 _saveDataLineFormat = _saveDataLineFormat + "\t{3:F2}";
             }
+
+            ResetGraphData();
 
             return true;
         }
@@ -464,6 +474,7 @@ namespace ControlledPTT
         /// </summary>
         private void DisableControlsExperimentStarted()
         {
+            cmbExperimentType.Enabled = false;
             btnStartExperiment.Text = "Stop Experiment";
             txtExperimentStarted.Text = "Experiment Going";
             txtExperimentStarted.BackColor = Color.Green;
@@ -483,6 +494,7 @@ namespace ControlledPTT
         /// </summary>
         private void EnableControlsExperimentFinished()
         {
+            cmbExperimentType.Enabled = true;
             btnStartExperiment.Text = "Start Experiment";
             txtExperimentStarted.Text = "Experiment Not Going";
             txtExperimentStarted.BackColor = Color.Red;
@@ -493,21 +505,40 @@ namespace ControlledPTT
             txtDescription.Enabled = true;
             txtOperator.Enabled = true;
             cbSaveHeader.Enabled = true;
-            gbLaser.Enabled = true;
             nudTargetTemp.Enabled = true;
+            if (_laser == null)
+                gbLaser.Enabled = true;
+        }
+
+        /// <summary>
+        /// Finishes the experiment either on time expiration, termination by user or App closing. 
+        /// </summary>
+        private void FinishExperiment()
+        {
+            _laser?.SwitchOff();
+
+            _expGoing = false;
+            _expTimer.Stop();
+
+            if (cbSaveData.Checked)
+            {
+                _expWriter.Flush();
+                _expWriter.Close();
+            }
+
+            EnableControlsExperimentFinished();
         }
 
         private void btnStartExperiment_Click(object sender, EventArgs e)
         {
             if (_expGoing)
             {
-                EnableControlsExperimentFinished();
-
-                _expGoing = false;
-                _experimentTimer.Stop();
+                // Experiment was stopped by user
+                FinishExperiment();
             }
             else
             {
+                // Start of experiment was initiated by user
                 if (PrepareExperiment())
                 {
                     if (cbSaveData.Checked)
@@ -518,46 +549,50 @@ namespace ControlledPTT
                             // Save header data
                             string laser = "No Laser";
                             string pidParams = "No PID control";
+                            string targetTemp = pidParams;
                             if (cmbExperimentType.SelectedIndex > 0)
-                                laser = cmbLasers.SelectedText;
+                                laser = cmbLasers.SelectedItem.ToString();
                             if (cmbExperimentType.SelectedIndex == 2)
                             {
                                 // PID Controlled PTT selected
                                 pidParams = "proportional = " + nudPropGain.Value.ToString("F2") + "; integral = " +
                                     nudIntGain.Value.ToString("F2") + "; differential = " + nudDiffGain.Value.ToString("F2");
+                                targetTemp = _targetTemperature.ToString("F2");
+                                double startPower = _pid.Compute(_calibratedTemperature, _targetTemperature);
+                                _laser?.SetPower(startPower);
                             }
                             string header =
                                 "File Name: " + _expFileName + Environment.NewLine +
                                 "File Directory: " + _expDir + Environment.NewLine +
-                                "Experiment: " + cmbExperimentType.SelectedText + Environment.NewLine +
+                                "Experiment: " + cmbExperimentType.SelectedItem.ToString() + Environment.NewLine +
                                 "Description: " + txtDescription.Text + Environment.NewLine +
                                 "Operator: " + txtOperator.Text + Environment.NewLine +
                                 "Settings: " + _configPath + Environment.NewLine +
-                                "Sensor: " + cmbSensors.SelectedText + Environment.NewLine +
+                                "Sensor: " + cmbSensors.SelectedItem.ToString() + Environment.NewLine +
                                 "Calibration: " + _calibration.CalibrationFile + Environment.NewLine +
-                                "PID parameters: " + pidParams + Environment.NewLine +
+                                "PID Parameters: " + pidParams + Environment.NewLine +
                                 "Laser: " + laser + Environment.NewLine +
-                                "Experiment time: " + nudExpTime.Value.ToString("F2") + " min";
-                            _expWriter.WriteLine(header);
+                                "Target Temperature: " + targetTemp + Environment.NewLine +
+                                "Experiment Time: " + nudExpTime.Value.ToString("F2") + " min";
+                            _expWriter.WriteLine(header + Environment.NewLine);
                         }
 
-                        // Save first lines
+                        // Save header line for the experiment
                         _expWriter.WriteLine(_saveDataLineHeader);
-                        _expWriter.WriteLine(string.Format(_saveDataLineFormat, 0, _receivedTemperature, _calibratedTemperature /* , _laser.GetLaserPower() */));
-
-                        
+                        _expWriter.WriteLine(string.Format(_saveDataLineFormat, 0, _receivedTemperature, _calibratedTemperature, _laser?.GetPower()));
                     }
 
                     DisableControlsExperimentStarted();
+                    SetGraphData();
 
-                    // TODO: switch on laser (possibly disable laser controls as well, but maybe not needed)
-                    
+                    if (cmbExperimentType.SelectedIndex > 0)
+                        _laser?.SwitchOn();
 
-                    _elapsedSeconds = 0;
-                    txtElapsedTime.Text = TimeSpan.FromSeconds(_elapsedSeconds).ToString("HH:mm:ss");
+                    _elapsedMilliseconds = 0;
+                    txtElapsedTime.Text = TimeSpan.Zero.ToString(@"hh\:mm\:ss\.fff");
 
                     _expGoing = true;
-                    _experimentTimer.Start();
+                    _expTimer.Start();
                 }
             }
         }
@@ -569,55 +604,37 @@ namespace ControlledPTT
         /// <param name="e"></param>
         private void experimentTimer_Tick(object sender, EventArgs e)
         {
-            if (_expGoing)
+            if (_elapsedMilliseconds >= (int)(nudExpTime.Value * 60 * 1000))
             {
-                if (_elapsedSeconds > (int)(nudExpTime.Value * 60))
-                {
-                    // Stop the experiment when the time is over. Write all the data if specified.
-                    if (cbSaveData.Checked)
-                    {
-                        _expWriter.Flush();
-                        _expWriter.Close();
-                    }
-
-                    EnableControlsExperimentFinished();
-
-                    // TODO: Laser off
-                    _expGoing = false;
-                    _experimentTimer.Stop();
-                }
-                else
-                {
-                    // Experiment is going
-                    _elapsedSeconds += 1;
-                    txtElapsedTime.Text = TimeSpan.FromSeconds(_elapsedSeconds).ToString("HH:mm:ss");
-
-                    if (cmbExperimentType.SelectedIndex == 2)
-                    {
-                        // PID Controled PTT is on
-                        // TODO: uncomment
-                        // _laser.SetPower(_pid.Compute(_calibratedTemperature, _targetTemperature));
-                    }
-
-                    if (cbSaveData.Checked)
-                        _expWriter.WriteLine(string.Format(_saveDataLineFormat, _elapsedSeconds, _receivedTemperature, _calibratedTemperature /* , _laser.GetLaserPower() */));
-                }
+                // Stop the experiment when the time is over. Write all the data if specified.
+                FinishExperiment();
             }
             else
             {
-                // Experiment is stopped manually by clicking the button
-                if (cbSaveData.Checked)
+                // Experiment is going
+                _elapsedMilliseconds += _expTimer.Interval;
+                txtElapsedTime.Text = TimeSpan.FromMilliseconds(_elapsedMilliseconds).ToString(@"hh\:mm\:ss\.fff");
+
+                // Sensor is not sending temperature
+                if (!_isSensorSendingTemperature && !_errNotSendingTemperatureShown)
                 {
-                    _expWriter.Flush();
-                    _expWriter.Close();
+                    _errNotSendingTemperatureShown = true;
+                    MessageBox.Show("The sensor is not sending temperature. Check if it is connected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                EnableControlsExperimentFinished();
+                if (cmbExperimentType.SelectedIndex == 2)
+                {
+                    // PID Controled PTT is on
+                    double relativePower = _pid.Compute(_calibratedTemperature, _targetTemperature);
+                    _laser?.SetPower(relativePower);
+                    txtRelativePower.Text = relativePower.ToString("F3");
+                }
 
-                // TODO: Laser off
-                _expGoing = false;
-                _experimentTimer.Stop();
-            }                             
+                if (cbSaveData.Checked)
+                    _expWriter.WriteLine(string.Format(_saveDataLineFormat, _elapsedMilliseconds, _receivedTemperature, _calibratedTemperature, _laser?.GetPower()));
+
+                SetGraphData();
+            }                    
         }
 
         private void SaveAppConfiguration()
@@ -657,9 +674,9 @@ namespace ControlledPTT
                 _config["experiment_type_index"] = cmbExperimentType.SelectedIndex + 1;
 
                 // Save PID values
-                _config["pid"]["proportional"] = _pid.PGain;
-                _config["pid"]["integral"] = _pid.IGain;
-                _config["pid"]["differential"] = _pid.DGain;
+                _config["pid"]["proportional"] = _pid.PropGain;
+                _config["pid"]["integral"] = _pid.IntGain;
+                _config["pid"]["differential"] = _pid.DiffGain;
 
                 // Save experiment dir
                 _config["experiment_dir"] = _expBaseDir;
@@ -686,6 +703,9 @@ namespace ControlledPTT
         /// <param name="e"></param>
         private void App_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (_expGoing)
+                FinishExperiment();
+            
             SaveAppConfiguration();
 
             _calibration.Dispose();
@@ -699,19 +719,19 @@ namespace ControlledPTT
 
         private void nudPropGain_ValueChanged(object sender, EventArgs e)
         {
-            _pid.PGain = (double)nudPropGain.Value;
+            _pid.PropGain = (double)nudPropGain.Value;
             _pid.Reset();
         }
 
         private void nudIntGain_ValueChanged(object sender, EventArgs e)
         {
-            _pid.IGain = (double)nudIntGain.Value;
+            _pid.IntGain = (double)nudIntGain.Value;
             _pid.Reset();
         }
 
         private void nudDiffGain_ValueChanged(object sender, EventArgs e)
         {
-            _pid.DGain = (double)nudDiffGain.Value;
+            _pid.DiffGain = (double)nudDiffGain.Value;
             _pid.Reset();
         }
     }

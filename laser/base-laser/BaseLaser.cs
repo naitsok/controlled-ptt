@@ -17,6 +17,12 @@ namespace ControlledPTT.Lasers
             InitializeComponent();
         }
 
+        private void BaseLaser_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SwitchOff();
+            DisconnectLaser();
+        }
+
         /// <summary>
         /// Gets the title of the laser to be displayed in the App's 
         /// dropdown list for selection.
@@ -46,10 +52,16 @@ namespace ControlledPTT.Lasers
         }
 
         /// <summary>
-        /// Initializes a connected laser.
+        /// Initializes a connection to Laser hardware.
         /// </summary>
         /// <returns>False if initalizetion failed</returns>
-        public virtual bool Initialize() { throw new NotImplementedException(); }
+        public virtual bool InitializeLaser() { throw new NotImplementedException(); }
+
+        /// <summary>
+        /// Checks if a conntection to Laser hardware was initialized.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsLaserInitialized() { throw new NotImplementedException(); }
 
         /// <summary>
         /// Sets the power of the laser. It can be value for current for power
@@ -75,5 +87,10 @@ namespace ControlledPTT.Lasers
         /// </summary>
         /// <returns>False if switching off failed.</returns>
         public virtual bool SwitchOff() { throw new NotImplementedException(); }
+
+        /// <summary>
+        /// Releases the connection to laser hardware, which was established in InitializeLaser method.
+        /// </summary>
+        public virtual void DisconnectLaser() { throw new NotImplementedException(); }
     }
 }

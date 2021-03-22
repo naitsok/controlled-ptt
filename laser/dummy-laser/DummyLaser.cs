@@ -8,7 +8,7 @@ namespace ControlledPTT.Lasers
     {
         private bool _initialized = false;
         private bool _laserOn = false;
-        private double _power = 0;
+        private double _power = 0.5;
 
         public override string Title { get { return "Dummy Laser"; } }
 
@@ -44,22 +44,24 @@ namespace ControlledPTT.Lasers
         /// Laser initialization
         /// </summary>
         /// <returns></returns>
-        public override bool Initialize()
+        public override bool InitializeLaser()
         {
-            if (_initialized)
-            {
-                _initialized = false;
-                txtInitStatus.BackColor = Color.Red;
-                txtInitStatus.Text = "Laser Not Initialized";
-                btnInitialize.Text = "Initialize Laser";
-            }
-            else
+            if (!_initialized)
             {
                 _initialized = true;
                 txtInitStatus.BackColor = Color.Green;
                 txtInitStatus.Text = "Laser Initialized";
                 btnInitialize.Text = "Disconnect";
             }
+            return _initialized;
+        }
+
+        /// <summary>
+        /// Checks laser initialization.
+        /// </summary>
+        /// <returns></returns>
+        public override bool IsLaserInitialized()
+        {
             return _initialized;
         }
 
@@ -74,6 +76,8 @@ namespace ControlledPTT.Lasers
             if (power < 0.0)
                 power = 0.0;
             _power = MinPower + (MaxPower - MinPower) * power;
+            if (_laserOn)
+                txtLaserSwitch.Text = "On with power: " + GetPower().ToString("F2");
         }
 
         /// <summary>
@@ -82,7 +86,10 @@ namespace ControlledPTT.Lasers
         /// <returns></returns>
         public override double GetPower()
         {
-            return _power;
+            if (_laserOn)
+                return _power;
+            else
+                return 0;
         }
 
         /// <summary>
@@ -119,9 +126,22 @@ namespace ControlledPTT.Lasers
             return false;
         }
 
+        public override void DisconnectLaser()
+        {
+            if (_initialized)
+            {
+                _initialized = false;
+                SwitchOff();
+                txtInitStatus.Text = "Laser Not Initialized";
+                txtInitStatus.BackColor = Color.Red;
+                btnInitialize.Text = "Initialize";
+            }
+        }
+
         public DummyLaser()
         {
             InitializeComponent();
+            InitializeLaser();
         }
 
         private void nudMinPower_ValueChanged(object sender, EventArgs e)
@@ -148,7 +168,10 @@ namespace ControlledPTT.Lasers
 
         private void btnInitialize_Click(object sender, EventArgs e)
         {
-            Initialize();
+            if (_initialized)
+                DisconnectLaser();
+            else
+                InitializeLaser();
         }
 
         private void btnSwitchLaser_Click(object sender, EventArgs e)

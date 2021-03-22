@@ -38,6 +38,7 @@ namespace ControlledPTT.Lasers
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Name = "BaseLaser";
             this.Text = "Base Laser";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BaseLaser_FormClosing);
             this.ResumeLayout(false);
 
         }

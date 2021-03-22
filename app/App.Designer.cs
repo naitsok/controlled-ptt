@@ -75,8 +75,6 @@
             this.btnLoadSensor = new System.Windows.Forms.Button();
             this.cmbSensors = new System.Windows.Forms.ComboBox();
             this.cbUseCalibration = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.rtbInfo = new System.Windows.Forms.RichTextBox();
             this.pltLaserCurrent = new OxyPlot.WindowsForms.PlotView();
             this.pltAmbTemp = new OxyPlot.WindowsForms.PlotView();
             this.menuMain = new System.Windows.Forms.MenuStrip();
@@ -103,7 +101,6 @@
             this.txtCalibration = new System.Windows.Forms.TextBox();
             this.ofdSelectSensor = new System.Windows.Forms.OpenFileDialog();
             this.fbdSelectDir = new System.Windows.Forms.FolderBrowserDialog();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.sfdSaveSettingsAs = new System.Windows.Forms.SaveFileDialog();
             this.ttSaveHeader = new System.Windows.Forms.ToolTip(this.components);
             this.ofdSelectLaser = new System.Windows.Forms.OpenFileDialog();
@@ -151,7 +148,7 @@
             this.pltTemperature.Location = new System.Drawing.Point(12, 573);
             this.pltTemperature.Name = "pltTemperature";
             this.pltTemperature.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.pltTemperature.Size = new System.Drawing.Size(418, 240);
+            this.pltTemperature.Size = new System.Drawing.Size(418, 283);
             this.pltTemperature.TabIndex = 43;
             this.pltTemperature.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.pltTemperature.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -671,23 +668,6 @@
             this.cbUseCalibration.UseVisualStyleBackColor = true;
             this.cbUseCalibration.CheckedChanged += new System.EventHandler(this.cbUseCalibration_CheckedChanged);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(204, 775);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(25, 13);
-            this.label2.TabIndex = 49;
-            this.label2.Text = "Info";
-            // 
-            // rtbInfo
-            // 
-            this.rtbInfo.Location = new System.Drawing.Point(207, 791);
-            this.rtbInfo.Name = "rtbInfo";
-            this.rtbInfo.Size = new System.Drawing.Size(725, 65);
-            this.rtbInfo.TabIndex = 48;
-            this.rtbInfo.Text = "";
-            // 
             // pltLaserCurrent
             // 
             this.pltLaserCurrent.Location = new System.Drawing.Point(0, 0);
@@ -916,16 +896,6 @@
             this.ofdSelectSensor.Filter = "Executables (*.exe)|*.exe";
             this.ofdSelectSensor.Title = "Select Sensor Executable";
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(477, 262);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 17);
-            this.checkBox1.TabIndex = 62;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // sfdSaveSettingsAs
             // 
             this.sfdSaveSettingsAs.DefaultExt = "json";
@@ -949,12 +919,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(879, 868);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.gbCalibration);
             this.Controls.Add(this.pltAmbTemp);
             this.Controls.Add(this.pltLaserCurrent);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.rtbInfo);
             this.Controls.Add(this.gbExperiment);
             this.Controls.Add(this.pltTemperature);
             this.Controls.Add(this.menuMain);
@@ -991,8 +958,6 @@
         private System.Windows.Forms.TextBox txtExpFileName;
         private OxyPlot.WindowsForms.PlotView pltTemperature;
         private System.Windows.Forms.GroupBox gbExperiment;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.RichTextBox rtbInfo;
         private System.Windows.Forms.CheckBox cbUseCalibration;
         private System.Windows.Forms.ComboBox cmbSensors;
         private System.Windows.Forms.GroupBox gbSensor;
@@ -1041,7 +1006,6 @@
         private System.Windows.Forms.ToolStripMenuItem selectLogsDirectoryToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem selectCalibrationsDirectoryToolStripMenuItem;
         private System.Windows.Forms.Button btnModifyCalibration;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.SaveFileDialog sfdSaveSettingsAs;
         private System.Windows.Forms.ToolStripMenuItem experimentSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createDirectoryWithCurrentDateToolStripMenuItem;

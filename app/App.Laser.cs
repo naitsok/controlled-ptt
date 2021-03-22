@@ -174,6 +174,8 @@ namespace ControlledPTT
         private void laser_FormClosed(object sender, FormClosedEventArgs e)
         {
             _laser.FormClosed -= laser_FormClosed;
+            _laser.Dispose();
+            _laser = null;
             gbLaser.Enabled = true;
         }
     }

@@ -164,6 +164,7 @@ namespace ControlledPTT
             Assembly sensorAssembly = Assembly.LoadFrom(_sensorPaths[cmbSensors.SelectedIndex]);
             Type[] types = sensorAssembly.GetExportedTypes();
             _sensor = Activator.CreateInstance(types[0]) as BaseSensor;
+            _sensor.SetTimerInterval(_discretizationTime);
             _sensor.FormClosed += sensor_FormClosed;
             _sensor.OnTemperatureSent += sensorForm_TemperatureSent;
             _sensor.Show();
@@ -187,6 +188,8 @@ namespace ControlledPTT
         {
             _sensor.FormClosed -= sensor_FormClosed;
             _sensor.OnTemperatureSent -= sensorForm_TemperatureSent;
+            _sensor.Dispose();
+            _sensor = null;
             gbSensor.Enabled = true;
             _isSensorSendingTemperature = false;
         }
@@ -236,7 +239,11 @@ namespace ControlledPTT
             if (_checkTemperatureChanging.Distinct().Count() == 1)
                 return false;
             else
+            {
+                // Temperature is back and sending. The error message box can be shown again if problem occurs.
+                _errNotSendingTemperatureShown = false;
                 return true;
+            }
         }
     }
 }

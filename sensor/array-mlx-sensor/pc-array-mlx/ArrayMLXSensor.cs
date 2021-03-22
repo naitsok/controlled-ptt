@@ -315,12 +315,6 @@ namespace ControlledPTT.Sensors
             return avgTemperature / _selectedTemperatures.Count;
         }
 
-        //private void sendDataTimer_Tick(object sender, EventArgs e)
-        //{
-        //    _averageTemperature = calculateAvgTemperature();
-        //    txtAvgTemperature.Text = _averageTemperature.ToString("0.##");
-        //    SendTemperature(_averageTemperature);
-        //}
         private void ArraySensor_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_comPort != null)

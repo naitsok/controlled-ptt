@@ -150,13 +150,23 @@
             65536});
             this.nudPower.Location = new System.Drawing.Point(114, 92);
             this.nudPower.Maximum = new decimal(new int[] {
-            5,
+            3,
             0,
             0,
             0});
+            this.nudPower.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
             this.nudPower.Name = "nudPower";
             this.nudPower.Size = new System.Drawing.Size(158, 20);
             this.nudPower.TabIndex = 6;
+            this.nudPower.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
             this.nudPower.ValueChanged += new System.EventHandler(this.nudPower_ValueChanged);
             // 
             // txtLaserSwitch
@@ -181,7 +191,7 @@
             this.btnSwitchLaser.UseVisualStyleBackColor = true;
             this.btnSwitchLaser.Click += new System.EventHandler(this.btnSwitchLaser_Click);
             // 
-            // DummyLaserForm
+            // DummyLaser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -196,7 +206,7 @@
             this.Controls.Add(this.nudMinPower);
             this.Controls.Add(this.txtInitStatus);
             this.Controls.Add(this.btnInitialize);
-            this.Name = "DummyLaserForm";
+            this.Name = "DummyLaser";
             this.Text = "Dummy Laser";
             ((System.ComponentModel.ISupportInitialize)(this.nudMinPower)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxPower)).EndInit();
