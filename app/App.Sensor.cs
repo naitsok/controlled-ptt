@@ -54,13 +54,13 @@ namespace ControlledPTT
 
             string[] allSensorExes = Directory.GetFiles(sensorsPath, "*.exe", SearchOption.AllDirectories);
             List<string> sensorTitles = new List<string>();
-            foreach (string partExe in allSensorExes)
+            foreach (string sensorExe in allSensorExes)
             {
-                if (!partExe.Contains("ref"))
+                if (!sensorExe.Contains("ref"))
                 {
-                    _sensorPaths.Add(partExe);
-                    Assembly partAssembly = Assembly.LoadFrom(partExe);
-                    Type[] types = partAssembly.GetExportedTypes();
+                    _sensorPaths.Add(sensorExe);
+                    Assembly sensorAssembly = Assembly.LoadFrom(sensorExe);
+                    Type[] types = sensorAssembly.GetExportedTypes();
                     BaseSensor sensor = Activator.CreateInstance(types[0]) as BaseSensor;
                     sensorTitles.Add(sensor.Title);
                 }

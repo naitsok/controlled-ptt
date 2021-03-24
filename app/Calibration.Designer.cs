@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lblCalibFile = new System.Windows.Forms.Label();
             this.txtCalibFile = new System.Windows.Forms.TextBox();
             this.nudIntercept = new System.Windows.Forms.NumericUpDown();
@@ -58,7 +58,7 @@
             // lblCalibFile
             // 
             this.lblCalibFile.AutoSize = true;
-            this.lblCalibFile.Location = new System.Drawing.Point(12, 9);
+            this.lblCalibFile.Location = new System.Drawing.Point(12, 43);
             this.lblCalibFile.Name = "lblCalibFile";
             this.lblCalibFile.Size = new System.Drawing.Size(23, 13);
             this.lblCalibFile.TabIndex = 47;
@@ -66,7 +66,7 @@
             // 
             // txtCalibFile
             // 
-            this.txtCalibFile.Location = new System.Drawing.Point(12, 25);
+            this.txtCalibFile.Location = new System.Drawing.Point(12, 59);
             this.txtCalibFile.Name = "txtCalibFile";
             this.txtCalibFile.ReadOnly = true;
             this.txtCalibFile.Size = new System.Drawing.Size(243, 20);
@@ -80,7 +80,7 @@
             0,
             0,
             65536});
-            this.nudIntercept.Location = new System.Drawing.Point(165, 77);
+            this.nudIntercept.Location = new System.Drawing.Point(165, 111);
             this.nudIntercept.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -95,12 +95,12 @@
             this.nudIntercept.Size = new System.Drawing.Size(90, 20);
             this.nudIntercept.TabIndex = 36;
             this.nudIntercept.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudIntercept.ValueChanged += new System.EventHandler(this.NudIntercept_ValueChanged);
+            this.nudIntercept.ValueChanged += new System.EventHandler(this.nudIntercept_ValueChanged);
             // 
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(130, 80);
+            this.label32.Location = new System.Drawing.Point(130, 114);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(33, 13);
             this.label32.TabIndex = 35;
@@ -108,7 +108,7 @@
             // 
             // txtCalibratedTemp
             // 
-            this.txtCalibratedTemp.Location = new System.Drawing.Point(145, 103);
+            this.txtCalibratedTemp.Location = new System.Drawing.Point(145, 137);
             this.txtCalibratedTemp.Name = "txtCalibratedTemp";
             this.txtCalibratedTemp.ReadOnly = true;
             this.txtCalibratedTemp.Size = new System.Drawing.Size(110, 20);
@@ -118,7 +118,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(12, 79);
+            this.label23.Location = new System.Drawing.Point(12, 113);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(26, 13);
             this.label23.TabIndex = 34;
@@ -127,7 +127,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(12, 54);
+            this.label22.Location = new System.Drawing.Point(12, 88);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(103, 13);
             this.label22.TabIndex = 28;
@@ -135,7 +135,7 @@
             // 
             // txtSensorTemp
             // 
-            this.txtSensorTemp.Location = new System.Drawing.Point(145, 51);
+            this.txtSensorTemp.Location = new System.Drawing.Point(145, 85);
             this.txtSensorTemp.Name = "txtSensorTemp";
             this.txtSensorTemp.ReadOnly = true;
             this.txtSensorTemp.Size = new System.Drawing.Size(110, 20);
@@ -145,7 +145,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(12, 106);
+            this.label27.Location = new System.Drawing.Point(12, 140);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(117, 13);
             this.label27.TabIndex = 30;
@@ -159,7 +159,7 @@
             0,
             0,
             65536});
-            this.nudSlope.Location = new System.Drawing.Point(38, 77);
+            this.nudSlope.Location = new System.Drawing.Point(38, 111);
             this.nudSlope.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -179,32 +179,32 @@
             0,
             0,
             0});
-            this.nudSlope.ValueChanged += new System.EventHandler(this.NudSlope_ValueChanged);
+            this.nudSlope.ValueChanged += new System.EventHandler(this.nudSlope_ValueChanged);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(75, 286);
+            this.btnSave.Location = new System.Drawing.Point(75, 12);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(56, 23);
             this.btnSave.TabIndex = 36;
             this.btnSave.Text = "Save As";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // dgCalibration
             // 
-            dataGridViewCellStyle3.NullValue = null;
-            this.dgCalibration.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.NullValue = null;
+            this.dgCalibration.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgCalibration.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
             this.dgCalibration.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dgCalibration.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgCalibration.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colTempSensor,
             this.RealTemp});
-            this.dgCalibration.Location = new System.Drawing.Point(261, 9);
+            this.dgCalibration.Location = new System.Drawing.Point(261, 12);
             this.dgCalibration.MultiSelect = false;
             this.dgCalibration.Name = "dgCalibration";
-            this.dgCalibration.Size = new System.Drawing.Size(270, 272);
+            this.dgCalibration.Size = new System.Drawing.Size(270, 202);
             this.dgCalibration.TabIndex = 38;
             this.dgCalibration.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCalibration_CellLeave);
             // 
@@ -223,20 +223,20 @@
             // 
             // btnCalculate
             // 
-            this.btnCalculate.Location = new System.Drawing.Point(261, 286);
+            this.btnCalculate.Location = new System.Drawing.Point(12, 192);
             this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(270, 23);
+            this.btnCalculate.Size = new System.Drawing.Size(243, 23);
             this.btnCalculate.TabIndex = 39;
             this.btnCalculate.Text = "Calculate Coefficients";
             this.btnCalculate.UseVisualStyleBackColor = true;
-            this.btnCalculate.Click += new System.EventHandler(this.BtnCalculate_Click);
+            this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
             // 
             // pltCalibration
             // 
-            this.pltCalibration.Location = new System.Drawing.Point(537, 9);
+            this.pltCalibration.Location = new System.Drawing.Point(12, 218);
             this.pltCalibration.Name = "pltCalibration";
             this.pltCalibration.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.pltCalibration.Size = new System.Drawing.Size(534, 301);
+            this.pltCalibration.Size = new System.Drawing.Size(519, 332);
             this.pltCalibration.TabIndex = 44;
             this.pltCalibration.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.pltCalibration.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -244,23 +244,23 @@
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(137, 286);
+            this.btnLoad.Location = new System.Drawing.Point(137, 12);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(56, 23);
             this.btnLoad.TabIndex = 45;
             this.btnLoad.Text = "Load";
             this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.BtnLoad_Click);
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(12, 286);
+            this.btnOK.Location = new System.Drawing.Point(12, 12);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(56, 23);
             this.btnOK.TabIndex = 46;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // ofdLoadCalibration
             // 
@@ -276,7 +276,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(199, 286);
+            this.btnCancel.Location = new System.Drawing.Point(199, 12);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(56, 23);
             this.btnCancel.TabIndex = 48;
@@ -288,7 +288,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1084, 321);
+            this.ClientSize = new System.Drawing.Size(544, 562);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblCalibFile);
             this.Controls.Add(this.btnOK);
@@ -306,7 +306,7 @@
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.nudSlope);
-            this.MinimumSize = new System.Drawing.Size(1100, 360);
+            this.MinimumSize = new System.Drawing.Size(560, 540);
             this.Name = "Calibration";
             this.Text = "Sensor Calibration";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Calibration_FormClosing);

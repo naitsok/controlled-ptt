@@ -9,6 +9,9 @@ using System.Drawing;
 
 namespace ControlledPTT
 {
+    /// <summary>
+    /// This part of App class contains methods related to sensors
+    /// </summary>
     partial class App
     {
         // Lasers

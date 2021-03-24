@@ -7,25 +7,6 @@ using Serilog;
 
 namespace ControlledPTT
 {
-    /*
-    public partial class MainAppForm : Form
-    {
-        //PID controls here.
-        private void BtnPIDStart_Click(object sender, EventArgs e)
-        {
-            Log.Information("PID control started.");
-        }
-        private void RbPIDControl_CheckedChanged(object sender, EventArgs e)
-        {
-            if (gbPID.Visible == true)
-            {
-                gbPID.Visible = false;
-            }
-            else
-                gbPID.Visible = true;
-        }
-    }
-    */
     class PID
     {
         #region Fields

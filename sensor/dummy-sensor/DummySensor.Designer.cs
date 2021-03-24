@@ -32,6 +32,7 @@
             this.btnGenTemp = new System.Windows.Forms.Button();
             this.txtTemperature = new System.Windows.Forms.TextBox();
             this.tmGenTemp = new System.Windows.Forms.Timer(this.components);
+            this.btnClose = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnGenTemp
@@ -57,14 +58,25 @@
             this.tmGenTemp.Interval = 1000;
             this.tmGenTemp.Tick += new System.EventHandler(this.tmGenTemp_Tick);
             // 
-            // DummySensorForm
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(12, 326);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(150, 23);
+            this.btnClose.TabIndex = 2;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // DummySensor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 361);
+            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.txtTemperature);
             this.Controls.Add(this.btnGenTemp);
-            this.Name = "DummySensorForm";
+            this.Name = "DummySensor";
             this.Text = "Dummy Sensor";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -76,6 +88,7 @@
         private System.Windows.Forms.Button btnGenTemp;
         private System.Windows.Forms.TextBox txtTemperature;
         private System.Windows.Forms.Timer tmGenTemp;
+        private System.Windows.Forms.Button btnClose;
     }
 }
 

@@ -41,15 +41,19 @@ namespace ControlledPTT.Sensors
         void GetComPorts()
         {
             cbPorts.Items.Clear();
-            var comPortNames = SerialPort.GetPortNames();
+            string[] comPortNames = SerialPort.GetPortNames();
             if (comPortNames.Length > 0)
             {
                 cbPorts.Items.AddRange(comPortNames);
                 cbPorts.SelectedIndex = 0;
             }
+            if (comPortNames.Length == 1)
+            {
+                btnConnToBoard_Click(btnConnToBoard, new EventArgs());
+            }
         }
 
-        private void btnConnBoard_Click(object sender, EventArgs e)
+        private void btnConnToBoard_Click(object sender, EventArgs e)
         {
             if (!_comConnected)
             {
@@ -73,7 +77,7 @@ namespace ControlledPTT.Sensors
                         MessageBoxIcon.Error);
                 }
 
-                btnConnBoard.Text = "Disconnect";
+                btnConnToBoard.Text = "Disconnect";
                 txtConnectedStatus.Text = "Connected";
                 txtConnectedStatus.BackColor = Color.Green;
                 _comConnected = true;
@@ -87,7 +91,7 @@ namespace ControlledPTT.Sensors
                 }
                 _comPort.Close();
                 _comPort = null;
-                btnConnBoard.Text = "Connect";
+                btnConnToBoard.Text = "Connect";
                 txtConnectedStatus.Text = "Not Connected";
                 txtConnectedStatus.BackColor = Color.Red;
                 _comConnected = false;
@@ -143,6 +147,11 @@ namespace ControlledPTT.Sensors
                     _comPort = null;
                 }
             }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

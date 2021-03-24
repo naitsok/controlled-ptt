@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(App));
             this.txtExpDir = new System.Windows.Forms.TextBox();
             this.btnSelectExpDir = new System.Windows.Forms.Button();
             this.txtExpFileName = new System.Windows.Forms.TextBox();
@@ -148,7 +149,7 @@
             this.pltTemperature.Location = new System.Drawing.Point(12, 573);
             this.pltTemperature.Name = "pltTemperature";
             this.pltTemperature.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.pltTemperature.Size = new System.Drawing.Size(418, 283);
+            this.pltTemperature.Size = new System.Drawing.Size(418, 290);
             this.pltTemperature.TabIndex = 43;
             this.pltTemperature.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.pltTemperature.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -698,7 +699,7 @@
             this.helpToolStripMenuItem});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(879, 24);
+            this.menuMain.Size = new System.Drawing.Size(444, 24);
             this.menuMain.TabIndex = 51;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -918,7 +919,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(879, 868);
+            this.ClientSize = new System.Drawing.Size(444, 871);
             this.Controls.Add(this.gbCalibration);
             this.Controls.Add(this.pltAmbTemp);
             this.Controls.Add(this.pltLaserCurrent);
@@ -926,6 +927,7 @@
             this.Controls.Add(this.pltTemperature);
             this.Controls.Add(this.menuMain);
             this.Controls.Add(this.gbSensor);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(100, 10);
             this.MainMenuStrip = this.menuMain;
             this.Name = "App";

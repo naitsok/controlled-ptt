@@ -1,13 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using ControlledPTT.Sensors;
 
 namespace ControlledPTT.Sensors
 {
@@ -49,6 +40,11 @@ namespace ControlledPTT.Sensors
                 btnGenTemp.Text = "Stop Generating";
                 _genRunning = true;
             }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

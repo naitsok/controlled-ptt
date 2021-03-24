@@ -14,10 +14,8 @@ using Newtonsoft.Json.Linq;
 
 namespace ControlledPTT
 {
-    public delegate void ShowFrm();
-
     /// <summary>
-    /// Performs caliblration for sensor. Can save and load previous calibrations in json format.
+    /// Performs and keeps caliblration for sensor. Can save and load previous calibrations in json format.
     /// </summary>
     public partial class Calibration : Form
     {
@@ -46,29 +44,96 @@ namespace ControlledPTT
             Interval = 1000
         };
 
-        public double _sensorCalA { get; set; }
+        #region Graph Helpers
 
-        public double _sensorCalB { get; set; }
-
-        private StreamWriter _tempWriter = null;
-
-        // Calibration plot.
-        private PlotModel _calibrationPM = new PlotModel()
+        /// <summary>
+        /// Sets the data of graph.
+        /// </summary>
+        private void SetGraph()
         {
-            Title = "Calibration",
-            PlotAreaBackground = OxyColors.White,
-            DefaultColors = new List<OxyColor>
+            var xAxis = pltCalibration.Model.Axes[0];
+            var yAxis = pltCalibration.Model.Axes[1];
+
+            // Get and clear plot series
+            ScatterSeries tempsSeries = pltCalibration.Model.Series[0] as ScatterSeries;
+            tempsSeries.Points.Clear();
+            LineSeries calibSeries = pltCalibration.Model.Series[1] as LineSeries;
+            calibSeries.Points.Clear();
+
+            // check there is something to plot
+            if (_sensorTemps.Count == 0 || _correctTemps.Count == 0)
             {
-                OxyColors.Blue,
-                OxyColors.Red,
-            },
-            TitleFontSize = 12,
-            TitleFontWeight = 400,
-            LegendFontWeight = 500,
-            LegendFontSize = 12,
-            LegendPosition = LegendPosition.LeftTop,
-            LegendTextColor = OxyColors.Black,
-        };
+                pltCalibration.InvalidatePlot(true);
+                return;
+            }
+
+            // Scaling the axes
+            xAxis.Maximum = _sensorTemps.Max() + 2;
+            xAxis.Minimum = _sensorTemps.Min() - 2;
+            yAxis.Maximum = _correctTemps.Max() + 2;
+            yAxis.Minimum = _correctTemps.Min() - 2;
+
+            // Add new points
+            for (int i = 0; i < _sensorTemps.Count; i++)
+            {
+                tempsSeries.Points.Add(new ScatterPoint(_sensorTemps[i], _correctTemps[i]));
+            }
+
+            // Add fitted line
+            calibSeries.Points.Add(new DataPoint(xAxis.Minimum, this.Slope * xAxis.Minimum + this.Intercept));
+            calibSeries.Points.Add(new DataPoint(xAxis.Maximum, this.Slope * xAxis.Maximum + this.Intercept));
+
+            pltCalibration.InvalidatePlot(true);
+        }
+
+        #endregion
+
+        #region Load and Save Helpers
+
+        /// <summary>
+        /// Loads the calibration from JSON file.
+        /// </summary>
+        private void LoadCalibration()
+        {
+            if (string.IsNullOrEmpty(CalibrationFile))
+                return;
+
+            _calibration = JObject.Parse(File.ReadAllText(CalibrationFile));
+            Slope = (double)_calibration["slope"];
+            Intercept = (double)_calibration["intercept"];
+            _sensorTemps = _calibration["sensor_temperatures"].ToObject<List<double>>();
+            _correctTemps = _calibration["correct_temperatures"].ToObject<List<double>>();
+
+            // Set up the controls
+            SetGraph();
+            nudSlope.Value = (decimal)Slope;
+            nudIntercept.Value = (decimal)Intercept;
+            dgCalibration.Rows.Clear();
+            for (int i = 0; i < _sensorTemps.Count; i++)
+            {
+                dgCalibration.Rows.Add(new string[] { _sensorTemps[i].ToString("F2"), _correctTemps[i].ToString("F2") });
+            }
+        }
+
+        /// <summary>
+        /// Saves current calibaration to the selected file.s
+        /// </summary>
+        private void SaveCalibration()
+        {
+            _calibration["slope"] = this.Slope;
+            _calibration["intercept"] = this.Intercept;
+            _calibration["sensor_temperatures"] = new JArray(_sensorTemps.ToArray());
+            _calibration["correct_temperatures"] = new JArray(_correctTemps.ToArray());
+
+            CalibrationFile = sfdSaveCalibration.FileName;
+            txtCalibFile.Text = CalibrationFile;
+            txtCalibFile.SelectionStart = txtCalibFile.Text.Length;
+            txtCalibFile.ScrollToCaret();
+
+            File.WriteAllText(CalibrationFile, _calibration.ToString());
+        }
+
+        #endregion
 
         // Function to make linear least squares estimation.
         private void LeastSquares()
@@ -109,7 +174,19 @@ namespace ControlledPTT
 
             _calTimer.Tick += new EventHandler(this.CalibrationTimer_Tick);
 
-            // Calibration plot.
+            // Initialize graph
+            PlotModel _calibrationPM = new PlotModel()
+            {
+                Title = "Calibration",
+                PlotAreaBackground = OxyColors.White,
+                DefaultColors = new List<OxyColor>{ OxyColors.Blue, OxyColors.Red, },
+                TitleFontSize = 12,
+                TitleFontWeight = 400,
+                LegendFontWeight = 500,
+                LegendFontSize = 12,
+                LegendPosition = LegendPosition.LeftTop,
+                LegendTextColor = OxyColors.Black,
+            };
             _calibrationPM.Axes.Add(new LinearAxis()
             {
                 Title = "Sensor Temperature",
@@ -139,7 +216,7 @@ namespace ControlledPTT
                 Title = "Fitted Line",
                 TextColor = OxyColors.Red,
             });
-            this.pltCalibration.Model = _calibrationPM;
+            pltCalibration.Model = _calibrationPM;
         }
 
         public Calibration(string calibrationFile = "") : this()
@@ -155,94 +232,21 @@ namespace ControlledPTT
             LoadCalibration();
         }
 
-        /// <summary>
-        /// Sets the graph data.
-        /// </summary>
-        /// <param name="pw"></param>
-        /// <param name="sensorTemps"></param>
-        /// <param name="correctTemps"></param>
-        /// <param name="drawFit"></param>
-        private void SetGraph()
-        {
-            PlotView pw = pltCalibration;
-            var xAxis = pw.Model.Axes[0];
-            var yAxis = pw.Model.Axes[1];
+        #region Event Handlers
 
-            // Get and clear plot series
-            ScatterSeries tempsSeries = pw.Model.Series[0] as ScatterSeries;
-            tempsSeries.Points.Clear();
-            LineSeries calibSeries = pw.Model.Series[1] as LineSeries;
-            calibSeries.Points.Clear();
-
-            // check there is something to plot
-            if (_sensorTemps.Count == 0 || _correctTemps.Count == 0)
-            {
-                pw.InvalidatePlot(true);
-                return;
-            }
-
-            // Scaling the axes
-            xAxis.Maximum = _sensorTemps.Max() + 2;
-            xAxis.Minimum = _sensorTemps.Min() - 2;
-            yAxis.Maximum = _correctTemps.Max() + 2;
-            yAxis.Minimum = _correctTemps.Min() - 2;
-
-            // Add new points
-            for (int i = 0; i < _sensorTemps.Count; i++)
-            {
-                tempsSeries.Points.Add(new ScatterPoint(_sensorTemps[i], _correctTemps[i]));
-            }
-
-            // Add fitted line
-            calibSeries.Points.Add(new DataPoint(xAxis.Minimum, this.Slope * xAxis.Minimum + this.Intercept));
-            calibSeries.Points.Add(new DataPoint(xAxis.Maximum, this.Slope * xAxis.Maximum + this.Intercept));
-
-            pw.InvalidatePlot(true);
-        }
-
-        private void LoadCalibration()
-        {
-            if (string.IsNullOrEmpty(this.CalibrationFile))
-                return;
-
-            _calibration = JObject.Parse(File.ReadAllText(this.CalibrationFile));
-            this.Slope = (double)_calibration["slope"];
-            this.Intercept = (double)_calibration["intercept"];
-            _sensorTemps = _calibration["sensor_temperatures"].ToObject<List<double>>();
-            _correctTemps = _calibration["correct_temperatures"].ToObject<List<double>>();
-
-            // Set up the controls
-            SetGraph();
-            nudSlope.Value = (decimal)Slope;
-            nudIntercept.Value = (decimal)Intercept;
-            dgCalibration.Rows.Clear();
-            for (int i = 0; i < _sensorTemps.Count; i++)
-            {
-                dgCalibration.Rows.Add(new string[] { _sensorTemps[i].ToString("F2"), _correctTemps[i].ToString("F2") });
-            }
-        }
-
-        private void NudSlope_ValueChanged(object sender, EventArgs e)
+        private void nudSlope_ValueChanged(object sender, EventArgs e)
         {
             Slope = (double)nudSlope.Value;
             SetGraph();
         }
 
-        private void NudIntercept_ValueChanged(object sender, EventArgs e)
+        private void nudIntercept_ValueChanged(object sender, EventArgs e)
         {
             Intercept = (double)nudIntercept.Value;
             SetGraph();
         }
 
-        private void CalibrationTimer_Tick(object sender, EventArgs e)
-        {       
-            txtSensorTemp.Text = SensorTemperature.ToString("#.##");
-            txtCalibratedTemp.Text = (Slope * SensorTemperature + Intercept).ToString("#.##");
-
-            dgCalibration.Rows[dgCalibration.Rows.Count - 1].Cells[0].Value = this.SensorTemperature.ToString("#.##");
-        }
-
-        private void BtnSave_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
             DialogResult result = sfdSaveCalibration.ShowDialog();
             if (result == DialogResult.OK)
@@ -252,29 +256,11 @@ namespace ControlledPTT
         }
 
         /// <summary>
-        /// Saves current calibaration to the selected file.s
-        /// </summary>
-        private void SaveCalibration()
-        {
-            _calibration["slope"] = this.Slope;
-            _calibration["intercept"] = this.Intercept;
-            _calibration["sensor_temperatures"] = new JArray(_sensorTemps.ToArray());
-            _calibration["correct_temperatures"] = new JArray(_correctTemps.ToArray());
-
-            CalibrationFile = sfdSaveCalibration.FileName;
-            txtCalibFile.Text = CalibrationFile;
-            txtCalibFile.SelectionStart = txtCalibFile.Text.Length;
-            txtCalibFile.ScrollToCaret();
-
-            File.WriteAllText(CalibrationFile, _calibration.ToString());
-        }
-
-        /// <summary>
         /// Loads calibration file.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnLoad_Click(object sender, EventArgs e)
+        private void btnLoad_Click(object sender, EventArgs e)
         {
             DialogResult result = ofdLoadCalibration.ShowDialog();
             if (result == DialogResult.OK)
@@ -285,6 +271,14 @@ namespace ControlledPTT
                 txtCalibFile.ScrollToCaret();
                 LoadCalibration();
             }
+        }
+
+        private void CalibrationTimer_Tick(object sender, EventArgs e)
+        {
+            txtSensorTemp.Text = SensorTemperature.ToString("#.##");
+            txtCalibratedTemp.Text = (Slope * SensorTemperature + Intercept).ToString("#.##");
+
+            dgCalibration.Rows[dgCalibration.Rows.Count - 1].Cells[0].Value = this.SensorTemperature.ToString("#.##");
         }
 
         private void Calibration_Load(object sender, EventArgs e)
@@ -352,14 +346,14 @@ namespace ControlledPTT
             SetGraph();
         }
 
-        private void BtnCalculate_Click(object sender, EventArgs e)
+        private void btnCalculate_Click(object sender, EventArgs e)
         {
             LeastSquares();
             nudSlope.Value = (decimal)Slope;
             nudIntercept.Value = (decimal)Intercept;
             SetGraph();
         }
-        private void BtnOK_Click(object sender, EventArgs e)
+        private void btnOK_Click(object sender, EventArgs e)
         {
             Close();
             DialogResult = DialogResult.OK;
@@ -372,5 +366,7 @@ namespace ControlledPTT
             Close();
             DialogResult = DialogResult.Cancel;
         }
+
+        #endregion
     }
 }

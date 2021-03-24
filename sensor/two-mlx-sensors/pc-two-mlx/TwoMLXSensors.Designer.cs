@@ -45,12 +45,14 @@
             this.btnGetComPorts = new System.Windows.Forms.Button();
             this.cbPorts = new System.Windows.Forms.ComboBox();
             this.cbBaudRate = new System.Windows.Forms.ComboBox();
-            this.btnConnBoard = new System.Windows.Forms.Button();
+            this.btnConnToBoard = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             this.gbArduino.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbArduino
             // 
+            this.gbArduino.Controls.Add(this.btnClose);
             this.gbArduino.Controls.Add(this.txtAmb2Temp);
             this.gbArduino.Controls.Add(this.txtObj2Temp);
             this.gbArduino.Controls.Add(this.btnAmb2Temp);
@@ -67,10 +69,10 @@
             this.gbArduino.Controls.Add(this.btnGetComPorts);
             this.gbArduino.Controls.Add(this.cbPorts);
             this.gbArduino.Controls.Add(this.cbBaudRate);
-            this.gbArduino.Controls.Add(this.btnConnBoard);
+            this.gbArduino.Controls.Add(this.btnConnToBoard);
             this.gbArduino.Location = new System.Drawing.Point(13, 12);
             this.gbArduino.Name = "gbArduino";
-            this.gbArduino.Size = new System.Drawing.Size(259, 335);
+            this.gbArduino.Size = new System.Drawing.Size(259, 368);
             this.gbArduino.TabIndex = 35;
             this.gbArduino.TabStop = false;
             this.gbArduino.Text = "Sensor controller connection";
@@ -235,23 +237,33 @@
             this.cbBaudRate.Size = new System.Drawing.Size(126, 21);
             this.cbBaudRate.TabIndex = 13;
             // 
-            // btnConnBoard
+            // btnConnToBoard
             // 
-            this.btnConnBoard.Location = new System.Drawing.Point(6, 80);
-            this.btnConnBoard.Name = "btnConnBoard";
-            this.btnConnBoard.Size = new System.Drawing.Size(115, 23);
-            this.btnConnBoard.TabIndex = 3;
-            this.btnConnBoard.Text = "Connect to Board";
-            this.btnConnBoard.UseVisualStyleBackColor = true;
-            this.btnConnBoard.Click += new System.EventHandler(this.btnConnBoard_Click);
+            this.btnConnToBoard.Location = new System.Drawing.Point(6, 80);
+            this.btnConnToBoard.Name = "btnConnToBoard";
+            this.btnConnToBoard.Size = new System.Drawing.Size(115, 23);
+            this.btnConnToBoard.TabIndex = 3;
+            this.btnConnToBoard.Text = "Connect to Board";
+            this.btnConnToBoard.UseVisualStyleBackColor = true;
+            this.btnConnToBoard.Click += new System.EventHandler(this.btnConnToBoard_Click);
             // 
-            // TwoMlxSensorsForm
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(6, 339);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(115, 23);
+            this.btnClose.TabIndex = 27;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // TwoMLXSensors
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 361);
+            this.ClientSize = new System.Drawing.Size(284, 392);
             this.Controls.Add(this.gbArduino);
-            this.Name = "TwoMlxSensorsForm";
+            this.Name = "TwoMLXSensors";
             this.Text = "Two MLX sensors";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TwoMlxSensorsForm_FormClosing);
             this.gbArduino.ResumeLayout(false);
@@ -274,12 +286,13 @@
         private System.Windows.Forms.Button btnGetComPorts;
         private System.Windows.Forms.ComboBox cbPorts;
         private System.Windows.Forms.ComboBox cbBaudRate;
-        private System.Windows.Forms.Button btnConnBoard;
+        private System.Windows.Forms.Button btnConnToBoard;
         private System.Windows.Forms.TextBox txtObj2Temp;
         private System.Windows.Forms.Button btnAmb2Temp;
         private System.Windows.Forms.Button btnObj2Temp;
         private System.Windows.Forms.Button btnObj1Temp;
         private System.Windows.Forms.TextBox txtAmb2Temp;
+        private System.Windows.Forms.Button btnClose;
     }
 }
 

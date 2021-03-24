@@ -42,13 +42,15 @@
             this.btnGetComPorts = new System.Windows.Forms.Button();
             this.cbPorts = new System.Windows.Forms.ComboBox();
             this.cbBaudRate = new System.Windows.Forms.ComboBox();
-            this.btnConnRedBoard = new System.Windows.Forms.Button();
+            this.btnConnToBoard = new System.Windows.Forms.Button();
             this.gbTemperatures = new System.Windows.Forms.GroupBox();
+            this.btnClose = new System.Windows.Forms.Button();
             this.gbArduino.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbArduino
             // 
+            this.gbArduino.Controls.Add(this.btnClose);
             this.gbArduino.Controls.Add(this.btnDeselectAll);
             this.gbArduino.Controls.Add(this.label2);
             this.gbArduino.Controls.Add(this.btnAvgTemperature);
@@ -62,7 +64,7 @@
             this.gbArduino.Controls.Add(this.btnGetComPorts);
             this.gbArduino.Controls.Add(this.cbPorts);
             this.gbArduino.Controls.Add(this.cbBaudRate);
-            this.gbArduino.Controls.Add(this.btnConnRedBoard);
+            this.gbArduino.Controls.Add(this.btnConnToBoard);
             this.gbArduino.Location = new System.Drawing.Point(13, 12);
             this.gbArduino.Name = "gbArduino";
             this.gbArduino.Size = new System.Drawing.Size(295, 540);
@@ -72,11 +74,11 @@
             // 
             // btnDeselectAll
             // 
-            this.btnDeselectAll.Location = new System.Drawing.Point(6, 377);
+            this.btnDeselectAll.Location = new System.Drawing.Point(142, 319);
             this.btnDeselectAll.Name = "btnDeselectAll";
-            this.btnDeselectAll.Size = new System.Drawing.Size(130, 23);
+            this.btnDeselectAll.Size = new System.Drawing.Size(144, 23);
             this.btnDeselectAll.TabIndex = 39;
-            this.btnDeselectAll.Text = "Deselect All";
+            this.btnDeselectAll.Text = "Deselect All Cell";
             this.btnDeselectAll.UseVisualStyleBackColor = true;
             this.btnDeselectAll.Click += new System.EventHandler(this.btnDeselectAll_Click);
             // 
@@ -92,7 +94,7 @@
             // 
             // btnAvgTemperature
             // 
-            this.btnAvgTemperature.Location = new System.Drawing.Point(6, 319);
+            this.btnAvgTemperature.Location = new System.Drawing.Point(6, 348);
             this.btnAvgTemperature.Name = "btnAvgTemperature";
             this.btnAvgTemperature.Size = new System.Drawing.Size(130, 23);
             this.btnAvgTemperature.TabIndex = 32;
@@ -101,17 +103,17 @@
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(6, 348);
+            this.btnSelectAll.Location = new System.Drawing.Point(6, 319);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(130, 23);
             this.btnSelectAll.TabIndex = 30;
-            this.btnSelectAll.Text = "Select All";
+            this.btnSelectAll.Text = "Select All Cells";
             this.btnSelectAll.UseVisualStyleBackColor = true;
             this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);
             // 
             // txtAvgTemperature
             // 
-            this.txtAvgTemperature.Location = new System.Drawing.Point(142, 321);
+            this.txtAvgTemperature.Location = new System.Drawing.Point(142, 350);
             this.txtAvgTemperature.Name = "txtAvgTemperature";
             this.txtAvgTemperature.Size = new System.Drawing.Size(145, 20);
             this.txtAvgTemperature.TabIndex = 29;
@@ -211,15 +213,15 @@
             this.cbBaudRate.Size = new System.Drawing.Size(145, 21);
             this.cbBaudRate.TabIndex = 13;
             // 
-            // btnConnRedBoard
+            // btnConnToBoard
             // 
-            this.btnConnRedBoard.Location = new System.Drawing.Point(6, 80);
-            this.btnConnRedBoard.Name = "btnConnRedBoard";
-            this.btnConnRedBoard.Size = new System.Drawing.Size(130, 23);
-            this.btnConnRedBoard.TabIndex = 3;
-            this.btnConnRedBoard.Text = "Connect to Board";
-            this.btnConnRedBoard.UseVisualStyleBackColor = true;
-            this.btnConnRedBoard.Click += new System.EventHandler(this.btnConnRedBoard_Click);
+            this.btnConnToBoard.Location = new System.Drawing.Point(6, 80);
+            this.btnConnToBoard.Name = "btnConnToBoard";
+            this.btnConnToBoard.Size = new System.Drawing.Size(130, 23);
+            this.btnConnToBoard.TabIndex = 3;
+            this.btnConnToBoard.Text = "Connect to Board";
+            this.btnConnToBoard.UseVisualStyleBackColor = true;
+            this.btnConnToBoard.Click += new System.EventHandler(this.btnConnToBoard_Click);
             // 
             // gbTemperatures
             // 
@@ -232,7 +234,17 @@
             this.gbTemperatures.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gbTemperatures_MouseClick);
             this.gbTemperatures.Paint += new System.Windows.Forms.PaintEventHandler(this.gbTemperatures_Paint);
             // 
-            // ArrayMLX
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(6, 511);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(130, 23);
+            this.btnClose.TabIndex = 40;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // ArrayMLXSensor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -240,7 +252,7 @@
             this.Controls.Add(this.gbTemperatures);
             this.Controls.Add(this.gbArduino);
             this.MinimumSize = new System.Drawing.Size(565, 600);
-            this.Name = "ArrayMLX";
+            this.Name = "ArrayMLXSensor";
             this.Text = "Array MLX Sensor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ArraySensor_FormClosing);
             this.gbArduino.ResumeLayout(false);
@@ -259,7 +271,7 @@
         private System.Windows.Forms.Button btnGetComPorts;
         private System.Windows.Forms.ComboBox cbPorts;
         private System.Windows.Forms.ComboBox cbBaudRate;
-        private System.Windows.Forms.Button btnConnRedBoard;
+        private System.Windows.Forms.Button btnConnToBoard;
         private System.Windows.Forms.TextBox txtAllReceivedData;
         private System.Windows.Forms.TextBox txtAvgTemperature;
         private System.Windows.Forms.Button btnSelectAll;
@@ -267,6 +279,7 @@
         private System.Windows.Forms.Button btnDeselectAll;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnAvgTemperature;
+        private System.Windows.Forms.Button btnClose;
     }
 }
 

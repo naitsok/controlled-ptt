@@ -99,11 +99,15 @@ namespace ControlledPTT.Sensors
         private void GetComPorts()
         {
             cbPorts.Items.Clear();
-            var comPortNames = SerialPort.GetPortNames();
+            string[] comPortNames = SerialPort.GetPortNames();
             if (comPortNames.Length > 0)
             {
                 cbPorts.Items.AddRange(comPortNames);
                 cbPorts.SelectedIndex = 0;
+            }
+            if (comPortNames.Length == 1)
+            {
+                btnConnToBoard_Click(btnConnToBoard, new EventArgs());
             }
         }
 
@@ -112,7 +116,7 @@ namespace ControlledPTT.Sensors
             GetComPorts();
         }
 
-        private void btnConnRedBoard_Click(object sender, EventArgs e)
+        private void btnConnToBoard_Click(object sender, EventArgs e)
         {
             if (!_comConnected)
             {
@@ -135,12 +139,10 @@ namespace ControlledPTT.Sensors
                         MessageBoxIcon.Error);
                 }
 
-                btnConnRedBoard.Text = "Disconnect";
+                btnConnToBoard.Text = "Disconnect";
                 txtConnectedStatus.Text = "Connected";
                 txtConnectedStatus.BackColor = Color.Green;
                 _comConnected = true;
-                // _sendTimer.Start();
-
             }
             else
             {
@@ -150,11 +152,10 @@ namespace ControlledPTT.Sensors
                 }
                 _comPort.Close();
                 _comPort = null;
-                btnConnRedBoard.Text = "Connect";
+                btnConnToBoard.Text = "Connect";
                 txtConnectedStatus.Text = "Not Connected";
                 txtConnectedStatus.BackColor = Color.Red;
                 _comConnected = false;
-                // _sendTimer.Stop();
             }
         }
         private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -347,6 +348,11 @@ namespace ControlledPTT.Sensors
         private void btnDeselectAll_Click(object sender, EventArgs e)
         {
             _selectedTemperatures.Clear();
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

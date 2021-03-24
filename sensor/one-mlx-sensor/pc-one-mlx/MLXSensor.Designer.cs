@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.gbArduino = new System.Windows.Forms.GroupBox();
+            this.btnClose = new System.Windows.Forms.Button();
             this.btnClearData = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.txtAllRecievedData = new System.Windows.Forms.RichTextBox();
@@ -41,12 +42,13 @@
             this.btnGetComPorts = new System.Windows.Forms.Button();
             this.cbPorts = new System.Windows.Forms.ComboBox();
             this.cbBaudRate = new System.Windows.Forms.ComboBox();
-            this.btnConnBoard = new System.Windows.Forms.Button();
+            this.btnConnToBoard = new System.Windows.Forms.Button();
             this.gbArduino.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbArduino
             // 
+            this.gbArduino.Controls.Add(this.btnClose);
             this.gbArduino.Controls.Add(this.btnClearData);
             this.gbArduino.Controls.Add(this.label3);
             this.gbArduino.Controls.Add(this.txtAllRecievedData);
@@ -59,13 +61,23 @@
             this.gbArduino.Controls.Add(this.btnGetComPorts);
             this.gbArduino.Controls.Add(this.cbPorts);
             this.gbArduino.Controls.Add(this.cbBaudRate);
-            this.gbArduino.Controls.Add(this.btnConnBoard);
+            this.gbArduino.Controls.Add(this.btnConnToBoard);
             this.gbArduino.Location = new System.Drawing.Point(12, 12);
             this.gbArduino.Name = "gbArduino";
             this.gbArduino.Size = new System.Drawing.Size(260, 337);
             this.gbArduino.TabIndex = 34;
             this.gbArduino.TabStop = false;
             this.gbArduino.Text = "Sensor controller connection";
+            // 
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(6, 308);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(112, 23);
+            this.btnClose.TabIndex = 23;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnClearData
             // 
@@ -193,23 +205,23 @@
             this.cbBaudRate.Size = new System.Drawing.Size(127, 21);
             this.cbBaudRate.TabIndex = 13;
             // 
-            // btnConnBoard
+            // btnConnToBoard
             // 
-            this.btnConnBoard.Location = new System.Drawing.Point(6, 80);
-            this.btnConnBoard.Name = "btnConnBoard";
-            this.btnConnBoard.Size = new System.Drawing.Size(115, 23);
-            this.btnConnBoard.TabIndex = 3;
-            this.btnConnBoard.Text = "Connect to Board";
-            this.btnConnBoard.UseVisualStyleBackColor = true;
-            this.btnConnBoard.Click += new System.EventHandler(this.btnConnRedBoard_Click);
+            this.btnConnToBoard.Location = new System.Drawing.Point(6, 80);
+            this.btnConnToBoard.Name = "btnConnToBoard";
+            this.btnConnToBoard.Size = new System.Drawing.Size(115, 23);
+            this.btnConnToBoard.TabIndex = 3;
+            this.btnConnToBoard.Text = "Connect to Board";
+            this.btnConnToBoard.UseVisualStyleBackColor = true;
+            this.btnConnToBoard.Click += new System.EventHandler(this.btnConnToBoard_Click);
             // 
-            // OneMLXForm
+            // MLXSensor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 361);
             this.Controls.Add(this.gbArduino);
-            this.Name = "OneMLXForm";
+            this.Name = "MLXSensor";
             this.Text = "One MLX Sensor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OneMLXForm_FormClosing);
             this.gbArduino.ResumeLayout(false);
@@ -226,7 +238,7 @@
         private System.Windows.Forms.Button btnGetComPorts;
         private System.Windows.Forms.ComboBox cbPorts;
         private System.Windows.Forms.ComboBox cbBaudRate;
-        private System.Windows.Forms.Button btnConnBoard;
+        private System.Windows.Forms.Button btnConnToBoard;
         private System.Windows.Forms.Button btnObjTemp;
         private System.Windows.Forms.TextBox txtObjTemp;
         private System.Windows.Forms.Button btnAmbTemp;
@@ -234,6 +246,7 @@
         private System.Windows.Forms.Button btnClearData;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RichTextBox txtAllRecievedData;
+        private System.Windows.Forms.Button btnClose;
     }
 }
 
