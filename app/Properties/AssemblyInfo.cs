@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ControlledPTT.App")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("University of Eastern Finland")]
 [assembly: AssemblyProduct("ControlledPTT")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCopyright("Copyright © 2021 Konstantin Tamarov")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -30,7 +30,7 @@ namespace ControlledPTT.Sensors
             InitializeComponent();
 
             cbBaudRate.SelectedIndex = 6;
-            getComPorts();
+            GetComPorts();
         }
 
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -46,17 +46,17 @@ namespace ControlledPTT.Sensors
                 }
                 catch
                 {
-                    // Somethign happened during data receive - ignore.
+                    // Something happened during data receive - ignore.
                 }
             }                     
         }
 
         private void btnGetComPorts_Click(object sender, EventArgs e)
         {
-            getComPorts();
+            GetComPorts();
         }
 
-        private void getComPorts()
+        private void GetComPorts()
         {
             cbPorts.Items.Clear();
             string[] comPortNames = SerialPort.GetPortNames();
@@ -64,10 +64,6 @@ namespace ControlledPTT.Sensors
             {
                 cbPorts.Items.AddRange(comPortNames);
                 cbPorts.SelectedIndex = 0;
-            }
-            if (comPortNames.Length == 1)
-            {
-                btnConnToBoard_Click(btnConnToBoard, new EventArgs());
             }
         }
 

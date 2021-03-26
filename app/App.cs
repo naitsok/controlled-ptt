@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -58,6 +59,9 @@ namespace ControlledPTT
         private int _elapsedMilliseconds = 0;
         // Indicates if the message box with error is already open when sensor is not sending temperature
         private bool _errNotSendingTemperatureShown = false;
+
+        // About box
+        private AboutBox _aboutBox = new AboutBox();
 
         #endregion
 
@@ -699,6 +703,18 @@ namespace ControlledPTT
             _pid.Reset();
         }
 
+        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/naitsok/controlled-ptt");
+        }
+
+        private void aboutControlledPTTToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _aboutBox.ShowDialog();
+        }
+
         #endregion
+
+        
     }
 }

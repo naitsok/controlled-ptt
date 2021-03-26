@@ -105,10 +105,6 @@ namespace ControlledPTT.Sensors
                 cbPorts.Items.AddRange(comPortNames);
                 cbPorts.SelectedIndex = 0;
             }
-            if (comPortNames.Length == 1)
-            {
-                btnConnToBoard_Click(btnConnToBoard, new EventArgs());
-            }
         }
 
         private void btnGetComPorts_Click(object sender, EventArgs e)

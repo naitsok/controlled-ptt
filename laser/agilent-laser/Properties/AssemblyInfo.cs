@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ControlledPTT.Lasers.DummyLaser")]
+[assembly: AssemblyTitle("ControlledPTT.Lasers.Agilent")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("University of Eastern Finland")]
 [assembly: AssemblyProduct("ControlledPTT")]
-[assembly: AssemblyCopyright("Copyright © Konstantin Tamarov 2021")]
+[assembly: AssemblyCopyright("Copyright ©  2021 Konsantin Tamarov")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("73116093-3f23-4384-9d63-d89e1b030b67")]
+[assembly: Guid("aad01938-7b4d-4534-8801-4ba0a0c2231d")]
 
 // Version information for an assembly consists of the following four values:
 //

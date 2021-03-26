@@ -90,6 +90,7 @@
             this.createDirectoryWithCurrentDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createFileWithCurrentTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutControlledPTTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbCalibration = new System.Windows.Forms.GroupBox();
             this.txtIntercept = new System.Windows.Forms.TextBox();
@@ -784,16 +785,25 @@
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.documentationToolStripMenuItem,
             this.aboutControlledPTTToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
+            // documentationToolStripMenuItem
+            // 
+            this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
+            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.documentationToolStripMenuItem.Text = "Documentation";
+            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.documentationToolStripMenuItem_Click);
+            // 
             // aboutControlledPTTToolStripMenuItem
             // 
             this.aboutControlledPTTToolStripMenuItem.Name = "aboutControlledPTTToolStripMenuItem";
-            this.aboutControlledPTTToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.aboutControlledPTTToolStripMenuItem.Text = "About Controlled PTT";
+            this.aboutControlledPTTToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.aboutControlledPTTToolStripMenuItem.Text = "About Controlled PTT 2";
+            this.aboutControlledPTTToolStripMenuItem.Click += new System.EventHandler(this.aboutControlledPTTToolStripMenuItem_Click);
             // 
             // gbCalibration
             // 
@@ -1031,6 +1041,7 @@
         private System.Windows.Forms.Button btnRemoveSensor;
         private System.Windows.Forms.Button btnRemoveLaser;
         private System.Windows.Forms.OpenFileDialog ofdLoadCalibration;
+        private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
     }
 }
 
