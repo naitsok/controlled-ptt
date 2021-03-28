@@ -43,9 +43,9 @@
             this.cmbLasers = new System.Windows.Forms.ComboBox();
             this.txtOperator = new System.Windows.Forms.TextBox();
             this.lblOperator = new System.Windows.Forms.Label();
+            this.cbSaveData = new System.Windows.Forms.CheckBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
-            this.cbSaveData = new System.Windows.Forms.CheckBox();
             this.lblFileName = new System.Windows.Forms.Label();
             this.lblFileDir = new System.Windows.Forms.Label();
             this.cmbExperimentType = new System.Windows.Forms.ComboBox();
@@ -125,14 +125,14 @@
             this.txtExpDir.Location = new System.Drawing.Point(72, 72);
             this.txtExpDir.Name = "txtExpDir";
             this.txtExpDir.ReadOnly = true;
-            this.txtExpDir.Size = new System.Drawing.Size(234, 20);
+            this.txtExpDir.Size = new System.Drawing.Size(320, 20);
             this.txtExpDir.TabIndex = 16;
             // 
             // btnSelectExpDir
             // 
-            this.btnSelectExpDir.Location = new System.Drawing.Point(312, 72);
+            this.btnSelectExpDir.Location = new System.Drawing.Point(398, 70);
             this.btnSelectExpDir.Name = "btnSelectExpDir";
-            this.btnSelectExpDir.Size = new System.Drawing.Size(100, 23);
+            this.btnSelectExpDir.Size = new System.Drawing.Size(106, 23);
             this.btnSelectExpDir.TabIndex = 18;
             this.btnSelectExpDir.Text = "Select Directory";
             this.btnSelectExpDir.UseVisualStyleBackColor = true;
@@ -142,15 +142,15 @@
             // 
             this.txtExpFileName.Location = new System.Drawing.Point(72, 46);
             this.txtExpFileName.Name = "txtExpFileName";
-            this.txtExpFileName.Size = new System.Drawing.Size(340, 20);
+            this.txtExpFileName.Size = new System.Drawing.Size(432, 20);
             this.txtExpFileName.TabIndex = 19;
             // 
             // pltTemperature
             // 
-            this.pltTemperature.Location = new System.Drawing.Point(12, 573);
+            this.pltTemperature.Location = new System.Drawing.Point(12, 616);
             this.pltTemperature.Name = "pltTemperature";
             this.pltTemperature.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.pltTemperature.Size = new System.Drawing.Size(418, 290);
+            this.pltTemperature.Size = new System.Drawing.Size(510, 247);
             this.pltTemperature.TabIndex = 43;
             this.pltTemperature.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.pltTemperature.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -162,9 +162,9 @@
             this.gbExperiment.Controls.Add(this.gbLaser);
             this.gbExperiment.Controls.Add(this.txtOperator);
             this.gbExperiment.Controls.Add(this.lblOperator);
+            this.gbExperiment.Controls.Add(this.cbSaveData);
             this.gbExperiment.Controls.Add(this.txtDescription);
             this.gbExperiment.Controls.Add(this.lblDescription);
-            this.gbExperiment.Controls.Add(this.cbSaveData);
             this.gbExperiment.Controls.Add(this.lblFileName);
             this.gbExperiment.Controls.Add(this.lblFileDir);
             this.gbExperiment.Controls.Add(this.txtExpFileName);
@@ -180,7 +180,7 @@
             this.gbExperiment.Controls.Add(this.txtElapsedTime);
             this.gbExperiment.Location = new System.Drawing.Point(12, 217);
             this.gbExperiment.Name = "gbExperiment";
-            this.gbExperiment.Size = new System.Drawing.Size(418, 350);
+            this.gbExperiment.Size = new System.Drawing.Size(510, 393);
             this.gbExperiment.TabIndex = 47;
             this.gbExperiment.TabStop = false;
             this.gbExperiment.Text = "Experiment";
@@ -190,13 +190,14 @@
             this.cbSaveHeader.AutoSize = true;
             this.cbSaveHeader.Checked = true;
             this.cbSaveHeader.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbSaveHeader.Location = new System.Drawing.Point(221, 128);
+            this.cbSaveHeader.Location = new System.Drawing.Point(329, 126);
             this.cbSaveHeader.Name = "cbSaveHeader";
             this.cbSaveHeader.Size = new System.Drawing.Size(89, 17);
             this.cbSaveHeader.TabIndex = 86;
             this.cbSaveHeader.Text = "Save Header";
             this.ttSaveHeader.SetToolTip(this.cbSaveHeader, "Save the information about the experiment at the beginning of the file.");
             this.cbSaveHeader.UseVisualStyleBackColor = true;
+            this.cbSaveHeader.CheckedChanged += new System.EventHandler(this.cbSaveHeader_CheckedChanged);
             // 
             // gbLaser
             // 
@@ -206,16 +207,16 @@
             this.gbLaser.Controls.Add(this.cmbLasers);
             this.gbLaser.Location = new System.Drawing.Point(6, 176);
             this.gbLaser.Name = "gbLaser";
-            this.gbLaser.Size = new System.Drawing.Size(406, 42);
+            this.gbLaser.Size = new System.Drawing.Size(498, 42);
             this.gbLaser.TabIndex = 86;
             this.gbLaser.TabStop = false;
             this.gbLaser.Text = "Laser";
             // 
             // btnRemoveLaser
             // 
-            this.btnRemoveLaser.Location = new System.Drawing.Point(280, 14);
+            this.btnRemoveLaser.Location = new System.Drawing.Point(342, 14);
             this.btnRemoveLaser.Name = "btnRemoveLaser";
-            this.btnRemoveLaser.Size = new System.Drawing.Size(60, 23);
+            this.btnRemoveLaser.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveLaser.TabIndex = 64;
             this.btnRemoveLaser.Text = "Remove";
             this.btnRemoveLaser.UseVisualStyleBackColor = true;
@@ -223,9 +224,9 @@
             // 
             // btnStartLaser
             // 
-            this.btnStartLaser.Location = new System.Drawing.Point(346, 14);
+            this.btnStartLaser.Location = new System.Drawing.Point(423, 14);
             this.btnStartLaser.Name = "btnStartLaser";
-            this.btnStartLaser.Size = new System.Drawing.Size(54, 23);
+            this.btnStartLaser.Size = new System.Drawing.Size(69, 23);
             this.btnStartLaser.TabIndex = 63;
             this.btnStartLaser.Text = "Start";
             this.btnStartLaser.UseVisualStyleBackColor = true;
@@ -233,9 +234,9 @@
             // 
             // btnLoadLaser
             // 
-            this.btnLoadLaser.Location = new System.Drawing.Point(215, 14);
+            this.btnLoadLaser.Location = new System.Drawing.Point(261, 14);
             this.btnLoadLaser.Name = "btnLoadLaser";
-            this.btnLoadLaser.Size = new System.Drawing.Size(60, 23);
+            this.btnLoadLaser.Size = new System.Drawing.Size(75, 23);
             this.btnLoadLaser.TabIndex = 63;
             this.btnLoadLaser.Text = "Load";
             this.btnLoadLaser.UseVisualStyleBackColor = true;
@@ -247,7 +248,7 @@
             this.cmbLasers.FormattingEnabled = true;
             this.cmbLasers.Location = new System.Drawing.Point(6, 15);
             this.cmbLasers.Name = "cmbLasers";
-            this.cmbLasers.Size = new System.Drawing.Size(203, 21);
+            this.cmbLasers.Size = new System.Drawing.Size(243, 21);
             this.cmbLasers.TabIndex = 63;
             this.cmbLasers.SelectedIndexChanged += new System.EventHandler(this.cmbLasers_SelectedIndexChanged);
             // 
@@ -255,7 +256,7 @@
             // 
             this.txtOperator.Location = new System.Drawing.Point(72, 124);
             this.txtOperator.Name = "txtOperator";
-            this.txtOperator.Size = new System.Drawing.Size(143, 20);
+            this.txtOperator.Size = new System.Drawing.Size(251, 20);
             this.txtOperator.TabIndex = 64;
             // 
             // lblOperator
@@ -267,11 +268,25 @@
             this.lblOperator.TabIndex = 85;
             this.lblOperator.Text = "Operator";
             // 
+            // cbSaveData
+            // 
+            this.cbSaveData.AutoSize = true;
+            this.cbSaveData.Checked = true;
+            this.cbSaveData.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbSaveData.Location = new System.Drawing.Point(427, 126);
+            this.cbSaveData.Name = "cbSaveData";
+            this.cbSaveData.Size = new System.Drawing.Size(77, 17);
+            this.cbSaveData.TabIndex = 85;
+            this.cbSaveData.Text = "Save Data";
+            this.ttSaveHeader.SetToolTip(this.cbSaveData, "If not checked, nothing is saved.");
+            this.cbSaveData.UseVisualStyleBackColor = true;
+            this.cbSaveData.CheckedChanged += new System.EventHandler(this.cbSaveData_CheckedChanged);
+            // 
             // txtDescription
             // 
             this.txtDescription.Location = new System.Drawing.Point(72, 98);
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(340, 20);
+            this.txtDescription.Size = new System.Drawing.Size(432, 20);
             this.txtDescription.TabIndex = 63;
             // 
             // lblDescription
@@ -282,20 +297,6 @@
             this.lblDescription.Size = new System.Drawing.Size(60, 13);
             this.lblDescription.TabIndex = 84;
             this.lblDescription.Text = "Description";
-            // 
-            // cbSaveData
-            // 
-            this.cbSaveData.AutoSize = true;
-            this.cbSaveData.Checked = true;
-            this.cbSaveData.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbSaveData.Location = new System.Drawing.Point(312, 128);
-            this.cbSaveData.Name = "cbSaveData";
-            this.cbSaveData.Size = new System.Drawing.Size(77, 17);
-            this.cbSaveData.TabIndex = 85;
-            this.cbSaveData.Text = "Save Data";
-            this.ttSaveHeader.SetToolTip(this.cbSaveData, "If not checked, nothing is saved.");
-            this.cbSaveData.UseVisualStyleBackColor = true;
-            this.cbSaveData.CheckedChanged += new System.EventHandler(this.cbSaveData_CheckedChanged);
             // 
             // lblFileName
             // 
@@ -325,7 +326,7 @@
             "PID Controlled PTT"});
             this.cmbExperimentType.Location = new System.Drawing.Point(6, 19);
             this.cmbExperimentType.Name = "cmbExperimentType";
-            this.cmbExperimentType.Size = new System.Drawing.Size(406, 21);
+            this.cmbExperimentType.Size = new System.Drawing.Size(498, 21);
             this.cmbExperimentType.TabIndex = 79;
             this.cmbExperimentType.SelectedIndexChanged += new System.EventHandler(this.cmbExperimentType_SelectedIndexChanged);
             // 
@@ -343,10 +344,10 @@
             this.txtExperimentStarted.BackColor = System.Drawing.Color.Red;
             this.txtExperimentStarted.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtExperimentStarted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtExperimentStarted.Location = new System.Drawing.Point(221, 323);
+            this.txtExperimentStarted.Location = new System.Drawing.Point(348, 348);
             this.txtExperimentStarted.Name = "txtExperimentStarted";
             this.txtExperimentStarted.ReadOnly = true;
-            this.txtExperimentStarted.Size = new System.Drawing.Size(191, 20);
+            this.txtExperimentStarted.Size = new System.Drawing.Size(156, 20);
             this.txtExperimentStarted.TabIndex = 76;
             this.txtExperimentStarted.Text = "Experiment Not Started";
             this.txtExperimentStarted.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -359,14 +360,14 @@
             0,
             0,
             65536});
-            this.nudExpTime.Location = new System.Drawing.Point(106, 150);
+            this.nudExpTime.Location = new System.Drawing.Point(157, 152);
             this.nudExpTime.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.nudExpTime.Name = "nudExpTime";
-            this.nudExpTime.Size = new System.Drawing.Size(109, 20);
+            this.nudExpTime.Size = new System.Drawing.Size(98, 20);
             this.nudExpTime.TabIndex = 79;
             this.nudExpTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudExpTime.Value = new decimal(new int[] {
@@ -389,7 +390,7 @@
             this.gbPID.Controls.Add(this.nudPropGain);
             this.gbPID.Location = new System.Drawing.Point(6, 224);
             this.gbPID.Name = "gbPID";
-            this.gbPID.Size = new System.Drawing.Size(406, 90);
+            this.gbPID.Size = new System.Drawing.Size(498, 90);
             this.gbPID.TabIndex = 73;
             this.gbPID.TabStop = false;
             this.gbPID.Text = "PID control";
@@ -398,11 +399,11 @@
             // lblTargetTemp
             // 
             this.lblTargetTemp.AutoSize = true;
-            this.lblTargetTemp.Location = new System.Drawing.Point(6, 35);
+            this.lblTargetTemp.Location = new System.Drawing.Point(6, 41);
             this.lblTargetTemp.Name = "lblTargetTemp";
-            this.lblTargetTemp.Size = new System.Drawing.Size(67, 26);
+            this.lblTargetTemp.Size = new System.Drawing.Size(121, 13);
             this.lblTargetTemp.TabIndex = 84;
-            this.lblTargetTemp.Text = "Target\nTemperature";
+            this.lblTargetTemp.Text = "Target Temperature [°C]";
             // 
             // nudTargetTemp
             // 
@@ -412,9 +413,9 @@
             0,
             0,
             65536});
-            this.nudTargetTemp.Location = new System.Drawing.Point(100, 39);
+            this.nudTargetTemp.Location = new System.Drawing.Point(151, 39);
             this.nudTargetTemp.Name = "nudTargetTemp";
-            this.nudTargetTemp.Size = new System.Drawing.Size(94, 20);
+            this.nudTargetTemp.Size = new System.Drawing.Size(98, 20);
             this.nudTargetTemp.TabIndex = 83;
             this.nudTargetTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudTargetTemp.Value = new decimal(new int[] {
@@ -425,7 +426,7 @@
             // 
             // nudDiffGain
             // 
-            this.nudDiffGain.Location = new System.Drawing.Point(306, 65);
+            this.nudDiffGain.Location = new System.Drawing.Point(392, 65);
             this.nudDiffGain.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -437,7 +438,7 @@
             0,
             -2147483648});
             this.nudDiffGain.Name = "nudDiffGain";
-            this.nudDiffGain.Size = new System.Drawing.Size(94, 20);
+            this.nudDiffGain.Size = new System.Drawing.Size(100, 20);
             this.nudDiffGain.TabIndex = 26;
             this.nudDiffGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudDiffGain.Value = new decimal(new int[] {
@@ -450,7 +451,7 @@
             // lblPropGain
             // 
             this.lblPropGain.AutoSize = true;
-            this.lblPropGain.Location = new System.Drawing.Point(212, 16);
+            this.lblPropGain.Location = new System.Drawing.Point(259, 15);
             this.lblPropGain.Name = "lblPropGain";
             this.lblPropGain.Size = new System.Drawing.Size(88, 13);
             this.lblPropGain.TabIndex = 22;
@@ -459,7 +460,7 @@
             // lblRelativePower
             // 
             this.lblRelativePower.AutoSize = true;
-            this.lblRelativePower.Location = new System.Drawing.Point(6, 67);
+            this.lblRelativePower.Location = new System.Drawing.Point(6, 68);
             this.lblRelativePower.Name = "lblRelativePower";
             this.lblRelativePower.Size = new System.Drawing.Size(79, 13);
             this.lblRelativePower.TabIndex = 28;
@@ -467,16 +468,16 @@
             // 
             // txtRelativePower
             // 
-            this.txtRelativePower.Location = new System.Drawing.Point(100, 64);
+            this.txtRelativePower.Location = new System.Drawing.Point(151, 64);
             this.txtRelativePower.Name = "txtRelativePower";
             this.txtRelativePower.ReadOnly = true;
-            this.txtRelativePower.Size = new System.Drawing.Size(94, 20);
+            this.txtRelativePower.Size = new System.Drawing.Size(98, 20);
             this.txtRelativePower.TabIndex = 21;
             this.txtRelativePower.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // nudIntGain
             // 
-            this.nudIntGain.Location = new System.Drawing.Point(306, 39);
+            this.nudIntGain.Location = new System.Drawing.Point(392, 39);
             this.nudIntGain.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -488,7 +489,7 @@
             0,
             -2147483648});
             this.nudIntGain.Name = "nudIntGain";
-            this.nudIntGain.Size = new System.Drawing.Size(94, 20);
+            this.nudIntGain.Size = new System.Drawing.Size(100, 20);
             this.nudIntGain.TabIndex = 24;
             this.nudIntGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudIntGain.Value = new decimal(new int[] {
@@ -501,7 +502,7 @@
             // lblDiffGain
             // 
             this.lblDiffGain.AutoSize = true;
-            this.lblDiffGain.Location = new System.Drawing.Point(212, 67);
+            this.lblDiffGain.Location = new System.Drawing.Point(258, 67);
             this.lblDiffGain.Name = "lblDiffGain";
             this.lblDiffGain.Size = new System.Drawing.Size(82, 13);
             this.lblDiffGain.TabIndex = 27;
@@ -510,7 +511,7 @@
             // lblIntGain
             // 
             this.lblIntGain.AutoSize = true;
-            this.lblIntGain.Location = new System.Drawing.Point(212, 41);
+            this.lblIntGain.Location = new System.Drawing.Point(259, 41);
             this.lblIntGain.Name = "lblIntGain";
             this.lblIntGain.Size = new System.Drawing.Size(67, 13);
             this.lblIntGain.TabIndex = 25;
@@ -518,7 +519,7 @@
             // 
             // nudPropGain
             // 
-            this.nudPropGain.Location = new System.Drawing.Point(306, 13);
+            this.nudPropGain.Location = new System.Drawing.Point(392, 13);
             this.nudPropGain.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -530,7 +531,7 @@
             0,
             -2147483648});
             this.nudPropGain.Name = "nudPropGain";
-            this.nudPropGain.Size = new System.Drawing.Size(94, 20);
+            this.nudPropGain.Size = new System.Drawing.Size(100, 20);
             this.nudPropGain.TabIndex = 23;
             this.nudPropGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudPropGain.Value = new decimal(new int[] {
@@ -542,9 +543,9 @@
             // 
             // btnStartExperiment
             // 
-            this.btnStartExperiment.Location = new System.Drawing.Point(6, 320);
+            this.btnStartExperiment.Location = new System.Drawing.Point(6, 345);
             this.btnStartExperiment.Name = "btnStartExperiment";
-            this.btnStartExperiment.Size = new System.Drawing.Size(194, 23);
+            this.btnStartExperiment.Size = new System.Drawing.Size(127, 23);
             this.btnStartExperiment.TabIndex = 77;
             this.btnStartExperiment.Text = "Start Experiment";
             this.btnStartExperiment.UseVisualStyleBackColor = true;
@@ -553,7 +554,7 @@
             // lblElapsedTime
             // 
             this.lblElapsedTime.AutoSize = true;
-            this.lblElapsedTime.Location = new System.Drawing.Point(218, 154);
+            this.lblElapsedTime.Location = new System.Drawing.Point(12, 322);
             this.lblElapsedTime.Name = "lblElapsedTime";
             this.lblElapsedTime.Size = new System.Drawing.Size(71, 13);
             this.lblElapsedTime.TabIndex = 81;
@@ -561,34 +562,34 @@
             // 
             // txtElapsedTime
             // 
-            this.txtElapsedTime.Location = new System.Drawing.Point(312, 150);
+            this.txtElapsedTime.Location = new System.Drawing.Point(157, 319);
             this.txtElapsedTime.Name = "txtElapsedTime";
             this.txtElapsedTime.ReadOnly = true;
-            this.txtElapsedTime.Size = new System.Drawing.Size(100, 20);
+            this.txtElapsedTime.Size = new System.Drawing.Size(98, 20);
             this.txtElapsedTime.TabIndex = 80;
             this.txtElapsedTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblCalibratedTemperature
             // 
             this.lblCalibratedTemperature.AutoSize = true;
-            this.lblCalibratedTemperature.Location = new System.Drawing.Point(218, 101);
+            this.lblCalibratedTemperature.Location = new System.Drawing.Point(265, 108);
             this.lblCalibratedTemperature.Name = "lblCalibratedTemperature";
-            this.lblCalibratedTemperature.Size = new System.Drawing.Size(67, 26);
+            this.lblCalibratedTemperature.Size = new System.Drawing.Size(137, 13);
             this.lblCalibratedTemperature.TabIndex = 83;
-            this.lblCalibratedTemperature.Text = "Calibrated\nTemperature";
+            this.lblCalibratedTemperature.Text = "Calibrated Temperature [°C]";
             // 
             // lblSensorTemp
             // 
             this.lblSensorTemp.AutoSize = true;
-            this.lblSensorTemp.Location = new System.Drawing.Point(218, 67);
+            this.lblSensorTemp.Location = new System.Drawing.Point(265, 75);
             this.lblSensorTemp.Name = "lblSensorTemp";
-            this.lblSensorTemp.Size = new System.Drawing.Size(67, 26);
+            this.lblSensorTemp.Size = new System.Drawing.Size(70, 13);
             this.lblSensorTemp.TabIndex = 82;
-            this.lblSensorTemp.Text = "Sensor\nTemperature";
+            this.lblSensorTemp.Text = "Sensor Value";
             // 
             // txtCalibratedTemp
             // 
-            this.txtCalibratedTemp.Location = new System.Drawing.Point(312, 105);
+            this.txtCalibratedTemp.Location = new System.Drawing.Point(404, 105);
             this.txtCalibratedTemp.Name = "txtCalibratedTemp";
             this.txtCalibratedTemp.ReadOnly = true;
             this.txtCalibratedTemp.Size = new System.Drawing.Size(100, 20);
@@ -597,7 +598,7 @@
             // 
             // txtSensorTemp
             // 
-            this.txtSensorTemp.Location = new System.Drawing.Point(312, 72);
+            this.txtSensorTemp.Location = new System.Drawing.Point(404, 72);
             this.txtSensorTemp.Name = "txtSensorTemp";
             this.txtSensorTemp.ReadOnly = true;
             this.txtSensorTemp.Size = new System.Drawing.Size(100, 20);
@@ -612,16 +613,16 @@
             this.gbSensor.Controls.Add(this.cmbSensors);
             this.gbSensor.Location = new System.Drawing.Point(12, 27);
             this.gbSensor.Name = "gbSensor";
-            this.gbSensor.Size = new System.Drawing.Size(418, 47);
+            this.gbSensor.Size = new System.Drawing.Size(510, 47);
             this.gbSensor.TabIndex = 60;
             this.gbSensor.TabStop = false;
             this.gbSensor.Text = "Sensor Selection";
             // 
             // btnRemoveSensor
             // 
-            this.btnRemoveSensor.Location = new System.Drawing.Point(287, 18);
+            this.btnRemoveSensor.Location = new System.Drawing.Point(348, 18);
             this.btnRemoveSensor.Name = "btnRemoveSensor";
-            this.btnRemoveSensor.Size = new System.Drawing.Size(60, 23);
+            this.btnRemoveSensor.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveSensor.TabIndex = 63;
             this.btnRemoveSensor.Text = "Remove";
             this.btnRemoveSensor.UseVisualStyleBackColor = true;
@@ -629,9 +630,9 @@
             // 
             // btnStartSensor
             // 
-            this.btnStartSensor.Location = new System.Drawing.Point(352, 18);
+            this.btnStartSensor.Location = new System.Drawing.Point(429, 18);
             this.btnStartSensor.Name = "btnStartSensor";
-            this.btnStartSensor.Size = new System.Drawing.Size(60, 23);
+            this.btnStartSensor.Size = new System.Drawing.Size(75, 23);
             this.btnStartSensor.TabIndex = 62;
             this.btnStartSensor.Text = "Start";
             this.btnStartSensor.UseVisualStyleBackColor = true;
@@ -639,9 +640,9 @@
             // 
             // btnLoadSensor
             // 
-            this.btnLoadSensor.Location = new System.Drawing.Point(221, 18);
+            this.btnLoadSensor.Location = new System.Drawing.Point(267, 18);
             this.btnLoadSensor.Name = "btnLoadSensor";
-            this.btnLoadSensor.Size = new System.Drawing.Size(60, 23);
+            this.btnLoadSensor.Size = new System.Drawing.Size(75, 23);
             this.btnLoadSensor.TabIndex = 60;
             this.btnLoadSensor.Text = "Load";
             this.btnLoadSensor.UseVisualStyleBackColor = true;
@@ -653,7 +654,7 @@
             this.cmbSensors.FormattingEnabled = true;
             this.cmbSensors.Location = new System.Drawing.Point(6, 19);
             this.cmbSensors.Name = "cmbSensors";
-            this.cmbSensors.Size = new System.Drawing.Size(209, 21);
+            this.cmbSensors.Size = new System.Drawing.Size(249, 21);
             this.cmbSensors.TabIndex = 57;
             this.cmbSensors.SelectedIndexChanged += new System.EventHandler(this.cmbSensors_SelectedIndexChanged);
             // 
@@ -700,7 +701,7 @@
             this.helpToolStripMenuItem});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(444, 24);
+            this.menuMain.Size = new System.Drawing.Size(534, 24);
             this.menuMain.TabIndex = 51;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -822,14 +823,14 @@
             this.gbCalibration.Controls.Add(this.cbUseCalibration);
             this.gbCalibration.Location = new System.Drawing.Point(12, 80);
             this.gbCalibration.Name = "gbCalibration";
-            this.gbCalibration.Size = new System.Drawing.Size(418, 131);
+            this.gbCalibration.Size = new System.Drawing.Size(510, 131);
             this.gbCalibration.TabIndex = 61;
             this.gbCalibration.TabStop = false;
             this.gbCalibration.Text = "Sensor Calibration";
             // 
             // txtIntercept
             // 
-            this.txtIntercept.Location = new System.Drawing.Point(117, 105);
+            this.txtIntercept.Location = new System.Drawing.Point(157, 105);
             this.txtIntercept.Name = "txtIntercept";
             this.txtIntercept.ReadOnly = true;
             this.txtIntercept.Size = new System.Drawing.Size(98, 20);
@@ -838,7 +839,7 @@
             // 
             // txtSlope
             // 
-            this.txtSlope.Location = new System.Drawing.Point(117, 72);
+            this.txtSlope.Location = new System.Drawing.Point(157, 72);
             this.txtSlope.Name = "txtSlope";
             this.txtSlope.ReadOnly = true;
             this.txtSlope.Size = new System.Drawing.Size(98, 20);
@@ -865,9 +866,9 @@
             // 
             // btnModifyCalibration
             // 
-            this.btnModifyCalibration.Location = new System.Drawing.Point(287, 40);
+            this.btnModifyCalibration.Location = new System.Drawing.Point(348, 40);
             this.btnModifyCalibration.Name = "btnModifyCalibration";
-            this.btnModifyCalibration.Size = new System.Drawing.Size(60, 23);
+            this.btnModifyCalibration.Size = new System.Drawing.Size(75, 23);
             this.btnModifyCalibration.TabIndex = 64;
             this.btnModifyCalibration.Text = "Modify";
             this.btnModifyCalibration.UseVisualStyleBackColor = true;
@@ -875,9 +876,9 @@
             // 
             // btnNewCalibration
             // 
-            this.btnNewCalibration.Location = new System.Drawing.Point(352, 40);
+            this.btnNewCalibration.Location = new System.Drawing.Point(429, 40);
             this.btnNewCalibration.Name = "btnNewCalibration";
-            this.btnNewCalibration.Size = new System.Drawing.Size(60, 23);
+            this.btnNewCalibration.Size = new System.Drawing.Size(75, 23);
             this.btnNewCalibration.TabIndex = 63;
             this.btnNewCalibration.Text = "New";
             this.btnNewCalibration.UseVisualStyleBackColor = true;
@@ -885,9 +886,9 @@
             // 
             // btnLoadCalibration
             // 
-            this.btnLoadCalibration.Location = new System.Drawing.Point(221, 40);
+            this.btnLoadCalibration.Location = new System.Drawing.Point(267, 40);
             this.btnLoadCalibration.Name = "btnLoadCalibration";
-            this.btnLoadCalibration.Size = new System.Drawing.Size(60, 23);
+            this.btnLoadCalibration.Size = new System.Drawing.Size(75, 23);
             this.btnLoadCalibration.TabIndex = 62;
             this.btnLoadCalibration.Text = "Load";
             this.btnLoadCalibration.UseVisualStyleBackColor = true;
@@ -898,7 +899,7 @@
             this.txtCalibration.Location = new System.Drawing.Point(6, 42);
             this.txtCalibration.Name = "txtCalibration";
             this.txtCalibration.ReadOnly = true;
-            this.txtCalibration.Size = new System.Drawing.Size(209, 20);
+            this.txtCalibration.Size = new System.Drawing.Size(249, 20);
             this.txtCalibration.TabIndex = 0;
             // 
             // ofdSelectSensor
@@ -929,7 +930,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 871);
+            this.ClientSize = new System.Drawing.Size(534, 871);
             this.Controls.Add(this.gbCalibration);
             this.Controls.Add(this.pltAmbTemp);
             this.Controls.Add(this.pltLaserCurrent);

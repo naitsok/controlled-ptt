@@ -50,8 +50,8 @@ namespace ControlledPTT
         // Timer for experiment.
         private Timer _expTimer = new Timer() { Interval = 1000 };
         // string with the format to save data depending on the experiment type
-        private string _saveDataLineHeader = "Time (ms)\tRaw Sensor Data\tCalibrated Temperature";
-        private string _saveDataLineFormat = "{0}\t{1:F2}\t{2:F2}";
+        private string _saveDataLineHeader = "Time (ms)\tRaw Sensor Data\tCalibrated Temperature (°C)\tThermal dose (min)";
+        private string _saveDataLineFormat = "{0}\t{1:F2}\t{2:F2}\t{3:F2}";
         // StreamWriter to save data
         private StreamWriter _expWriter = null;
         // Variables to keep track of experiment
@@ -101,7 +101,7 @@ namespace ControlledPTT
                 Position = AxisPosition.Left,
                 Minimum = 17,
                 Maximum = 23,
-                Title = "Temperature (Celcius)"
+                Title = "Temperature (°C)"
             });
             // object temperature plot series
             pm.Series.Add(new LineSeries()
@@ -306,13 +306,13 @@ namespace ControlledPTT
             }
 
             // Generate the tempalte string for saving the data depending on the selected experimental parameters
-            _saveDataLineHeader = "Time (ms)\tRaw Sensor Data\tCalibrated Temperature";
-            _saveDataLineFormat = "{0}\t{1:F2}\t{2:F2}";
+            _saveDataLineHeader = "Time (ms)\tRaw Sensor Data\tCalibrated Temperature (°C)\tThermal dose (min)";
+            _saveDataLineFormat = "{0}\t{1:F2}\t{2:F2}\t{3:F2}";
             if (cmbExperimentType.SelectedIndex > 0)
             {
                 // Laser will be used in the experiment
                 _saveDataLineHeader = _saveDataLineHeader + "\tLaser Power";
-                _saveDataLineFormat = _saveDataLineFormat + "\t{3:F2}";
+                _saveDataLineFormat = _saveDataLineFormat + "\t{4:F2}";
             }
 
             _elapsedMilliseconds = 0;
@@ -549,13 +549,19 @@ namespace ControlledPTT
             }
         }
 
+        private void cbSaveHeader_CheckedChanged(object sender, EventArgs e)
+        {
+            txtDescription.Enabled = cbSaveData.Checked && cbSaveHeader.Checked;
+            txtOperator.Enabled = cbSaveData.Checked && cbSaveHeader.Checked;
+        }
+
         private void cbSaveData_CheckedChanged(object sender, EventArgs e)
         {
             txtExpFileName.Enabled = cbSaveData.Checked;
             txtExpDir.Enabled = cbSaveData.Checked;
             btnSelectExpDir.Enabled = cbSaveData.Checked;
-            txtDescription.Enabled = cbSaveData.Checked;
-            txtOperator.Enabled = cbSaveData.Checked;
+            txtDescription.Enabled = cbSaveData.Checked && cbSaveHeader.Checked;
+            txtOperator.Enabled = cbSaveData.Checked && cbSaveHeader.Checked;
             cbSaveHeader.Enabled = cbSaveData.Checked;
         }
 
@@ -713,8 +719,9 @@ namespace ControlledPTT
             _aboutBox.ShowDialog();
         }
 
+
         #endregion
 
-        
+
     }
 }
