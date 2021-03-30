@@ -32,7 +32,7 @@ namespace ControlledPTT
         #region Fields
 
         // Base directory where executable is located
-        private static string BASE_DIR = Directory.GetCurrentDirectory();
+        private static readonly string BASE_DIR = Directory.GetCurrentDirectory();
         // Config path to be loaded from settings
         private string _configPath = "";
         private JObject _config = null;
@@ -44,6 +44,9 @@ namespace ControlledPTT
         private string _expFileName = "";
         private string _expFilePath = "";
         private double _calibratedTemperature = 0;
+        private double _thermalDose = 0;
+        private double _discretizationTimeMin = 1 / 60; // min, for thermal dose calculation
+        private double _previousCalibratedTemperature = 0; // needed to calculate thermal dose
         // PID
         private PID _pid = null;
         private double _targetTemperature = 50;
@@ -89,30 +92,48 @@ namespace ControlledPTT
                 LegendTextColor = OxyColors.Black,
                 LegendPosition = LegendPosition.RightTop,
             };
+            // X axis - elapsed experiment time
             pm.Axes.Add(new LinearAxis()
             {
+                Key = "XElapsedTime",
                 Position = AxisPosition.Bottom,
                 Minimum = 0,
                 Maximum = 120,
                 Title = "Elapsed Time (s)"
             });
+            // Y left axis - raw sensor data, calibrated and target temperatures
             pm.Axes.Add(new LinearAxis()
             {
+                Key = "YTemperatures",
                 Position = AxisPosition.Left,
                 Minimum = 17,
                 Maximum = 23,
                 Title = "Temperature (°C)"
             });
+            // Y right axis - thermal dose
+            pm.Axes.Add(new LinearAxis()
+            {
+                Key = "YThermalDose",
+                Position = AxisPosition.Right,
+                Minimum = -1,
+                Maximum = 5,
+                Title = "Thermal dose (min)"
+            });
             // object temperature plot series
             pm.Series.Add(new LineSeries()
             {
+                XAxisKey = "XElapsedTime",
+                YAxisKey = "YTemperatures",
                 Title = "Raw data",
                 TextColor = OxyColors.Red,
-                IsVisible = false // Raw data is only shown when the calibration is on
+                // Raw data is only shown when the calibration is on
+                IsVisible = false
             });
-            //series for calibrated temperature
+            // series for calibrated temperature
             pm.Series.Add(new LineSeries()
             {
+                XAxisKey = "XElapsedTime",
+                YAxisKey = "YTemperatures",
                 Title = "Calibrated",
                 TextColor = OxyColors.Green,
                 IsVisible = true
@@ -120,9 +141,20 @@ namespace ControlledPTT
             // series for target temperature in PID controller
             pm.Series.Add(new LineSeries()
             {
+                XAxisKey = "XElapsedTime",
+                YAxisKey = "YTemperatures",
                 Title = "Target",
                 TextColor = OxyColors.Blue,
                 IsVisible = false
+            });
+            // series for thermal dose
+            pm.Series.Add(new LineSeries()
+            {
+                XAxisKey = "XElapsedTime",
+                YAxisKey = "YThermalDose",
+                Title = "Thermal dose",
+                TextColor = OxyColors.Magenta,
+                IsVisible = true
             });
             pltTemperature.Model = pm;
             cmbExperimentType_SelectedIndexChanged(cmbExperimentType, new EventArgs());
@@ -131,7 +163,7 @@ namespace ControlledPTT
         /// <summary>
         /// Sets the graph values and scales the axis during the experiment.
         /// </summary>
-        private void SetGraphData()
+        private void SetGraphTemperatureData()
         {
             double[] tempData = new double[] { _receivedTemperature, _calibratedTemperature, _targetTemperature };
             List<double> visibleData = new List<double>();
@@ -139,7 +171,8 @@ namespace ControlledPTT
             Axis xAxis = pltTemperature.Model.Axes[0];
             Axis yAxis = pltTemperature.Model.Axes[1];
 
-            for (int i = 0; i < pltTemperature.Model.Series.Count; i++)
+            // this is to set temperatures only, so only Series related to temperatures are in action
+            for (int i = 0; i < tempData.Length; i++)
             {
                 LineSeries series = pltTemperature.Model.Series[i] as LineSeries;
                 if (series.IsVisible)
@@ -148,20 +181,29 @@ namespace ControlledPTT
                 }
                 series.Points.Add(new DataPoint(elapsedSeconds, tempData[i]));
             }
+
             // Scale X axis
             if (elapsedSeconds > xAxis.Maximum - 30)
             {
                 xAxis.Maximum += 50;
                 xAxis.Minimum += 50;
             }
-
+            
             // Scale Y axis
             double yMax = visibleData.Max();
+            double yMin = visibleData.Min();
+
+            if ((pltTemperature.Model.Series[0] as LineSeries).Points.Count == 1)
+            {
+                // Scale to first point in the graph
+                yAxis.Maximum = yMax + 3;
+                yAxis.Minimum = yMin - 3;
+            }
+
             if (yAxis.Maximum - 1 < yMax)
                 yAxis.Maximum += 1;
             if (yAxis.Maximum - 3 > yMax)
                 yAxis.Maximum -= 1;
-            double yMin = visibleData.Min();
             if (yAxis.Minimum + 1 > yMin)
                 yAxis.Minimum -= 1;
             if (yAxis.Minimum + 3 < yMin)
@@ -171,17 +213,6 @@ namespace ControlledPTT
         }
 
         #endregion
-
-        private void AppendText(RichTextBox box, string txt, Color color)
-        {
-            box.SelectionStart = box.TextLength;
-            box.SelectionLength = 0;
-
-            box.SelectionColor = color;
-            box.AppendText(txt);
-            box.SelectionColor = box.ForeColor;
-            box.ScrollToCaret();
-        }
 
         #region Configuration Helpers
 
@@ -247,6 +278,27 @@ namespace ControlledPTT
         #endregion
 
         #region Experiment Helpers
+
+        /// <summary>
+        /// Calulates thermal dose for a time step between temperature measurements.
+        /// Temperature must be in Celsius.
+        /// </summary>
+        /// <param name="discretizationTime">Time in ms between the temperature measurements.</param>
+        /// <param name="previousTemperature">Termperature at the beginning of the time span.</param>
+        /// <param name="currentTemperature">Termperature at the end of the time span.</param>
+        /// <returns></returns>
+        private double CalculateThermalDose(int discretizationTime, double previousTemperature, double currentTemperature)
+        {
+            double averageTemperature = 0.5 * (previousTemperature + currentTemperature);
+            if (averageTemperature < 43)
+            {
+                return _discretizationTimeMin * Math.Pow(0.25, 43 - averageTemperature);
+            }
+            else
+            {
+                return _discretizationTime * Math.Pow(0.5, 43 - averageTemperature);
+            }
+        }
 
         /// <summary>
         /// Checks everything before the experiment. If everything is ok, returns true.
@@ -316,6 +368,7 @@ namespace ControlledPTT
             }
 
             _elapsedMilliseconds = 0;
+            _thermalDose = 0;
             txtElapsedTime.Text = TimeSpan.Zero.ToString(@"hh\:mm\:ss\.fff");
 
             ResetGraphData();
@@ -332,6 +385,7 @@ namespace ControlledPTT
             btnStartExperiment.Text = "Stop Experiment";
             txtExperimentStarted.Text = "Experiment Going";
             txtExperimentStarted.BackColor = Color.Green;
+            txtExpDir.Enabled = false;
             nudExpTime.ReadOnly = true;
             cbSaveData.Enabled = false;
             txtExpFileName.Enabled = false;
@@ -352,6 +406,7 @@ namespace ControlledPTT
             btnStartExperiment.Text = "Start Experiment";
             txtExperimentStarted.Text = "Experiment Not Going";
             txtExperimentStarted.BackColor = Color.Red;
+            txtExpDir.Enabled = true;
             nudExpTime.ReadOnly = false;
             cbSaveData.Enabled = true;
             txtExpFileName.Enabled = true;
@@ -493,6 +548,7 @@ namespace ControlledPTT
 
             // get information about experiment and set values
             _discretizationTime = (int)_config["discretization_ms"];
+            _discretizationTimeMin = (double)_discretizationTime / (1000 * 60);
             _expTimer.Interval = _discretizationTime;
             _expTimer.Tick += new EventHandler(this.experimentTimer_Tick);
         }
@@ -615,14 +671,20 @@ namespace ControlledPTT
 
                         // Save header line for the experiment
                         _expWriter.WriteLine(_saveDataLineHeader);
-                        _expWriter.WriteLine(string.Format(_saveDataLineFormat, 0, _receivedTemperature, _calibratedTemperature, _laser?.GetPower()));
+                        // TODO: replace 0 with thermal dose calculation
+                        _expWriter.WriteLine(string.Format(_saveDataLineFormat, 0, _receivedTemperature, _calibratedTemperature, 0, _laser?.GetPower()));
                     }
 
                     DisableControlsExperimentStarted();
-                    SetGraphData();
+                    SetGraphTemperatureData();
 
                     if (cmbExperimentType.SelectedIndex > (int)ExperimentType.NoLaser)
-                        _laser?.SwitchOn();
+                    {
+                        if (!(_laser?.SwitchOn() ?? false))
+                        {
+                            FinishExperiment();
+                        }
+                    }
 
                     _expGoing = true;
                     _expTimer.Start();
@@ -664,9 +726,10 @@ namespace ControlledPTT
                 }
 
                 if (cbSaveData.Checked)
-                    _expWriter.WriteLine(string.Format(_saveDataLineFormat, _elapsedMilliseconds, _receivedTemperature, _calibratedTemperature, _laser?.GetPower()));
+                    // TODO: replace 0 with thermal dose
+                    _expWriter.WriteLine(string.Format(_saveDataLineFormat, _elapsedMilliseconds, _receivedTemperature, _calibratedTemperature, 0, _laser?.GetPower()));
 
-                SetGraphData();
+                SetGraphTemperatureData();
             }                    
         }
 

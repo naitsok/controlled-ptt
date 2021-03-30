@@ -24,8 +24,8 @@ namespace ControlledPTT.Sensors
         private double _temperature = 0.0;
 
         // Dimensions of the infrared array sensor;
-        private static int SENSOR_ROWS = 4;
-        private static int SENSOR_COLS = 16;
+        private static readonly int SENSOR_ROWS = 4;
+        private static readonly int SENSOR_COLS = 16;
 
         // Array keeps temperatures received from the board. It updates as soon as new data
         // is receieved, i.e. each second.
@@ -33,26 +33,26 @@ namespace ControlledPTT.Sensors
         private HashSet<(int, int)> _selectedTemperatures = new HashSet<(int, int)>();
 
         // Parameters for temperature visualization.
-        private static int LEFT_X = 10;
-        private static int LEFT_Y = 25; //coordinates for the left corner of the first sensor cell.
+        private static readonly int LEFT_X = 10;
+        private static readonly int LEFT_Y = 25; //coordinates for the left corner of the first sensor cell.
 
-        private static int WIDTH = 45;
-        private static int HEIGHT = 24; // cell dimensions.
+        private static readonly int WIDTH = 45;
+        private static readonly int HEIGHT = 24; // cell dimensions.
 
-        private static int SPACE_X = 8;
-        private static int SPACE_Y = 8; // Space between cells
+        private static readonly int SPACE_X = 8;
+        private static readonly int SPACE_Y = 8; // Space between cells
 
-        private static int TEXT_LEFT_X = 13;
-        private static int TEXT_LEFT_Y = 29; // coordinates for the text in the first cell.
+        private static readonly int TEXT_LEFT_X = 13;
+        private static readonly int TEXT_LEFT_Y = 29; // coordinates for the text in the first cell.
 
-        private static Pen NotSelectedCellBorder = new Pen(Color.Black, 3);
-        private static Pen SelectedCellBorder = new Pen(Color.White, 3); // Pens to draw cell borders.
+        private static readonly Pen NotSelectedCellBorder = new Pen(Color.Black, 3);
+        private static readonly Pen SelectedCellBorder = new Pen(Color.White, 3); // Pens to draw cell borders.
 
-        private static double MinTemperatureColor = 20;
-        private static double MaxTemperatureColor = 50; // Min and max values to draw color for a cell.
+        private static readonly double MinTemperatureColor = 20;
+        private static readonly double MaxTemperatureColor = 60; // Min and max values to draw color for a cell.
 
-        private static Font TemperatureFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
-        private static Brush TemperatureFontColor = new SolidBrush(Color.White);
+        private static readonly Font TemperatureFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
+        private static readonly Brush TemperatureFontColor = new SolidBrush(Color.White);
 
         // keep the selected cells
         private static string SELECTED_CELLS = @".\ArrayMLX_selected_cells.txt";

@@ -71,12 +71,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\base-laser\ControlledPTT.Lasers.BaseLaser.csproj">
-      <Project>{3ad3b4d6-07a5-4613-958f-3cd0dc18dafb}</Project>
-      <Name>ControlledPTT.Lasers.BaseLaser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Agilent.resx">
       <DependentUpon>Agilent.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,12 +80,18 @@
     <Content Include="lib\Keysight.CommandExpert.Common.dll" />
     <Content Include="lib\Keysight.CommandExpert.InstrumentAbstraction.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\base-laser\ControlledPTT.Lasers.BaseLaser.csproj">
+      <Project>{3ad3b4d6-07a5-4613-958f-3cd0dc18dafb}</Project>
+      <Name>ControlledPTT.Lasers.BaseLaser</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)" mkdir "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)"
 xcopy "$(TargetDir)*Agilent.*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\"  /Y /I
 xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\lib\"  /Y /I
-xcopy "$(TargetDir)*AgN*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\lib\"  /Y /I
+xcopy "$(TargetDir)*AgN*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\"  /Y /I
 xcopy "$(TargetDir)*Keysight*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>
