@@ -46,16 +46,16 @@ namespace ControlledPTT.Lasers
             this.txtAgilentSwitch = new System.Windows.Forms.TextBox();
             this.btnSwitchAgilent = new System.Windows.Forms.Button();
             this.gbOutput = new System.Windows.Forms.GroupBox();
-            this.cmbAgilentConnAddress = new System.Windows.Forms.ComboBox();
-            this.lblCurrentNow = new System.Windows.Forms.Label();
-            this.lblVoltageNow = new System.Windows.Forms.Label();
-            this.txtCurrentNow = new System.Windows.Forms.TextBox();
-            this.txtVoltageNow = new System.Windows.Forms.TextBox();
+            this.btnClose = new System.Windows.Forms.Button();
             this.nudOutputVoltage = new System.Windows.Forms.NumericUpDown();
             this.lblOutpuVoltage = new System.Windows.Forms.Label();
+            this.txtVoltageNow = new System.Windows.Forms.TextBox();
+            this.txtCurrentNow = new System.Windows.Forms.TextBox();
+            this.lblVoltageNow = new System.Windows.Forms.Label();
+            this.lblCurrentNow = new System.Windows.Forms.Label();
+            this.cmbAgilentConnAddress = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnClose = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinCurrent)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxCurrent)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxVoltage)).BeginInit();
@@ -302,47 +302,15 @@ namespace ControlledPTT.Lasers
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
             // 
-            // cmbAgilentConnAddress
+            // btnClose
             // 
-            this.cmbAgilentConnAddress.FormattingEnabled = true;
-            this.cmbAgilentConnAddress.Location = new System.Drawing.Point(12, 25);
-            this.cmbAgilentConnAddress.Name = "cmbAgilentConnAddress";
-            this.cmbAgilentConnAddress.Size = new System.Drawing.Size(306, 21);
-            this.cmbAgilentConnAddress.TabIndex = 28;
-            // 
-            // lblCurrentNow
-            // 
-            this.lblCurrentNow.AutoSize = true;
-            this.lblCurrentNow.Location = new System.Drawing.Point(6, 73);
-            this.lblCurrentNow.Name = "lblCurrentNow";
-            this.lblCurrentNow.Size = new System.Drawing.Size(82, 13);
-            this.lblCurrentNow.TabIndex = 29;
-            this.lblCurrentNow.Text = "Current Now [A]";
-            // 
-            // lblVoltageNow
-            // 
-            this.lblVoltageNow.AutoSize = true;
-            this.lblVoltageNow.Location = new System.Drawing.Point(6, 99);
-            this.lblVoltageNow.Name = "lblVoltageNow";
-            this.lblVoltageNow.Size = new System.Drawing.Size(84, 13);
-            this.lblVoltageNow.TabIndex = 30;
-            this.lblVoltageNow.Text = "Voltage Now [V]";
-            // 
-            // txtCurrentNow
-            // 
-            this.txtCurrentNow.Location = new System.Drawing.Point(180, 70);
-            this.txtCurrentNow.Name = "txtCurrentNow";
-            this.txtCurrentNow.ReadOnly = true;
-            this.txtCurrentNow.Size = new System.Drawing.Size(120, 20);
-            this.txtCurrentNow.TabIndex = 29;
-            // 
-            // txtVoltageNow
-            // 
-            this.txtVoltageNow.Location = new System.Drawing.Point(180, 96);
-            this.txtVoltageNow.Name = "txtVoltageNow";
-            this.txtVoltageNow.ReadOnly = true;
-            this.txtVoltageNow.Size = new System.Drawing.Size(120, 20);
-            this.txtVoltageNow.TabIndex = 30;
+            this.btnClose.Location = new System.Drawing.Point(180, 148);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(120, 23);
+            this.btnClose.TabIndex = 31;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // nudOutputVoltage
             // 
@@ -372,6 +340,50 @@ namespace ControlledPTT.Lasers
             this.lblOutpuVoltage.TabIndex = 30;
             this.lblOutpuVoltage.Text = "Output Voltage [V]";
             // 
+            // txtVoltageNow
+            // 
+            this.txtVoltageNow.Location = new System.Drawing.Point(180, 96);
+            this.txtVoltageNow.Name = "txtVoltageNow";
+            this.txtVoltageNow.ReadOnly = true;
+            this.txtVoltageNow.Size = new System.Drawing.Size(120, 20);
+            this.txtVoltageNow.TabIndex = 30;
+            // 
+            // txtCurrentNow
+            // 
+            this.txtCurrentNow.Location = new System.Drawing.Point(180, 70);
+            this.txtCurrentNow.Name = "txtCurrentNow";
+            this.txtCurrentNow.ReadOnly = true;
+            this.txtCurrentNow.Size = new System.Drawing.Size(120, 20);
+            this.txtCurrentNow.TabIndex = 29;
+            // 
+            // lblVoltageNow
+            // 
+            this.lblVoltageNow.AutoSize = true;
+            this.lblVoltageNow.Location = new System.Drawing.Point(6, 99);
+            this.lblVoltageNow.Name = "lblVoltageNow";
+            this.lblVoltageNow.Size = new System.Drawing.Size(84, 13);
+            this.lblVoltageNow.TabIndex = 30;
+            this.lblVoltageNow.Text = "Voltage Now [V]";
+            // 
+            // lblCurrentNow
+            // 
+            this.lblCurrentNow.AutoSize = true;
+            this.lblCurrentNow.Location = new System.Drawing.Point(6, 73);
+            this.lblCurrentNow.Name = "lblCurrentNow";
+            this.lblCurrentNow.Size = new System.Drawing.Size(82, 13);
+            this.lblCurrentNow.TabIndex = 29;
+            this.lblCurrentNow.Text = "Current Now [A]";
+            // 
+            // cmbAgilentConnAddress
+            // 
+            this.cmbAgilentConnAddress.AllowDrop = true;
+            this.cmbAgilentConnAddress.FormattingEnabled = true;
+            this.cmbAgilentConnAddress.Location = new System.Drawing.Point(12, 25);
+            this.cmbAgilentConnAddress.Name = "cmbAgilentConnAddress";
+            this.cmbAgilentConnAddress.Size = new System.Drawing.Size(306, 21);
+            this.cmbAgilentConnAddress.TabIndex = 28;
+            this.cmbAgilentConnAddress.Text = "USB0::0x0957::0x0807::US08M3130G::0::INSTR";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -389,16 +401,6 @@ namespace ControlledPTT.Lasers
             this.label3.Size = new System.Drawing.Size(84, 13);
             this.label3.TabIndex = 30;
             this.label3.Text = "Voltage Now [V]";
-            // 
-            // btnClose
-            // 
-            this.btnClose.Location = new System.Drawing.Point(180, 148);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(120, 23);
-            this.btnClose.TabIndex = 31;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // Agilent
             // 

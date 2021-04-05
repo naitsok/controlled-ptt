@@ -35,6 +35,15 @@
             this.txtExpFileName = new System.Windows.Forms.TextBox();
             this.pltTemperature = new OxyPlot.WindowsForms.PlotView();
             this.gbExperiment = new System.Windows.Forms.GroupBox();
+            this.txtGainedThermalDose = new System.Windows.Forms.TextBox();
+            this.lblGainedThermalDose = new System.Windows.Forms.Label();
+            this.gbStopCondition = new System.Windows.Forms.GroupBox();
+            this.lblThermalDose = new System.Windows.Forms.Label();
+            this.nudThermalDose = new System.Windows.Forms.NumericUpDown();
+            this.cmbStopCondition = new System.Windows.Forms.ComboBox();
+            this.lblExpTime = new System.Windows.Forms.Label();
+            this.nudExpTime = new System.Windows.Forms.NumericUpDown();
+            this.txtElapsedTime = new System.Windows.Forms.TextBox();
             this.cbSaveHeader = new System.Windows.Forms.CheckBox();
             this.gbLaser = new System.Windows.Forms.GroupBox();
             this.btnRemoveLaser = new System.Windows.Forms.Button();
@@ -49,9 +58,7 @@
             this.lblFileName = new System.Windows.Forms.Label();
             this.lblFileDir = new System.Windows.Forms.Label();
             this.cmbExperimentType = new System.Windows.Forms.ComboBox();
-            this.lblExpTime = new System.Windows.Forms.Label();
             this.txtExperimentStarted = new System.Windows.Forms.TextBox();
-            this.nudExpTime = new System.Windows.Forms.NumericUpDown();
             this.gbPID = new System.Windows.Forms.GroupBox();
             this.lblTargetTemp = new System.Windows.Forms.Label();
             this.nudTargetTemp = new System.Windows.Forms.NumericUpDown();
@@ -65,7 +72,6 @@
             this.nudPropGain = new System.Windows.Forms.NumericUpDown();
             this.btnStartExperiment = new System.Windows.Forms.Button();
             this.lblElapsedTime = new System.Windows.Forms.Label();
-            this.txtElapsedTime = new System.Windows.Forms.TextBox();
             this.lblCalibratedTemperature = new System.Windows.Forms.Label();
             this.lblSensorTemp = new System.Windows.Forms.Label();
             this.txtCalibratedTemp = new System.Windows.Forms.TextBox();
@@ -108,8 +114,10 @@
             this.ofdSelectLaser = new System.Windows.Forms.OpenFileDialog();
             this.ofdLoadCalibration = new System.Windows.Forms.OpenFileDialog();
             this.gbExperiment.SuspendLayout();
-            this.gbLaser.SuspendLayout();
+            this.gbStopCondition.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThermalDose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpTime)).BeginInit();
+            this.gbLaser.SuspendLayout();
             this.gbPID.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTargetTemp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDiffGain)).BeginInit();
@@ -147,10 +155,10 @@
             // 
             // pltTemperature
             // 
-            this.pltTemperature.Location = new System.Drawing.Point(12, 616);
+            this.pltTemperature.Location = new System.Drawing.Point(12, 619);
             this.pltTemperature.Name = "pltTemperature";
             this.pltTemperature.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.pltTemperature.Size = new System.Drawing.Size(510, 247);
+            this.pltTemperature.Size = new System.Drawing.Size(510, 244);
             this.pltTemperature.TabIndex = 43;
             this.pltTemperature.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.pltTemperature.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -158,6 +166,10 @@
             // 
             // gbExperiment
             // 
+            this.gbExperiment.Controls.Add(this.txtGainedThermalDose);
+            this.gbExperiment.Controls.Add(this.lblGainedThermalDose);
+            this.gbExperiment.Controls.Add(this.gbStopCondition);
+            this.gbExperiment.Controls.Add(this.txtElapsedTime);
             this.gbExperiment.Controls.Add(this.cbSaveHeader);
             this.gbExperiment.Controls.Add(this.gbLaser);
             this.gbExperiment.Controls.Add(this.txtOperator);
@@ -169,21 +181,135 @@
             this.gbExperiment.Controls.Add(this.lblFileDir);
             this.gbExperiment.Controls.Add(this.txtExpFileName);
             this.gbExperiment.Controls.Add(this.cmbExperimentType);
-            this.gbExperiment.Controls.Add(this.lblExpTime);
             this.gbExperiment.Controls.Add(this.btnSelectExpDir);
             this.gbExperiment.Controls.Add(this.txtExperimentStarted);
             this.gbExperiment.Controls.Add(this.txtExpDir);
-            this.gbExperiment.Controls.Add(this.nudExpTime);
             this.gbExperiment.Controls.Add(this.gbPID);
             this.gbExperiment.Controls.Add(this.btnStartExperiment);
             this.gbExperiment.Controls.Add(this.lblElapsedTime);
-            this.gbExperiment.Controls.Add(this.txtElapsedTime);
             this.gbExperiment.Location = new System.Drawing.Point(12, 217);
             this.gbExperiment.Name = "gbExperiment";
-            this.gbExperiment.Size = new System.Drawing.Size(510, 393);
+            this.gbExperiment.Size = new System.Drawing.Size(510, 396);
             this.gbExperiment.TabIndex = 47;
             this.gbExperiment.TabStop = false;
             this.gbExperiment.Text = "Experiment";
+            // 
+            // txtGainedThermalDose
+            // 
+            this.txtGainedThermalDose.Location = new System.Drawing.Point(398, 371);
+            this.txtGainedThermalDose.Name = "txtGainedThermalDose";
+            this.txtGainedThermalDose.ReadOnly = true;
+            this.txtGainedThermalDose.Size = new System.Drawing.Size(106, 20);
+            this.txtGainedThermalDose.TabIndex = 88;
+            this.txtGainedThermalDose.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblGainedThermalDose
+            // 
+            this.lblGainedThermalDose.AutoSize = true;
+            this.lblGainedThermalDose.Location = new System.Drawing.Point(264, 374);
+            this.lblGainedThermalDose.Name = "lblGainedThermalDose";
+            this.lblGainedThermalDose.Size = new System.Drawing.Size(110, 13);
+            this.lblGainedThermalDose.TabIndex = 89;
+            this.lblGainedThermalDose.Text = "Gained Thermal Dose";
+            // 
+            // gbStopCondition
+            // 
+            this.gbStopCondition.Controls.Add(this.lblThermalDose);
+            this.gbStopCondition.Controls.Add(this.nudThermalDose);
+            this.gbStopCondition.Controls.Add(this.cmbStopCondition);
+            this.gbStopCondition.Controls.Add(this.lblExpTime);
+            this.gbStopCondition.Controls.Add(this.nudExpTime);
+            this.gbStopCondition.Location = new System.Drawing.Point(6, 293);
+            this.gbStopCondition.Name = "gbStopCondition";
+            this.gbStopCondition.Size = new System.Drawing.Size(498, 46);
+            this.gbStopCondition.TabIndex = 87;
+            this.gbStopCondition.TabStop = false;
+            this.gbStopCondition.Text = "Stop Condition";
+            // 
+            // lblThermalDose
+            // 
+            this.lblThermalDose.AutoSize = true;
+            this.lblThermalDose.Location = new System.Drawing.Point(389, 1);
+            this.lblThermalDose.Name = "lblThermalDose";
+            this.lblThermalDose.Size = new System.Drawing.Size(98, 13);
+            this.lblThermalDose.TabIndex = 90;
+            this.lblThermalDose.Text = "Thremal Dose [min]";
+            // 
+            // nudThermalDose
+            // 
+            this.nudThermalDose.DecimalPlaces = 1;
+            this.nudThermalDose.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nudThermalDose.Location = new System.Drawing.Point(392, 20);
+            this.nudThermalDose.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudThermalDose.Name = "nudThermalDose";
+            this.nudThermalDose.Size = new System.Drawing.Size(100, 20);
+            this.nudThermalDose.TabIndex = 80;
+            this.nudThermalDose.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudThermalDose.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // cmbStopCondition
+            // 
+            this.cmbStopCondition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbStopCondition.FormattingEnabled = true;
+            this.cmbStopCondition.Location = new System.Drawing.Point(6, 19);
+            this.cmbStopCondition.Name = "cmbStopCondition";
+            this.cmbStopCondition.Size = new System.Drawing.Size(243, 21);
+            this.cmbStopCondition.TabIndex = 64;
+            this.cmbStopCondition.SelectedIndexChanged += new System.EventHandler(this.cmbStopCondition_SelectedIndexChanged);
+            // 
+            // lblExpTime
+            // 
+            this.lblExpTime.AutoSize = true;
+            this.lblExpTime.Location = new System.Drawing.Point(258, 1);
+            this.lblExpTime.Name = "lblExpTime";
+            this.lblExpTime.Size = new System.Drawing.Size(55, 13);
+            this.lblExpTime.TabIndex = 82;
+            this.lblExpTime.Text = "Time [min]";
+            // 
+            // nudExpTime
+            // 
+            this.nudExpTime.DecimalPlaces = 1;
+            this.nudExpTime.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nudExpTime.Location = new System.Drawing.Point(261, 20);
+            this.nudExpTime.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudExpTime.Name = "nudExpTime";
+            this.nudExpTime.Size = new System.Drawing.Size(100, 20);
+            this.nudExpTime.TabIndex = 79;
+            this.nudExpTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudExpTime.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // txtElapsedTime
+            // 
+            this.txtElapsedTime.Location = new System.Drawing.Point(398, 345);
+            this.txtElapsedTime.Name = "txtElapsedTime";
+            this.txtElapsedTime.ReadOnly = true;
+            this.txtElapsedTime.Size = new System.Drawing.Size(106, 20);
+            this.txtElapsedTime.TabIndex = 80;
+            this.txtElapsedTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // cbSaveHeader
             // 
@@ -205,7 +331,7 @@
             this.gbLaser.Controls.Add(this.btnStartLaser);
             this.gbLaser.Controls.Add(this.btnLoadLaser);
             this.gbLaser.Controls.Add(this.cmbLasers);
-            this.gbLaser.Location = new System.Drawing.Point(6, 176);
+            this.gbLaser.Location = new System.Drawing.Point(6, 149);
             this.gbLaser.Name = "gbLaser";
             this.gbLaser.Size = new System.Drawing.Size(498, 42);
             this.gbLaser.TabIndex = 86;
@@ -330,51 +456,18 @@
             this.cmbExperimentType.TabIndex = 79;
             this.cmbExperimentType.SelectedIndexChanged += new System.EventHandler(this.cmbExperimentType_SelectedIndexChanged);
             // 
-            // lblExpTime
-            // 
-            this.lblExpTime.AutoSize = true;
-            this.lblExpTime.Location = new System.Drawing.Point(8, 154);
-            this.lblExpTime.Name = "lblExpTime";
-            this.lblExpTime.Size = new System.Drawing.Size(52, 13);
-            this.lblExpTime.TabIndex = 82;
-            this.lblExpTime.Text = "Time, min";
-            // 
             // txtExperimentStarted
             // 
             this.txtExperimentStarted.BackColor = System.Drawing.Color.Red;
             this.txtExperimentStarted.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtExperimentStarted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtExperimentStarted.Location = new System.Drawing.Point(348, 348);
+            this.txtExperimentStarted.Location = new System.Drawing.Point(6, 371);
             this.txtExperimentStarted.Name = "txtExperimentStarted";
             this.txtExperimentStarted.ReadOnly = true;
-            this.txtExperimentStarted.Size = new System.Drawing.Size(156, 20);
+            this.txtExperimentStarted.Size = new System.Drawing.Size(140, 20);
             this.txtExperimentStarted.TabIndex = 76;
             this.txtExperimentStarted.Text = "Experiment Not Started";
             this.txtExperimentStarted.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // nudExpTime
-            // 
-            this.nudExpTime.DecimalPlaces = 1;
-            this.nudExpTime.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.nudExpTime.Location = new System.Drawing.Point(157, 152);
-            this.nudExpTime.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudExpTime.Name = "nudExpTime";
-            this.nudExpTime.Size = new System.Drawing.Size(98, 20);
-            this.nudExpTime.TabIndex = 79;
-            this.nudExpTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudExpTime.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
             // 
             // gbPID
             // 
@@ -388,7 +481,7 @@
             this.gbPID.Controls.Add(this.lblDiffGain);
             this.gbPID.Controls.Add(this.lblIntGain);
             this.gbPID.Controls.Add(this.nudPropGain);
-            this.gbPID.Location = new System.Drawing.Point(6, 224);
+            this.gbPID.Location = new System.Drawing.Point(6, 197);
             this.gbPID.Name = "gbPID";
             this.gbPID.Size = new System.Drawing.Size(498, 90);
             this.gbPID.TabIndex = 73;
@@ -543,9 +636,9 @@
             // 
             // btnStartExperiment
             // 
-            this.btnStartExperiment.Location = new System.Drawing.Point(6, 345);
+            this.btnStartExperiment.Location = new System.Drawing.Point(6, 343);
             this.btnStartExperiment.Name = "btnStartExperiment";
-            this.btnStartExperiment.Size = new System.Drawing.Size(127, 23);
+            this.btnStartExperiment.Size = new System.Drawing.Size(140, 23);
             this.btnStartExperiment.TabIndex = 77;
             this.btnStartExperiment.Text = "Start Experiment";
             this.btnStartExperiment.UseVisualStyleBackColor = true;
@@ -554,20 +647,11 @@
             // lblElapsedTime
             // 
             this.lblElapsedTime.AutoSize = true;
-            this.lblElapsedTime.Location = new System.Drawing.Point(12, 322);
+            this.lblElapsedTime.Location = new System.Drawing.Point(265, 348);
             this.lblElapsedTime.Name = "lblElapsedTime";
             this.lblElapsedTime.Size = new System.Drawing.Size(71, 13);
             this.lblElapsedTime.TabIndex = 81;
             this.lblElapsedTime.Text = "Elapsed Time";
-            // 
-            // txtElapsedTime
-            // 
-            this.txtElapsedTime.Location = new System.Drawing.Point(157, 319);
-            this.txtElapsedTime.Name = "txtElapsedTime";
-            this.txtElapsedTime.ReadOnly = true;
-            this.txtElapsedTime.Size = new System.Drawing.Size(98, 20);
-            this.txtElapsedTime.TabIndex = 80;
-            this.txtElapsedTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblCalibratedTemperature
             // 
@@ -947,8 +1031,11 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.App_FormClosing);
             this.gbExperiment.ResumeLayout(false);
             this.gbExperiment.PerformLayout();
-            this.gbLaser.ResumeLayout(false);
+            this.gbStopCondition.ResumeLayout(false);
+            this.gbStopCondition.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThermalDose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpTime)).EndInit();
+            this.gbLaser.ResumeLayout(false);
             this.gbPID.ResumeLayout(false);
             this.gbPID.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTargetTemp)).EndInit();
@@ -1043,6 +1130,12 @@
         private System.Windows.Forms.Button btnRemoveLaser;
         private System.Windows.Forms.OpenFileDialog ofdLoadCalibration;
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
+        private System.Windows.Forms.TextBox txtGainedThermalDose;
+        private System.Windows.Forms.Label lblGainedThermalDose;
+        private System.Windows.Forms.GroupBox gbStopCondition;
+        private System.Windows.Forms.ComboBox cmbStopCondition;
+        private System.Windows.Forms.Label lblThermalDose;
+        private System.Windows.Forms.NumericUpDown nudThermalDose;
     }
 }
 

@@ -27,6 +27,18 @@ namespace ControlledPTT
         ControlledPTT = 2
     }
 
+    public enum StopCondition
+    {
+        [Description("Time")]
+        Time = 0,
+
+        [Description("Thermal Dose")]
+        ThermalDose = 1,
+
+        [Description("Time or Thermal Dose")]
+        TimeOrThermalDose = 2
+    }
+
     public partial class App : Form
     {
         #region Fields
@@ -62,6 +74,12 @@ namespace ControlledPTT
         private int _elapsedMilliseconds = 0;
         // Indicates if the message box with error is already open when sensor is not sending temperature
         private bool _errNotSendingTemperatureShown = false;
+
+        // Graph
+        // Constants indicate how much to scale axes
+        private static readonly double X_TIME_SCALE_CHANGE = 50;
+        private static readonly double Y_TEMPERATURE_SCALE_CHANGE = 1;
+        private static readonly double Y_THERMAL_DOSE_SCALE_CHANGE = 25;
 
         // About box
         private AboutBox _aboutBox = new AboutBox();
@@ -115,8 +133,8 @@ namespace ControlledPTT
             {
                 Key = "YThermalDose",
                 Position = AxisPosition.Right,
-                Minimum = -1,
-                Maximum = 5,
+                Minimum = -5,
+                Maximum = 50,
                 Title = "Thermal dose (min)"
             });
             // object temperature plot series
@@ -162,14 +180,25 @@ namespace ControlledPTT
 
         /// <summary>
         /// Sets the graph values and scales the axis during the experiment.
+        /// Does it for temperature and thermal dose.
         /// </summary>
-        private void SetGraphTemperatureData()
+        private void SetGraphData()
         {
+            // First scale X axis
+            double elapsedSeconds = (double)_elapsedMilliseconds / 1000;
+            Axis xTime = pltTemperature.Model.Axes[0];
+            if (elapsedSeconds > xTime.Maximum - X_TIME_SCALE_CHANGE)
+            {
+                xTime.Maximum += 2 * X_TIME_SCALE_CHANGE;
+                xTime.Minimum += 2 * X_TIME_SCALE_CHANGE;
+            }
+
+            // Then deal with temperature
             double[] tempData = new double[] { _receivedTemperature, _calibratedTemperature, _targetTemperature };
             List<double> visibleData = new List<double>();
-            double elapsedSeconds = (double)_elapsedMilliseconds / 1000;
-            Axis xAxis = pltTemperature.Model.Axes[0];
-            Axis yAxis = pltTemperature.Model.Axes[1];
+           
+            Axis yTemperature = pltTemperature.Model.Axes[1];
+            
 
             // this is to set temperatures only, so only Series related to temperatures are in action
             for (int i = 0; i < tempData.Length; i++)
@@ -181,33 +210,37 @@ namespace ControlledPTT
                 }
                 series.Points.Add(new DataPoint(elapsedSeconds, tempData[i]));
             }
-
-            // Scale X axis
-            if (elapsedSeconds > xAxis.Maximum - 30)
-            {
-                xAxis.Maximum += 50;
-                xAxis.Minimum += 50;
-            }
             
-            // Scale Y axis
+            // Scale Y temperature axis
             double yMax = visibleData.Max();
             double yMin = visibleData.Min();
 
             if ((pltTemperature.Model.Series[0] as LineSeries).Points.Count == 1)
             {
                 // Scale to first point in the graph
-                yAxis.Maximum = yMax + 3;
-                yAxis.Minimum = yMin - 3;
+                yTemperature.Maximum = yMax + 3 * Y_TEMPERATURE_SCALE_CHANGE;
+                yTemperature.Minimum = yMin - 3 * Y_TEMPERATURE_SCALE_CHANGE;
             }
 
-            if (yAxis.Maximum - 1 < yMax)
-                yAxis.Maximum += 1;
-            if (yAxis.Maximum - 3 > yMax)
-                yAxis.Maximum -= 1;
-            if (yAxis.Minimum + 1 > yMin)
-                yAxis.Minimum -= 1;
-            if (yAxis.Minimum + 3 < yMin)
-                yAxis.Minimum += 1;
+            if (yTemperature.Maximum - Y_TEMPERATURE_SCALE_CHANGE < yMax)
+                yTemperature.Maximum += Y_TEMPERATURE_SCALE_CHANGE;
+            if (yTemperature.Maximum - 3 * Y_TEMPERATURE_SCALE_CHANGE > yMax)
+                yTemperature.Maximum -= Y_TEMPERATURE_SCALE_CHANGE;
+            if (yTemperature.Minimum + Y_TEMPERATURE_SCALE_CHANGE > yMin)
+                yTemperature.Minimum -= Y_TEMPERATURE_SCALE_CHANGE;
+            if (yTemperature.Minimum + 3 * Y_TEMPERATURE_SCALE_CHANGE < yMin)
+                yTemperature.Minimum += Y_TEMPERATURE_SCALE_CHANGE;
+
+            // Finally deal with thermal dose
+            Axis yThermalDose = pltTemperature.Model.Axes[2];
+            if (yThermalDose.Maximum - Y_THERMAL_DOSE_SCALE_CHANGE < _thermalDose)
+                yThermalDose.Maximum += Y_THERMAL_DOSE_SCALE_CHANGE;
+            if (yThermalDose.Maximum - 3 * Y_THERMAL_DOSE_SCALE_CHANGE > _thermalDose)
+                yThermalDose.Maximum -= Y_THERMAL_DOSE_SCALE_CHANGE;
+            if (yThermalDose.Minimum + Y_THERMAL_DOSE_SCALE_CHANGE > _thermalDose)
+                yThermalDose.Minimum -= Y_THERMAL_DOSE_SCALE_CHANGE;
+            if (yThermalDose.Minimum + 3 * Y_THERMAL_DOSE_SCALE_CHANGE < _thermalDose)
+                yThermalDose.Minimum += Y_THERMAL_DOSE_SCALE_CHANGE;
 
             pltTemperature.Model.InvalidatePlot(false);
         }
@@ -252,6 +285,9 @@ namespace ControlledPTT
                 // Save experiment type
                 _config["experiment_type_index"] = cmbExperimentType.SelectedIndex + 1;
 
+                // Save expriment stop condition
+                _config["selected_stop_condition_index"] = cmbStopCondition.SelectedIndex + 1;
+
                 // Save PID values
                 _config["pid"]["proportional"] = _pid.PropGain;
                 _config["pid"]["integral"] = _pid.IntGain;
@@ -283,20 +319,20 @@ namespace ControlledPTT
         /// Calulates thermal dose for a time step between temperature measurements.
         /// Temperature must be in Celsius.
         /// </summary>
-        /// <param name="discretizationTime">Time in ms between the temperature measurements.</param>
+        /// <param name="discretizationTime">Time in min between the temperature measurements.</param>
         /// <param name="previousTemperature">Termperature at the beginning of the time span.</param>
         /// <param name="currentTemperature">Termperature at the end of the time span.</param>
         /// <returns></returns>
-        private double CalculateThermalDose(int discretizationTime, double previousTemperature, double currentTemperature)
+        private double CalculateThermalDose(double discretizationTime, double previousTemperature, double currentTemperature)
         {
             double averageTemperature = 0.5 * (previousTemperature + currentTemperature);
             if (averageTemperature < 43)
             {
-                return _discretizationTimeMin * Math.Pow(0.25, 43 - averageTemperature);
+                return discretizationTime * Math.Pow(0.25, 43 - averageTemperature);
             }
             else
             {
-                return _discretizationTime * Math.Pow(0.5, 43 - averageTemperature);
+                return discretizationTime * Math.Pow(0.5, 43 - averageTemperature);
             }
         }
 
@@ -377,6 +413,26 @@ namespace ControlledPTT
         }
 
         /// <summary>
+        /// Checks if experiment must stop if the selected stop condition is satisfied.
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckExperimentStops()
+        {
+            switch (cmbStopCondition.SelectedValue)
+            {
+                case StopCondition.Time:
+                    return _elapsedMilliseconds >= (int)(nudExpTime.Value * 60 * 1000);
+                case StopCondition.ThermalDose:
+                    return _thermalDose >= (double)nudThermalDose.Value;
+                case StopCondition.TimeOrThermalDose:
+                    return (_elapsedMilliseconds >= (int)(nudExpTime.Value * 60 * 1000)) ||
+                        (_thermalDose >= (double)nudThermalDose.Value);
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// Disables and changes controls when experiment is running
         /// </summary>
         private void DisableControlsExperimentStarted()
@@ -385,6 +441,7 @@ namespace ControlledPTT
             btnStartExperiment.Text = "Stop Experiment";
             txtExperimentStarted.Text = "Experiment Going";
             txtExperimentStarted.BackColor = Color.Green;
+            gbStopCondition.Enabled = false;
             txtExpDir.Enabled = false;
             nudExpTime.ReadOnly = true;
             cbSaveData.Enabled = false;
@@ -406,6 +463,7 @@ namespace ControlledPTT
             btnStartExperiment.Text = "Start Experiment";
             txtExperimentStarted.Text = "Experiment Not Going";
             txtExperimentStarted.BackColor = Color.Red;
+            gbStopCondition.Enabled = true;
             txtExpDir.Enabled = true;
             nudExpTime.ReadOnly = false;
             cbSaveData.Enabled = true;
@@ -459,6 +517,18 @@ namespace ControlledPTT
             cmbExperimentType.DisplayMember = "Description";
             cmbExperimentType.ValueMember = "value";
 
+            // Initialize stop condition
+            cmbStopCondition.DataSource = Enum.GetValues(typeof(StopCondition))
+                .Cast<Enum>()
+                .Select(value => new
+                {
+                    (Attribute.GetCustomAttribute(value.GetType().GetField(value.ToString()), typeof(DescriptionAttribute)) as DescriptionAttribute).Description,
+                    value
+                })
+                .ToList();
+            cmbStopCondition.DisplayMember = "Description";
+            cmbStopCondition.ValueMember = "value";
+
             // Load configuration
             // First get the settings file to load
             _configPath = Properties.Settings.Default.AppSettings;
@@ -503,6 +573,7 @@ namespace ControlledPTT
             nudTargetTemp.Minimum = (decimal)_config["min_target_temperature"];
             nudTargetTemp.Maximum = (decimal)_config["max_target_temperature"];
             cmbExperimentType.SelectedIndex = (int)_config["experiment_type_index"] - 1;
+            cmbStopCondition.SelectedIndex = (int)_config["selected_stop_condition_index"] - 1;
             _pid = new PID(
                 (double)_config["pid"]["proportional"],
                 (double)_config["pid"]["integral"],
@@ -584,6 +655,37 @@ namespace ControlledPTT
                     break;
             }
             pltTemperature.Model.InvalidatePlot(false);
+        }
+
+        private void cmbStopCondition_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (cmbStopCondition.SelectedValue)
+            {
+                case StopCondition.Time:
+                    lblExpTime.Enabled = true;
+                    nudExpTime.Enabled = true;
+                    lblThermalDose.Enabled = false;
+                    nudThermalDose.Enabled = false;
+                    break;
+                case StopCondition.ThermalDose:
+                    lblExpTime.Enabled = false;
+                    nudExpTime.Enabled = false;
+                    lblThermalDose.Enabled = true;
+                    nudThermalDose.Enabled = true;
+                    break;
+                case StopCondition.TimeOrThermalDose:
+                    lblExpTime.Enabled = true;
+                    nudExpTime.Enabled = true;
+                    lblThermalDose.Enabled = true;
+                    nudThermalDose.Enabled = true;
+                    break;
+                default:
+                    lblExpTime.Enabled = true;
+                    nudExpTime.Enabled = true;
+                    lblThermalDose.Enabled = false;
+                    nudThermalDose.Enabled = false;
+                    break;
+            }
         }
 
         /// <summary>
@@ -671,12 +773,11 @@ namespace ControlledPTT
 
                         // Save header line for the experiment
                         _expWriter.WriteLine(_saveDataLineHeader);
-                        // TODO: replace 0 with thermal dose calculation
-                        _expWriter.WriteLine(string.Format(_saveDataLineFormat, 0, _receivedTemperature, _calibratedTemperature, 0, _laser?.GetPower()));
+                        _expWriter.WriteLine(string.Format(_saveDataLineFormat, 0, _receivedTemperature, _calibratedTemperature, _thermalDose, _laser?.GetPower()));
                     }
 
                     DisableControlsExperimentStarted();
-                    SetGraphTemperatureData();
+                    SetGraphData();
 
                     if (cmbExperimentType.SelectedIndex > (int)ExperimentType.NoLaser)
                     {
@@ -687,6 +788,7 @@ namespace ControlledPTT
                     }
 
                     _expGoing = true;
+                    _previousCalibratedTemperature = _calibratedTemperature;
                     _expTimer.Start();
                 }
             }
@@ -699,7 +801,7 @@ namespace ControlledPTT
         /// <param name="e"></param>
         private void experimentTimer_Tick(object sender, EventArgs e)
         {
-            if (_elapsedMilliseconds >= (int)(nudExpTime.Value * 60 * 1000))
+            if (CheckExperimentStops())
             {
                 // Stop the experiment when the time is over. Write all the data if specified.
                 FinishExperiment();
@@ -707,8 +809,14 @@ namespace ControlledPTT
             else
             {
                 // Experiment is going
+                // Update elapsed time
                 _elapsedMilliseconds += _expTimer.Interval;
                 txtElapsedTime.Text = TimeSpan.FromMilliseconds(_elapsedMilliseconds).ToString(@"hh\:mm\:ss\.fff");
+
+                // Update thermal dose and temperature to calculate thermal dose
+                _thermalDose += CalculateThermalDose(_discretizationTimeMin, _previousCalibratedTemperature, _calibratedTemperature);
+                txtGainedThermalDose.Text = _thermalDose.ToString("F2");
+                _previousCalibratedTemperature = _calibratedTemperature;
 
                 // Sensor is not sending temperature
                 if (!_isSensorSendingTemperature && !_errNotSendingTemperatureShown)
@@ -726,10 +834,9 @@ namespace ControlledPTT
                 }
 
                 if (cbSaveData.Checked)
-                    // TODO: replace 0 with thermal dose
-                    _expWriter.WriteLine(string.Format(_saveDataLineFormat, _elapsedMilliseconds, _receivedTemperature, _calibratedTemperature, 0, _laser?.GetPower()));
+                    _expWriter.WriteLine(string.Format(_saveDataLineFormat, _elapsedMilliseconds, _receivedTemperature, _calibratedTemperature, _thermalDose, _laser?.GetPower()));
 
-                SetGraphTemperatureData();
+                SetGraphData();
             }                    
         }
 
@@ -783,8 +890,7 @@ namespace ControlledPTT
         }
 
 
+
         #endregion
-
-
     }
 }

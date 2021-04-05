@@ -1,5 +1,6 @@
 ﻿using Agilent.CommandExpert.ScpiNet.AgN5700_A_04_00;
 using System;
+using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,9 +13,6 @@ namespace ControlledPTT.Lasers
     /// </summary>
     public partial class Agilent : BaseLaser
     {
-        // Connection to Agilent power supply
-        private string _agilentConnString = "USB0::0x0957::0x0807::US08M3130G::0::INSTR";
-
         private AgN5700 _agilent = null;
 
         /// <summary>
@@ -64,7 +62,7 @@ namespace ControlledPTT.Lasers
             {
                 if (_agilent == null)
                 {
-                    _agilent = new AgN5700(_agilentConnString);
+                    _agilent = new AgN5700(cmbAgilentConnAddress.Text);
                 }
 
                 try
@@ -300,6 +298,10 @@ namespace ControlledPTT.Lasers
         public Agilent()
         {
             InitializeComponent();
+            // Properties.Settings.Default.AgilentConnectionAddresses = new string[] { "USB0::0x0957::0x0807::US08M3130G::0::INSTR", "USB0::0x0957::0x0807::US08M3130G::0::INSTR::1" };
+            // Properties.Settings.Default.Save();
+            cmbAgilentConnAddress.Items.AddRange(Properties.Settings.Default.AgilentConnectionAddresses);
+            cmbAgilentConnAddress.SelectedIndex = Properties.Settings.Default.AgilentConnectionAddressIndex;
         }
 
         private void btnInitialize_Click(object sender, EventArgs e)
