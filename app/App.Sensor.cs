@@ -51,6 +51,7 @@ namespace ControlledPTT
             {
                 sensorsPath = Path.GetFullPath(Path.Combine(BASE_DIR, sensorsPath));
             }
+            ofdSelectSensor.InitialDirectory = sensorsPath;
 
             string[] allSensorExes = Directory.GetFiles(sensorsPath, "*.exe", SearchOption.AllDirectories);
             List<string> sensorTitles = new List<string>();

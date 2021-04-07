@@ -1,6 +1,7 @@
 ﻿using Agilent.CommandExpert.ScpiNet.AgN5700_A_04_00;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,7 +10,8 @@ namespace ControlledPTT.Lasers
     /// <summary>
     /// Agilent power supply is connected to laser. The control of power is through
     /// control of the current given to laser. Tested with Agilent AgN5768A power supply.
-    /// NOTE: not fully tested with a real equipment.
+    /// NOTE: Not fully tested with a real equipment. Only tested with Agilent N5768A supply.
+    /// That the it connects, initalizes. No laser was connected to Agilent.
     /// </summary>
     public partial class Agilent : BaseLaser
     {
@@ -62,7 +64,7 @@ namespace ControlledPTT.Lasers
             {
                 if (_agilent == null)
                 {
-                    _agilent = new AgN5700(cmbAgilentConnAddress.Text);
+                    _agilent = new AgN5700(cmbAgilentConnAddress.SelectedItem.ToString());
                 }
 
                 try
@@ -298,10 +300,48 @@ namespace ControlledPTT.Lasers
         public Agilent()
         {
             InitializeComponent();
-            // Properties.Settings.Default.AgilentConnectionAddresses = new string[] { "USB0::0x0957::0x0807::US08M3130G::0::INSTR", "USB0::0x0957::0x0807::US08M3130G::0::INSTR::1" };
-            // Properties.Settings.Default.Save();
             cmbAgilentConnAddress.Items.AddRange(Properties.Settings.Default.AgilentConnectionAddresses);
             cmbAgilentConnAddress.SelectedIndex = Properties.Settings.Default.AgilentConnectionAddressIndex;
+        }
+
+        private void cmbAgilentConnAddress_Leave(object sender, EventArgs e)
+        {
+
+            if (string.IsNullOrEmpty(cmbAgilentConnAddress.Text))
+                return;
+
+            bool isInAddresses = false;
+            foreach (object item in cmbAgilentConnAddress.Items)
+            {
+                if (item.ToString() == cmbAgilentConnAddress.Text)
+                {
+                    isInAddresses = true;
+                    break;
+                }
+            }
+
+            if (!isInAddresses)
+            {
+                cmbAgilentConnAddress.Items.Add(cmbAgilentConnAddress.Text);
+                cmbAgilentConnAddress.SelectedIndex = cmbAgilentConnAddress.Items.Count - 1;
+            } 
+
+        }
+
+        private void cmbAgilentConnAddress_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                // User pressed "Enter". Add new address.
+                cmbAgilentConnAddress_Leave(sender, e);
+            }
+        }
+
+        private void btnRemoveAddress_Click(object sender, EventArgs e)
+        {
+            int selectedIndex = cmbAgilentConnAddress.SelectedIndex;
+            cmbAgilentConnAddress.Items.RemoveAt(selectedIndex);
+            cmbAgilentConnAddress.SelectedIndex = selectedIndex - 1;
         }
 
         private void btnInitialize_Click(object sender, EventArgs e)
@@ -332,9 +372,15 @@ namespace ControlledPTT.Lasers
 
         private void btnClose_Click(object sender, EventArgs e)
         {
+            Properties.Settings.Default.AgilentConnectionAddressIndex = cmbAgilentConnAddress.SelectedIndex;
+            List<string> addresses = new List<string>();
+            foreach (object item in cmbAgilentConnAddress.Items)
+                addresses.Add(item.ToString());
+            Properties.Settings.Default.AgilentConnectionAddresses = addresses.ToArray();
+            Properties.Settings.Default.Save();
             Close();
         }
 
-        
+
     }
 }

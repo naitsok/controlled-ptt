@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Globalization;
-using Serilog;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.WindowsForms;
@@ -105,6 +104,8 @@ namespace ControlledPTT
             _correctTemps = _calibration["correct_temperatures"].ToObject<List<double>>();
 
             // Set up the controls
+            ofdLoadCalibration.InitialDirectory = Path.GetDirectoryName(CalibrationFile);
+            sfdSaveCalibration.InitialDirectory = ofdLoadCalibration.InitialDirectory;
             SetGraph();
             nudSlope.Value = (decimal)Slope;
             nudIntercept.Value = (decimal)Intercept;

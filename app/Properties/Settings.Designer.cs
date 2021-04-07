@@ -26,12 +26,12 @@ namespace ControlledPTT.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(".\\configurations\\default_config.json")]
-        public string AppSettings {
+        public string AppConfiguration {
             get {
-                return ((string)(this["AppSettings"]));
+                return ((string)(this["AppConfiguration"]));
             }
             set {
-                this["AppSettings"] = value;
+                this["AppConfiguration"] = value;
             }
         }
     }

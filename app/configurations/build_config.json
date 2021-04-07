@@ -25,5 +25,6 @@
   "user_added_lasers": [
   ],
   "selected_laser_index": 1,
-  "selected_stop_condition_index": 1
+  "selected_stop_condition_index": 1,
+  "operator": ""
 }

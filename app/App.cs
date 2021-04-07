@@ -95,7 +95,7 @@ namespace ControlledPTT
         {
             PlotModel pm = new PlotModel()
             {
-                Title = "Object Temperature",
+                Title = "Object Temperature and Thermal Dose",
                 PlotAreaBackground = OxyColors.White,
                 DefaultColors = new List<OxyColor>
                 {
@@ -135,14 +135,14 @@ namespace ControlledPTT
                 Position = AxisPosition.Right,
                 Minimum = -5,
                 Maximum = 50,
-                Title = "Thermal dose (min)"
+                Title = "Thermal dose (min)",
             });
             // object temperature plot series
             pm.Series.Add(new LineSeries()
             {
                 XAxisKey = "XElapsedTime",
                 YAxisKey = "YTemperatures",
-                Title = "Raw data",
+                Title = "Raw T data",
                 TextColor = OxyColors.Red,
                 // Raw data is only shown when the calibration is on
                 IsVisible = false
@@ -152,7 +152,7 @@ namespace ControlledPTT
             {
                 XAxisKey = "XElapsedTime",
                 YAxisKey = "YTemperatures",
-                Title = "Calibrated",
+                Title = "Calibrated T",
                 TextColor = OxyColors.Green,
                 IsVisible = true
             });
@@ -161,7 +161,7 @@ namespace ControlledPTT
             {
                 XAxisKey = "XElapsedTime",
                 YAxisKey = "YTemperatures",
-                Title = "Target",
+                Title = "Target T",
                 TextColor = OxyColors.Blue,
                 IsVisible = false
             });
@@ -232,6 +232,7 @@ namespace ControlledPTT
                 yTemperature.Minimum += Y_TEMPERATURE_SCALE_CHANGE;
 
             // Finally deal with thermal dose
+            (pltTemperature.Model.Series[3] as LineSeries).Points.Add(new DataPoint(elapsedSeconds, _thermalDose));
             Axis yThermalDose = pltTemperature.Model.Axes[2];
             if (yThermalDose.Maximum - Y_THERMAL_DOSE_SCALE_CHANGE < _thermalDose)
                 yThermalDose.Maximum += Y_THERMAL_DOSE_SCALE_CHANGE;
@@ -301,14 +302,125 @@ namespace ControlledPTT
                 _config["save_experiment_data"] = cbSaveData.Checked;
                 _config["create_experiment_folder_with_current_date"] = createDirectoryWithCurrentDateToolStripMenuItem.Checked;
                 _config["create_experiment_file_with_current_time"] = createFileWithCurrentTimeToolStripMenuItem.Checked;
+                _config["operator"] = txtOperator.Text;
 
             }
             // Saves main settings file
             File.WriteAllText(_configPath, _config.ToString());
 
             // Saves base settings file
-            Properties.Settings.Default.AppSettings = _configPath;
+            Properties.Settings.Default.AppConfiguration = _configPath;
             Properties.Settings.Default.Save();
+
+            // Display current config
+            toolStripCurrentConfig.Text = "Current Configuration: " + Path.GetFileName(_configPath);
+        }
+
+        private void LoadAppConfiguration()
+        {
+            // Load configuration
+            // First get the settings file to load
+            _configPath = Properties.Settings.Default.AppConfiguration;
+            if (!Path.IsPathRooted(_configPath))
+                _configPath = Path.GetFullPath(Path.Combine(BASE_DIR, _configPath));
+            // Load settings either saved by user or default ones
+            if (File.Exists(_configPath))
+                _config = JObject.Parse(File.ReadAllText(_configPath));
+            else
+            {
+                // config file was not found - load default one
+                _configPath = Path.GetFullPath(Path.Combine(BASE_DIR, (string)Properties.Settings.Default.Properties["AppSettings"].DefaultValue));
+                _config = JObject.Parse(File.ReadAllText(_configPath));
+            }
+
+            // Display current config
+            toolStripCurrentConfig.Text = "Current Configuration: " + Path.GetFileName(_configPath);
+
+            // Set dialogs
+            ofdLoadConfig.InitialDirectory = Path.GetDirectoryName(_configPath);
+            sfdSaveConfigAs.InitialDirectory = ofdLoadConfig.InitialDirectory;
+
+            saveCurrentConfigWhenClosingToolStripMenuItem.Checked = (bool)_config["save_settings_on_closing"];
+
+            // get information about sensors and select the indicated one
+            _selectedSensorIndex = (int)_config["selected_sensor_index"] - 1;
+            FindSensors((string)_config["sensors_path"], (JArray)_config["user_added_sensors"], _selectedSensorIndex);
+
+            // get information about lasers and select the indicated one
+            _selectedLaserIndex = (int)_config["selected_laser_index"] - 1;
+            FindLasers((string)_config["lasers_path"], (JArray)_config["user_added_lasers"], _selectedLaserIndex);
+
+            // calibration
+            string calibrationFile = (string)_config["calibration"];
+            try
+            {
+                calibrationFile = Path.GetFullPath(calibrationFile);
+                _calibration = new Calibration(calibrationFile);
+                ofdLoadCalibration.InitialDirectory = Path.GetDirectoryName(calibrationFile);
+            }
+            catch (ArgumentException)
+            {
+                // file does not exist of path is in the wrong format
+                _calibration = new Calibration();
+            }
+            cbUseCalibration.Checked = (bool)_config["use_calibration"];
+            DisplayCalibration();
+            cbUseCalibration_CheckedChanged(cbUseCalibration, new EventArgs());
+
+            nudTargetTemp.Minimum = (decimal)_config["min_target_temperature"];
+            nudTargetTemp.Maximum = (decimal)_config["max_target_temperature"];
+            cmbExperimentType.SelectedIndex = (int)_config["experiment_type_index"] - 1;
+            cmbStopCondition.SelectedIndex = (int)_config["selected_stop_condition_index"] - 1;
+            _pid = new PID(
+                (double)_config["pid"]["proportional"],
+                (double)_config["pid"]["integral"],
+                (double)_config["pid"]["differential"],
+                (double)nudTargetTemp.Maximum, // Max temperature that can be set and achieved
+                (double)nudTargetTemp.Minimum, // Min temperature that can be set and achieved
+                1.0, // PID gives output in the [0, 1] interval of relative laser power
+                0); // The final laser power to be calculated by the laser part
+            nudPropGain.Value = (decimal)_pid.PropGain;
+            nudIntGain.Value = (decimal)_pid.IntGain;
+            nudDiffGain.Value = (decimal)_pid.DiffGain;
+
+            // Initialization for Experiment
+            // directory to save files of the experiment
+            _expBaseDir = Path.GetFullPath((string)_config["experiment_dir"]);
+            if ((bool)_config["create_experiment_folder_with_current_date"])
+                _expDir = Path.Combine(_expBaseDir, DateTime.Now.ToString("yyyy-MM-dd"));
+            else
+                _expDir = _expBaseDir;
+            txtExpDir.Text = _expDir;
+            txtExpDir.SelectionStart = txtExpDir.Text.Length;
+            txtExpDir.ScrollToCaret();
+
+            // if header needs to be saved
+            cbSaveHeader.Checked = (bool)_config["save_header_data"];
+
+            // if data needs to be saved
+            cbSaveData.Checked = (bool)_config["save_experiment_data"];
+            txtExpFileName.Enabled = cbSaveData.Checked;
+            txtExpDir.Enabled = cbSaveData.Checked;
+            btnSelectExpDir.Enabled = cbSaveData.Checked;
+            txtDescription.Enabled = cbSaveData.Checked;
+            txtOperator.Enabled = cbSaveData.Checked;
+            cbSaveHeader.Enabled = cbSaveData.Checked;
+            txtExpFileName.Text = _expFileName;
+
+            // generate file name
+            if ((bool)_config["create_experiment_file_with_current_time"])
+                _expFileName = "Record_" + DateTime.Now.ToString("hh-mm-ss") + ".txt";
+            else
+                _expFileName = "";
+            txtExpFileName.Text = _expFileName;
+
+            txtOperator.Text = (string)_config["operator"];
+
+            // get information about experiment and set values
+            _discretizationTime = (int)_config["discretization_ms"];
+            _discretizationTimeMin = (double)_discretizationTime / (1000 * 60);
+            _expTimer.Interval = _discretizationTime;
+            _expTimer.Tick += new EventHandler(this.experimentTimer_Tick);
         }
 
         #endregion
@@ -529,99 +641,7 @@ namespace ControlledPTT
             cmbStopCondition.DisplayMember = "Description";
             cmbStopCondition.ValueMember = "value";
 
-            // Load configuration
-            // First get the settings file to load
-            _configPath = Properties.Settings.Default.AppSettings;
-            if (!Path.IsPathRooted(_configPath))
-                _configPath = Path.GetFullPath(Path.Combine(BASE_DIR, _configPath));
-            // Load settings either saved by user or default ones
-            if (File.Exists(_configPath))
-                _config = JObject.Parse(File.ReadAllText(_configPath));
-            else
-            {
-                // config file was not found - load default one
-                _configPath = Path.GetFullPath(Path.Combine(BASE_DIR, (string)Properties.Settings.Default.Properties["AppSettings"].DefaultValue));
-                _config = JObject.Parse(File.ReadAllText(_configPath));
-            }
-
-            saveCurrentConfigWhenClosingToolStripMenuItem.Checked = (bool)_config["save_settings_on_closing"];            
-
-            // get information about sensors and select the indicated one
-            _selectedSensorIndex = (int)_config["selected_sensor_index"] - 1;
-            FindSensors((string)_config["sensors_path"], (JArray)_config["user_added_sensors"], _selectedSensorIndex);
-
-            // get information about lasers and select the indicated one
-            _selectedLaserIndex = (int)_config["selected_laser_index"] - 1;
-            FindLasers((string)_config["lasers_path"], (JArray)_config["user_added_lasers"], _selectedLaserIndex);
-
-            // calibration
-            string calibrationFile = (string)_config["calibration"];
-            try
-            {
-                calibrationFile = Path.GetFullPath(calibrationFile);
-                _calibration = new Calibration(calibrationFile);
-            }
-            catch (ArgumentException)
-            {
-                // file does not exist of path is in the wrong format
-                _calibration = new Calibration();
-            }
-            cbUseCalibration.Checked = (bool)_config["use_calibration"];
-            DisplayCalibration();
-            cbUseCalibration_CheckedChanged(cbUseCalibration, new EventArgs());
-
-            nudTargetTemp.Minimum = (decimal)_config["min_target_temperature"];
-            nudTargetTemp.Maximum = (decimal)_config["max_target_temperature"];
-            cmbExperimentType.SelectedIndex = (int)_config["experiment_type_index"] - 1;
-            cmbStopCondition.SelectedIndex = (int)_config["selected_stop_condition_index"] - 1;
-            _pid = new PID(
-                (double)_config["pid"]["proportional"],
-                (double)_config["pid"]["integral"],
-                (double)_config["pid"]["differential"],
-                (double)nudTargetTemp.Maximum, // Max temperature that can be set and achieved
-                (double)nudTargetTemp.Minimum, // Min temperature that can be set and achieved
-                1.0, // PID gives output in the [0, 1] interval of relative laser power
-                0); // The final laser power to be calculated by the laser part
-            nudPropGain.Value = (decimal)_pid.PropGain;
-            nudIntGain.Value = (decimal)_pid.IntGain;
-            nudDiffGain.Value = (decimal)_pid.DiffGain;
-
-            // Initialization for Experiment
-            // directory to save files of the experiment
-            _expBaseDir = Path.GetFullPath((string)_config["experiment_dir"]);
-            if ((bool)_config["create_experiment_folder_with_current_date"])
-                _expDir = Path.Combine(_expBaseDir, DateTime.Now.ToString("yyyy-MM-dd"));
-            else
-                _expDir = _expBaseDir;
-            txtExpDir.Text = _expDir;
-            txtExpDir.SelectionStart = txtExpDir.Text.Length;
-            txtExpDir.ScrollToCaret();
-
-            // if header needs to be saved
-            cbSaveHeader.Checked = (bool)_config["save_header_data"];
-
-            // if data needs to be saved
-            cbSaveData.Checked = (bool)_config["save_experiment_data"];
-            txtExpFileName.Enabled = cbSaveData.Checked;
-            txtExpDir.Enabled = cbSaveData.Checked;
-            btnSelectExpDir.Enabled = cbSaveData.Checked;
-            txtDescription.Enabled = cbSaveData.Checked;
-            txtOperator.Enabled = cbSaveData.Checked;
-            cbSaveHeader.Enabled = cbSaveData.Checked;
-            txtExpFileName.Text = _expFileName;
-
-            // generate file name
-            if ((bool)_config["create_experiment_file_with_current_time"])
-                _expFileName = "Record_" + DateTime.Now.ToString("hh-mm-ss") + ".txt";
-            else
-                _expFileName = "";
-            txtExpFileName.Text = _expFileName;
-
-            // get information about experiment and set values
-            _discretizationTime = (int)_config["discretization_ms"];
-            _discretizationTimeMin = (double)_discretizationTime / (1000 * 60);
-            _expTimer.Interval = _discretizationTime;
-            _expTimer.Tick += new EventHandler(this.experimentTimer_Tick);
+            LoadAppConfiguration();
         }
 
         #region Event Handlers
@@ -861,6 +881,25 @@ namespace ControlledPTT
             SaveAppConfiguration();
         }
 
+        private void saveConfigAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (sfdSaveConfigAs.ShowDialog() == DialogResult.OK)
+            {
+                _configPath = sfdSaveConfigAs.FileName;
+                SaveAppConfiguration();
+            }
+        }
+
+        private void loadConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ofdLoadConfig.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.AppConfiguration = ofdLoadConfig.FileName;
+                Properties.Settings.Default.Save();
+                LoadAppConfiguration();
+            }
+        }
+
         private void nudPropGain_ValueChanged(object sender, EventArgs e)
         {
             _pid.PropGain = (double)nudPropGain.Value;
@@ -888,8 +927,6 @@ namespace ControlledPTT
         {
             _aboutBox.ShowDialog();
         }
-
-
 
         #endregion
     }

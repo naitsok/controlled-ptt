@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ControlledPTT.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="AppSettings" Type="System.String" Scope="User">
+    <Setting Name="AppConfiguration" Type="System.String" Scope="User">
       <Value Profile="(Default)">.\configurations\default_config.json</Value>
     </Setting>
   </Settings>

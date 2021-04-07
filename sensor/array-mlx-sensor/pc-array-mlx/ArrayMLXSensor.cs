@@ -191,7 +191,12 @@ namespace ControlledPTT.Sensors
             {
                 for (int j = 0; j < SENSOR_COLS; j++)
                 {
-                    double temperature = double.Parse(splittedData[j + SENSOR_COLS * i], NumberStyles.Any, CultureInfo.InvariantCulture);
+                    double temperature = double.NaN;
+                    try
+                    {
+                        temperature = double.Parse(splittedData[j + SENSOR_COLS * i], NumberStyles.Any, CultureInfo.InvariantCulture);
+                    }
+                    catch { /* Ignore parsing errors if any */ }
                     _temperatures[i, j] = temperature;
 
                     // Visualize temperatures.

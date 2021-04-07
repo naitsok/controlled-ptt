@@ -86,12 +86,11 @@
             this.pltAmbTemp = new OxyPlot.WindowsForms.PlotView();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.appSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripCurrentConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.saveConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveConfigAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveCurrentConfigWhenClosingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectLogsDirectoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectCalibrationsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.experimentSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createDirectoryWithCurrentDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createFileWithCurrentTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -109,10 +108,11 @@
             this.txtCalibration = new System.Windows.Forms.TextBox();
             this.ofdSelectSensor = new System.Windows.Forms.OpenFileDialog();
             this.fbdSelectDir = new System.Windows.Forms.FolderBrowserDialog();
-            this.sfdSaveSettingsAs = new System.Windows.Forms.SaveFileDialog();
+            this.sfdSaveConfigAs = new System.Windows.Forms.SaveFileDialog();
             this.ttSaveHeader = new System.Windows.Forms.ToolTip(this.components);
             this.ofdSelectLaser = new System.Windows.Forms.OpenFileDialog();
             this.ofdLoadCalibration = new System.Windows.Forms.OpenFileDialog();
+            this.ofdLoadConfig = new System.Windows.Forms.OpenFileDialog();
             this.gbExperiment.SuspendLayout();
             this.gbStopCondition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudThermalDose)).BeginInit();
@@ -792,15 +792,19 @@
             // appSettingsToolStripMenuItem
             // 
             this.appSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripCurrentConfig,
             this.saveConfigToolStripMenuItem,
             this.saveConfigAsToolStripMenuItem,
             this.loadConfigToolStripMenuItem,
-            this.saveCurrentConfigWhenClosingToolStripMenuItem,
-            this.selectLogsDirectoryToolStripMenuItem1,
-            this.selectCalibrationsDirectoryToolStripMenuItem});
+            this.saveCurrentConfigWhenClosingToolStripMenuItem});
             this.appSettingsToolStripMenuItem.Name = "appSettingsToolStripMenuItem";
             this.appSettingsToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
             this.appSettingsToolStripMenuItem.Text = "App Configuration";
+            // 
+            // toolStripCurrentConfig
+            // 
+            this.toolStripCurrentConfig.Name = "toolStripCurrentConfig";
+            this.toolStripCurrentConfig.Size = new System.Drawing.Size(295, 22);
             // 
             // saveConfigToolStripMenuItem
             // 
@@ -814,12 +818,14 @@
             this.saveConfigAsToolStripMenuItem.Name = "saveConfigAsToolStripMenuItem";
             this.saveConfigAsToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
             this.saveConfigAsToolStripMenuItem.Text = "Save Configuration As";
+            this.saveConfigAsToolStripMenuItem.Click += new System.EventHandler(this.saveConfigAsToolStripMenuItem_Click);
             // 
             // loadConfigToolStripMenuItem
             // 
             this.loadConfigToolStripMenuItem.Name = "loadConfigToolStripMenuItem";
             this.loadConfigToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
             this.loadConfigToolStripMenuItem.Text = "Load Configuration";
+            this.loadConfigToolStripMenuItem.Click += new System.EventHandler(this.loadConfigToolStripMenuItem_Click);
             // 
             // saveCurrentConfigWhenClosingToolStripMenuItem
             // 
@@ -829,18 +835,6 @@
             this.saveCurrentConfigWhenClosingToolStripMenuItem.Name = "saveCurrentConfigWhenClosingToolStripMenuItem";
             this.saveCurrentConfigWhenClosingToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
             this.saveCurrentConfigWhenClosingToolStripMenuItem.Text = "Save Current Configuration When Closing";
-            // 
-            // selectLogsDirectoryToolStripMenuItem1
-            // 
-            this.selectLogsDirectoryToolStripMenuItem1.Name = "selectLogsDirectoryToolStripMenuItem1";
-            this.selectLogsDirectoryToolStripMenuItem1.Size = new System.Drawing.Size(295, 22);
-            this.selectLogsDirectoryToolStripMenuItem1.Text = "Select Logs Directory";
-            // 
-            // selectCalibrationsDirectoryToolStripMenuItem
-            // 
-            this.selectCalibrationsDirectoryToolStripMenuItem.Name = "selectCalibrationsDirectoryToolStripMenuItem";
-            this.selectCalibrationsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
-            this.selectCalibrationsDirectoryToolStripMenuItem.Text = "Select Calibrations Directory";
             // 
             // experimentSettingsToolStripMenuItem
             // 
@@ -992,11 +986,11 @@
             this.ofdSelectSensor.Filter = "Executables (*.exe)|*.exe";
             this.ofdSelectSensor.Title = "Select Sensor Executable";
             // 
-            // sfdSaveSettingsAs
+            // sfdSaveConfigAs
             // 
-            this.sfdSaveSettingsAs.DefaultExt = "json";
-            this.sfdSaveSettingsAs.Filter = "JSON files (*.json)|*.json";
-            this.sfdSaveSettingsAs.Title = "Save Settings As";
+            this.sfdSaveConfigAs.DefaultExt = "json";
+            this.sfdSaveConfigAs.Filter = "JSON files (*.json)|*.json";
+            this.sfdSaveConfigAs.Title = "Save Configuration As";
             // 
             // ofdSelectLaser
             // 
@@ -1009,6 +1003,11 @@
             this.ofdLoadCalibration.DefaultExt = "exe";
             this.ofdLoadCalibration.Filter = "JSON files (*.json)|*json";
             this.ofdLoadCalibration.Title = "Select Laser Executable";
+            // 
+            // ofdLoadConfig
+            // 
+            this.ofdLoadConfig.DefaultExt = "json";
+            this.ofdLoadConfig.Filter = "JSON files (*.json)|*json";
             // 
             // App
             // 
@@ -1103,10 +1102,8 @@
         private System.Windows.Forms.Label lblFileDir;
         private System.Windows.Forms.Label lblFileName;
         private System.Windows.Forms.FolderBrowserDialog fbdSelectDir;
-        private System.Windows.Forms.ToolStripMenuItem selectLogsDirectoryToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem selectCalibrationsDirectoryToolStripMenuItem;
         private System.Windows.Forms.Button btnModifyCalibration;
-        private System.Windows.Forms.SaveFileDialog sfdSaveSettingsAs;
+        private System.Windows.Forms.SaveFileDialog sfdSaveConfigAs;
         private System.Windows.Forms.ToolStripMenuItem experimentSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createDirectoryWithCurrentDateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createFileWithCurrentTimeToolStripMenuItem;
@@ -1136,6 +1133,8 @@
         private System.Windows.Forms.ComboBox cmbStopCondition;
         private System.Windows.Forms.Label lblThermalDose;
         private System.Windows.Forms.NumericUpDown nudThermalDose;
+        private System.Windows.Forms.OpenFileDialog ofdLoadConfig;
+        private System.Windows.Forms.ToolStripMenuItem toolStripCurrentConfig;
     }
 }
 

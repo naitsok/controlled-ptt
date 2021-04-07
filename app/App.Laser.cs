@@ -45,6 +45,7 @@ namespace ControlledPTT
             {
                 laserPath = Path.GetFullPath(Path.Combine(BASE_DIR, laserPath));
             }
+            ofdSelectLaser.InitialDirectory = laserPath;
 
             string[] allLaserExes = Directory.GetFiles(laserPath, "*.exe", SearchOption.AllDirectories);
             List<string> laserTitles = new List<string>();
