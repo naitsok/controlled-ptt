@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ControlledPTT.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AgN5700_A_04_00, Version=0.0.0.0, Culture=neutral, PublicKeyToken=344b812ea93ad2d2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -85,6 +88,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ControlledPTT.ico" />
     <Content Include="lib\AgN5700_A_04_00.dll" />
     <Content Include="lib\Keysight.CommandExpert.Common.dll" />
     <Content Include="lib\Keysight.CommandExpert.InstrumentAbstraction.dll" />

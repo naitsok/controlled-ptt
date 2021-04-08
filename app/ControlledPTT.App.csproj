@@ -40,6 +40,9 @@
     <AssemblyVersion>2.0.*</AssemblyVersion>
     <Deterministic>false</Deterministic>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ControlledPTT.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -207,7 +210,6 @@ xcopy "$(TargetDir)calibrations" "$(SolutionDir)build\$(ConfigurationName)\calib
 xcopy "$(TargetDir)configurations\build_config.json" "$(SolutionDir)build\$(ConfigurationName)\configurations\default_config.json*"  /Y /I</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>powershell -Command "Get-ChildItem -Path $(SolutionDir)AssemblyInfo.cs -Force -Recurse | Foreach-Object { (gc $_.FullName) -replace '2.0.0.\*', '2.0.0.*' | Out-File -encoding UTF8 $_.FullName }"</PreBuildEvent>
   </PropertyGroup>
 </Project>

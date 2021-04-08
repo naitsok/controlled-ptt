@@ -38,6 +38,9 @@
     <AssemblyVersion>2.0.*</AssemblyVersion>
     <Deterministic>false</Deterministic>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ControlledPTT.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,6 +75,9 @@
       <Project>{949dad28-5f74-443c-92a7-6383998b1b43}</Project>
       <Name>ControlledPTT.Sensors.BaseSensor</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ControlledPTT.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
