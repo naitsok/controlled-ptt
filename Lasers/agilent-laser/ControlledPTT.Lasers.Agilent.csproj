@@ -101,10 +101,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)" mkdir "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)"
-xcopy "$(TargetDir)*Agilent.*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\lib\"  /Y /I
-xcopy "$(TargetDir)*AgN*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*Keysight*" "$(SolutionDir)build\$(ConfigurationName)\lasers\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+    <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)" mkdir "$(SolutionDir)build\$(ConfigurationName)\Lasers\$(TargetName)"
+xcopy "$(TargetDir)*Agilent.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\"  /Y /I
+xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\lib\"  /Y /I
+xcopy "$(TargetDir)*AgN*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\"  /Y /I
+xcopy "$(TargetDir)*Keysight*" "$(SolutionDir)Build\$(ConfigurationName)Llasers\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

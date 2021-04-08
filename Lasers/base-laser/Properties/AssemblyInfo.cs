@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ControlledPTT.Sensors.TwoMLXSensors")]
+[assembly: AssemblyTitle("ControlledPTT.Lasers.BaseLaser")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("University of Eastern Finland")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4f3d5b99-37d6-49b9-81b1-fe701414dbb8")]
+[assembly: Guid("3ad3b4d6-07a5-4613-958f-3cd0dc18dafb")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,6 +31,4 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2.0.0.*")]
-// [assembly: AssemblyFileVersion("1.0.0.0")]
