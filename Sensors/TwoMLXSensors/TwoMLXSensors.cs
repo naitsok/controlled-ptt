@@ -128,9 +128,13 @@ namespace ControlledPTT.Sensors
             txtObj2Temp.Text = temperatures[2];
             txtAmb2Temp.Text = temperatures[3];
 
-            // Calculate average temperature from two sensors.
-            _objectTemperature = 0.5 * (double.Parse(temperatures[0]) + double.Parse(temperatures[2]));
-            _ambientTemperature = 0.5 * (double.Parse(temperatures[1]) + double.Parse(temperatures[3]));
+            try
+            {
+                // Calculate average temperature from two sensors.
+                _objectTemperature = 0.5 * (double.Parse(temperatures[0]) + double.Parse(temperatures[2]));
+                _ambientTemperature = 0.5 * (double.Parse(temperatures[1]) + double.Parse(temperatures[3]));
+            }
+            catch { /* ignore parsing errors */ }
         }
 
         private void TwoMlxSensorsForm_FormClosing(object sender, FormClosingEventArgs e)

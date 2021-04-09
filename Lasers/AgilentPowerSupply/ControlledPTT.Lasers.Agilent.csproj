@@ -94,7 +94,7 @@
     <Content Include="lib\Keysight.CommandExpert.InstrumentAbstraction.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\base-laser\ControlledPTT.Lasers.BaseLaser.csproj">
+    <ProjectReference Include="..\BaseLaser\ControlledPTT.Lasers.BaseLaser.csproj">
       <Project>{3ad3b4d6-07a5-4613-958f-3cd0dc18dafb}</Project>
       <Name>ControlledPTT.Lasers.BaseLaser</Name>
     </ProjectReference>
@@ -105,6 +105,6 @@
 xcopy "$(TargetDir)*Agilent.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\"  /Y /I
 xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\lib\"  /Y /I
 xcopy "$(TargetDir)*AgN*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*Keysight*" "$(SolutionDir)Build\$(ConfigurationName)Llasers\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+xcopy "$(TargetDir)*Keysight*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

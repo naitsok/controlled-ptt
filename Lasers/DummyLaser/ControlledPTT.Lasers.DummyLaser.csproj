@@ -4,29 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F}</ProjectGuid>
+    <ProjectGuid>{73116093-3F23-4384-9D63-D89E1B030B67}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ControlledPTT.Sensors</RootNamespace>
-    <AssemblyName>ControlledPTT.Sensors.ArrayMLXSensor</AssemblyName>
+    <RootNamespace>ControlledPTT.Lasers</RootNamespace>
+    <AssemblyName>ControlledPTT.Lasers.DummyLaser</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,10 +31,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
@@ -74,50 +55,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrayMLXSensor.cs">
+    <Compile Include="DummyLaser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArrayMLXSensor.Designer.cs">
-      <DependentUpon>ArrayMLXSensor.cs</DependentUpon>
+    <Compile Include="DummyLaser.Designer.cs">
+      <DependentUpon>DummyLaser.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ArrayMLXSensor.resx">
-      <DependentUpon>ArrayMLXSensor.cs</DependentUpon>
+    <EmbeddedResource Include="DummyLaser.resx">
+      <DependentUpon>DummyLaser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ArrayMLX_selected_cells.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ControlledPTT.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\base-sensor\ControlledPTT.Sensors.BaseSensor.csproj">
-      <Project>{949dad28-5f74-443c-92a7-6383998b1b43}</Project>
-      <Name>ControlledPTT.Sensors.BaseSensor</Name>
+    <ProjectReference Include="..\BaseLaser\ControlledPTT.Lasers.BaseLaser.csproj">
+      <Project>{3ad3b4d6-07a5-4613-958f-3cd0dc18dafb}</Project>
+      <Name>ControlledPTT.Lasers.BaseLaser</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ControlledPTT.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)build\$(ConfigurationName)" mkdir "$(SolutionDir)build\$(ConfigurationName)"
-xcopy "$(TargetDir)*ArrayMLXSensor.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*.txt" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+    <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)" mkdir "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)"
+xcopy "$(TargetDir)*DummyLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\"  /Y /I
+xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

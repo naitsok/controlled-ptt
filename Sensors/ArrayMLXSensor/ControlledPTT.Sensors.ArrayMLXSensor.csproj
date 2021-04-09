@@ -4,14 +4,29 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B2F33C8D-9AA3-4031-B697-773DF7DC5236}</ProjectGuid>
+    <ProjectGuid>{2A9BEBFE-CD29-4646-B26E-26CA7019CC5F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ControlledPTT.Sensors</RootNamespace>
-    <AssemblyName>ControlledPTT.Sensors.MLXSensor</AssemblyName>
+    <AssemblyName>ControlledPTT.Sensors.ArrayMLXSensor</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,13 +48,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <Version>2.0.0</Version>
     <AssemblyVersion>2.0.*</AssemblyVersion>
     <Deterministic>false</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>ControlledPTT.Sensors.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>ControlledPTT.ico</ApplicationIcon>
@@ -58,34 +74,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MLXSensor.cs">
+    <Compile Include="ArrayMLXSensor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MLXSensor.Designer.cs">
-      <DependentUpon>MLXSensor.cs</DependentUpon>
+    <Compile Include="ArrayMLXSensor.Designer.cs">
+      <DependentUpon>ArrayMLXSensor.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MLXSensor.resx">
-      <DependentUpon>MLXSensor.cs</DependentUpon>
+    <EmbeddedResource Include="ArrayMLXSensor.resx">
+      <DependentUpon>ArrayMLXSensor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\base-sensor\ControlledPTT.Sensors.BaseSensor.csproj">
+    <Content Include="ArrayMLX_selected_cells.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ControlledPTT.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseSensor\ControlledPTT.Sensors.BaseSensor.csproj">
       <Project>{949dad28-5f74-443c-92a7-6383998b1b43}</Project>
       <Name>ControlledPTT.Sensors.BaseSensor</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="ControlledPTT.ico" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)" mkdir "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)"
-xcopy "$(TargetDir)*MLXSensor.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+    <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)" mkdir "$(SolutionDir)Build\$(ConfigurationName)"
+xcopy "$(TargetDir)*ArrayMLXSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\"  /Y /I
+xcopy "$(TargetDir)*.txt" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\"  /Y /I
+xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\lib\"  /Y /I
+xcopy "$(ProjectDir)BoardArrayMLXSensor" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\BoardArrayMLXSensor" /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -71,7 +71,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\base-sensor\ControlledPTT.Sensors.BaseSensor.csproj">
+    <ProjectReference Include="..\BaseSensor\ControlledPTT.Sensors.BaseSensor.csproj">
       <Project>{949dad28-5f74-443c-92a7-6383998b1b43}</Project>
       <Name>ControlledPTT.Sensors.BaseSensor</Name>
     </ProjectReference>
@@ -81,8 +81,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)" mkdir "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)"
-xcopy "$(TargetDir)*DummySensor.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+    <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)" mkdir "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)"
+xcopy "$(TargetDir)*DummySensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\"  /Y /I
+xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

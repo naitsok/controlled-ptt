@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4F3D5B99-37D6-49B9-81B1-FE701414DBB8}</ProjectGuid>
+    <ProjectGuid>{B2F33C8D-9AA3-4031-B697-773DF7DC5236}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ControlledPTT.Sensors</RootNamespace>
-    <AssemblyName>ControlledPTT.Sensors.TwoMLXSensors</AssemblyName>
+    <AssemblyName>ControlledPTT.Sensors.MLXSensor</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,6 +39,9 @@
     <Deterministic>false</Deterministic>
   </PropertyGroup>
   <PropertyGroup>
+    <StartupObject>ControlledPTT.Sensors.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
     <ApplicationIcon>ControlledPTT.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
@@ -55,23 +58,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TwoMLXSensors.cs">
+    <Compile Include="MLXSensor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TwoMLXSensors.Designer.cs">
-      <DependentUpon>TwoMLXSensors.cs</DependentUpon>
+    <Compile Include="MLXSensor.Designer.cs">
+      <DependentUpon>MLXSensor.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="TwoMLXSensors.resx">
-      <DependentUpon>TwoMLXSensors.cs</DependentUpon>
+    <EmbeddedResource Include="MLXSensor.resx">
+      <DependentUpon>MLXSensor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\base-sensor\ControlledPTT.Sensors.BaseSensor.csproj">
+    <ProjectReference Include="..\BaseSensor\ControlledPTT.Sensors.BaseSensor.csproj">
       <Project>{949dad28-5f74-443c-92a7-6383998b1b43}</Project>
       <Name>ControlledPTT.Sensors.BaseSensor</Name>
     </ProjectReference>
@@ -81,8 +84,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)" mkdir "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)"
-xcopy "$(TargetDir)*TwoMLXSensors.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)build\$(ConfigurationName)\sensors\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+    <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)" mkdir "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)"
+xcopy "$(TargetDir)*MLXSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\"  /Y /I
+xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\lib\"  /Y /I
+xcopy "$(ProjectDir)BoardMLXSensor" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\BoardMLXSensor" /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

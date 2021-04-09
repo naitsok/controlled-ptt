@@ -124,8 +124,12 @@ namespace ControlledPTT.Sensors
             txtObjTemp.Text = temperatures[0];
             txtAmbTemp.Text = temperatures[1];
 
-            _objectTemperature = double.Parse(temperatures[0]);
-            _ambientTemperature = double.Parse(temperatures[1]);
+            try
+            {
+                _objectTemperature = double.Parse(temperatures[0]);
+                _ambientTemperature = double.Parse(temperatures[1]);
+            }
+            catch { /* Ignore parsing errors */ }
 
         }
 
