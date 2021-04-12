@@ -167,7 +167,8 @@ xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\lib\
 xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\lib\"  /Y /I
 xcopy "$(TargetDir)*App.*" "$(SolutionDir)Build\$(ConfigurationName)\"  /Y /I
 xcopy "$(TargetDir)calibrations" "$(SolutionDir)Build\$(ConfigurationName)\calibrations\"  /Y /I
-xcopy "$(TargetDir)configurations\build_config.json" "$(SolutionDir)Build\$(ConfigurationName)\configurations\default_config.json*"  /Y /I</PostBuildEvent>
+xcopy "$(TargetDir)configurations\build_config.json" "$(SolutionDir)Build\$(ConfigurationName)\configurations\default_config.json*"  /Y /I
+xcopy "$(SolutionDir)Sensors\BoardCommons" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\BoardCommons\" /S /Y /I</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>powershell -Command "Get-ChildItem -Path $(SolutionDir)AssemblyInfo.cs -Force -Recurse | Foreach-Object { (gc $_.FullName) -replace '2.0.0.\*', '2.0.0.*' | Out-File -encoding UTF8 $_.FullName }"</PreBuildEvent>
