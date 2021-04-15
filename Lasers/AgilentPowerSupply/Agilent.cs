@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace ControlledPTT.Lasers
@@ -64,18 +65,17 @@ namespace ControlledPTT.Lasers
             {
                 if (_agilent == null)
                 {
-                    _agilent = new AgN5700(cmbAgilentConnAddress.SelectedItem.ToString());
+                    try
+                    {
+                        _agilent = new AgN5700(cmbAgilentConnAddress.SelectedItem.ToString());
+                        _agilent.Connect();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Could not connect to Agilent. Check if it connected via USB and switched on.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    _initialized = true;
                 }
-
-                try
-                {
-                    _agilent.Connect();
-                }
-                catch
-                {
-                    MessageBox.Show("Could not connect to Agilent. Check if it connected via USB and switched on.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                _initialized = true;
 
                 // Check if it Agilent is indeed initialized.
                 if (IsLaserInitialized())
@@ -174,14 +174,17 @@ namespace ControlledPTT.Lasers
                     _agilent.SCPI.VOUT.Query(out voltageNow);
                     _agilent.SCPI.IOUT.Query(out currentNow);
 
-                    txtCurrentNow.Text = currentNow.Split(' ')[1];
-                    txtVoltageNow.Text = voltageNow.Split(' ')[1];
+                    currentNow = currentNow.Split(' ')[1];
+                    voltageNow = voltageNow.Split(' ')[1];
+
+                    txtCurrentNow.Text = currentNow;
+                    txtVoltageNow.Text = voltageNow;
                 }
                 catch 
                 { 
                     // Ignore errors to continue experiment
                 }
-                return Convert.ToDouble(currentNow);
+                return Convert.ToDouble(currentNow, CultureInfo.InvariantCulture);
             }
             return 0;
         }
@@ -194,25 +197,22 @@ namespace ControlledPTT.Lasers
         /// <returns>False if laser is not initalized or something went wrong.</returns>
         public override bool SwitchOn()
         {
-            if (IsLaserInitialized())
+            if (SetAgilentLimits())
             {
-                if (SetAgilentLimits())
+                try
                 {
-                    try
-                    {
-                        _agilent.SCPI.OUT.Command(1);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("An error occured while sending command to Agilent to swith output on. Please try again.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return false;
-                    }
-                    _currentOn = true;
-                    txtAgilentSwitch.Text = "Output On";
-                    txtAgilentSwitch.BackColor = Color.Green;
-                    btnSwitchAgilent.Text = "Switch Output Off";
-                    return true;
+                    _agilent.SCPI.OUT.Command(1);
                 }
+                catch
+                {
+                    MessageBox.Show("An error occured while sending command to Agilent to swith output on. Please try again.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+                _currentOn = true;
+                txtAgilentSwitch.Text = "Output On";
+                txtAgilentSwitch.BackColor = Color.Green;
+                btnSwitchAgilent.Text = "Switch Output Off";
+                return true;
             }
             return false;
         }
@@ -280,21 +280,25 @@ namespace ControlledPTT.Lasers
         /// </summary>
         private bool SetAgilentLimits()
         {
-            try
+            if (IsLaserInitialized())
             {
-                _agilent.SCPI.VMAX.Command(Convert.ToDouble(nudMaxVoltage.Value));
-                _agilent.SCPI.IMAX.Command(Convert.ToDouble(nudMaxCurrent.Value));
-                _agilent.SCPI.VSET.Command(Convert.ToDouble(nudOutputVoltage.Value));
-                _agilent.SCPI.ISET.Command(Convert.ToDouble(nudOutputCurrent.Value));
-                return true;
+                try
+                {
+                    _agilent.SCPI.VMAX.Command(Convert.ToDouble(nudMaxVoltage.Value));
+                    _agilent.SCPI.IMAX.Command(Convert.ToDouble(nudMaxCurrent.Value));
+                    _agilent.SCPI.VSET.Command(Convert.ToDouble(nudOutputVoltage.Value));
+                    _agilent.SCPI.ISET.Command(Convert.ToDouble(nudOutputCurrent.Value));
+                    return true;
+                }
+                catch
+                {
+                    // Ignore error message if the current is on to continue with experiment
+                    if (!_currentOn)
+                        MessageBox.Show("Something happened during sending limits to Agilent. Please try again.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
             }
-            catch
-            {
-                // Ignore error message if the current is on to continue with experiment
-                if (!_currentOn)
-                    MessageBox.Show("Something happened during sending limits to Agilent. Please try again.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+            return false;
         }
 
         public Agilent()
@@ -372,15 +376,20 @@ namespace ControlledPTT.Lasers
 
         private void btnClose_Click(object sender, EventArgs e)
         {
+            
+            Close();
+        }
+
+        private void Agilent_FormClosing(object sender, FormClosingEventArgs e)
+        {
             Properties.Settings.Default.AgilentConnectionAddressIndex = cmbAgilentConnAddress.SelectedIndex;
             List<string> addresses = new List<string>();
             foreach (object item in cmbAgilentConnAddress.Items)
                 addresses.Add(item.ToString());
             Properties.Settings.Default.AgilentConnectionAddresses = addresses.ToArray();
             Properties.Settings.Default.Save();
-            Close();
+
+            DisconnectLaser();
         }
-
-
     }
 }

@@ -409,6 +409,7 @@ namespace ControlledPTT.Lasers
             this.Controls.Add(this.lblAgilentConnAddress);
             this.Name = "Agilent";
             this.Text = "Laser Connected to Agilent Power Supply";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Agilent_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.nudMinCurrent)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxCurrent)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxVoltage)).EndInit();

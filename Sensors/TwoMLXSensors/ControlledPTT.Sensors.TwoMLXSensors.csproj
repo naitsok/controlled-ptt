@@ -83,7 +83,7 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)" mkdir "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)"
 xcopy "$(TargetDir)*MLXSensors.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\lib\"  /Y /I
+xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\Lib\"  /Y /I
 xcopy "$(ProjectDir)BoardTwoMLXSensors" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\BoardTwoMLXSensors" /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

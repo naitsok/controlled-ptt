@@ -83,6 +83,6 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)" mkdir "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)"
 xcopy "$(TargetDir)*DummyLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\Lib\"  /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

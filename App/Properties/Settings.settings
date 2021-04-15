@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="AppConfiguration" Type="System.String" Scope="User">
-      <Value Profile="(Default)">.\configurations\default_config.json</Value>
+      <Value Profile="(Default)">.\Configurations\default_config.json</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -13,7 +13,12 @@ Controlled PTT 2 was developed by Konstantin Tamarov, PhD, Emilia Happonen, MSc,
 
 ## Requrements
 
-.NET Framework 4.7.1
+The software consists of the PC program written in C# programming language and the borad part which reads the temperature sensor data and sends it to the PC program.
+
+- .NET Framework 4.7.1 to run the software on a PC with Windows OS. .NET Framework 4.7.1 is included by default in Windows 7 or higher.
+- [Arduino Studio 1.8.13](https://www.arduino.cc/en/software) or higher. Arduino Studio is needed to install necessary drivers and upload the program to the board. Refer to the [sensors](#selecting-sensor-part) section for more information about temperature sensors and boards.
+
+
 
 ## Usage
 

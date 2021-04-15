@@ -59,7 +59,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -127,13 +126,13 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="App.config" />
-    <None Include="calibrations\dummy_calibration.json">
+    <None Include="Calibrations\dummy_calibration.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="configurations\build_config.json">
+    <None Include="Configurations\build_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="configurations\default_config.json">
+    <None Include="Configurations\default_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -159,15 +158,15 @@
   <Import Project="packages\CenterSpace.NMath.Premium.6.2.0.58\build\CenterSpace.NMath.Premium.targets" Condition="Exists('packages\CenterSpace.NMath.Premium.6.2.0.58\build\CenterSpace.NMath.Premium.targets')" />
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)" mkdir "$(SolutionDir)Build\$(ConfigurationName)"
-xcopy "$(TargetDir)Microsoft.*" "$(SolutionDir)Build\$(ConfigurationName)\lib\"  /Y /I
-xcopy "$(TargetDir)Newtonsoft.*" "$(SolutionDir)Build\$(ConfigurationName)\lib\"  /Y /I
-xcopy "$(TargetDir)Oxyplot.*" "$(SolutionDir)Build\$(ConfigurationName)\lib\"  /Y /I
-xcopy "$(TargetDir)System.*" "$(SolutionDir)Build\$(ConfigurationName)\lib\"  /Y /I
-xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\lib\"  /Y /I
-xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\lib\"  /Y /I
+xcopy "$(TargetDir)Microsoft.*" "$(SolutionDir)Build\$(ConfigurationName)\Lib\"  /Y /I
+xcopy "$(TargetDir)Newtonsoft.*" "$(SolutionDir)Build\$(ConfigurationName)\Lib\"  /Y /I
+xcopy "$(TargetDir)Oxyplot.*" "$(SolutionDir)Build\$(ConfigurationName)\Lib\"  /Y /I
+xcopy "$(TargetDir)System.*" "$(SolutionDir)Build\$(ConfigurationName)\Lib\"  /Y /I
+xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Lib\"  /Y /I
+xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lib\"  /Y /I
 xcopy "$(TargetDir)*App.*" "$(SolutionDir)Build\$(ConfigurationName)\"  /Y /I
-xcopy "$(TargetDir)calibrations" "$(SolutionDir)Build\$(ConfigurationName)\calibrations\"  /Y /I
-xcopy "$(TargetDir)configurations\build_config.json" "$(SolutionDir)Build\$(ConfigurationName)\configurations\default_config.json*"  /Y /I
+xcopy "$(TargetDir)Calibrations" "$(SolutionDir)Build\$(ConfigurationName)\Calibrations\"  /Y /I
+xcopy "$(TargetDir)Configurations\build_config.json" "$(SolutionDir)Build\$(ConfigurationName)\Configurations\default_config.json*"  /Y /I
 xcopy "$(SolutionDir)Sensors\BoardCommons" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\BoardCommons\" /S /Y /I</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

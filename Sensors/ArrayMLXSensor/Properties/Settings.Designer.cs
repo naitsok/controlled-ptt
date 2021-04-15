@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ControlledPTT.Properties {
+namespace ControlledPTT.Sensors.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,13 +25,13 @@ namespace ControlledPTT.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(".\\Configurations\\default_config.json")]
-        public string AppConfiguration {
+        [global::System.Configuration.DefaultSettingValueAttribute(@"false false false false false false false false false false false false false false false false false false false false false false true true true true false false false false false false false false false false false false true true true true false false false false false false false false false false false false false false false false false false false false false false")]
+        public string SelectedCells {
             get {
-                return ((string)(this["AppConfiguration"]));
+                return ((string)(this["SelectedCells"]));
             }
             set {
-                this["AppConfiguration"] = value;
+                this["SelectedCells"] = value;
             }
         }
     }

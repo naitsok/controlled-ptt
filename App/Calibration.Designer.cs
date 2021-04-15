@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Calibration));
             this.lblCalibFile = new System.Windows.Forms.Label();
             this.txtCalibFile = new System.Windows.Forms.TextBox();
             this.nudIntercept = new System.Windows.Forms.NumericUpDown();
@@ -306,6 +307,7 @@
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.nudSlope);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(560, 540);
             this.Name = "Calibration";
             this.Text = "Sensor Calibration";

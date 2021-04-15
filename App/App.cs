@@ -295,7 +295,7 @@ namespace ControlledPTT
                 _config["pid"]["differential"] = _pid.DiffGain;
 
                 // Save experiment dir
-                _config["experiment_dir"] = _expBaseDir;
+                _config["experiment_path"] = _expBaseDir;
 
                 // Save experiment settings
                 _config["save_header_data"] = cbSaveHeader.Checked;
@@ -303,6 +303,8 @@ namespace ControlledPTT
                 _config["create_experiment_folder_with_current_date"] = createDirectoryWithCurrentDateToolStripMenuItem.Checked;
                 _config["create_experiment_file_with_current_time"] = createFileWithCurrentTimeToolStripMenuItem.Checked;
                 _config["operator"] = txtOperator.Text;
+                _config["experiment_time_min"] = nudExpTime.Value;
+                _config["experiment_thermal_dose"] = nudThermalDose.Value;
 
             }
             // Saves main settings file
@@ -385,7 +387,7 @@ namespace ControlledPTT
 
             // Initialization for Experiment
             // directory to save files of the experiment
-            _expBaseDir = Path.GetFullPath((string)_config["experiment_dir"]);
+            _expBaseDir = Path.GetFullPath((string)_config["experiment_path"]);
             if ((bool)_config["create_experiment_folder_with_current_date"])
                 _expDir = Path.Combine(_expBaseDir, DateTime.Now.ToString("yyyy-MM-dd"));
             else
@@ -415,6 +417,10 @@ namespace ControlledPTT
             txtExpFileName.Text = _expFileName;
 
             txtOperator.Text = (string)_config["operator"];
+
+            // time and thermal dose
+            nudExpTime.Value = (decimal)_config["experiment_time_min"];
+            nudThermalDose.Value = (decimal)_config["experiment_thermal_dose"];
 
             // get information about experiment and set values
             _discretizationTime = (int)_config["discretization_ms"];
@@ -606,6 +612,7 @@ namespace ControlledPTT
             }
 
             EnableControlsExperimentFinished();
+            MessageBox.Show("Experiment finished!", "Experiment finished!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion

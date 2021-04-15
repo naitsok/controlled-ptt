@@ -89,9 +89,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ControlledPTT.ico" />
-    <Content Include="lib\AgN5700_A_04_00.dll" />
-    <Content Include="lib\Keysight.CommandExpert.Common.dll" />
-    <Content Include="lib\Keysight.CommandExpert.InstrumentAbstraction.dll" />
+    <Content Include="Lib\AgN5700_A_04_00.dll" />
+    <Content Include="Lib\Keysight.CommandExpert.Common.dll" />
+    <Content Include="Lib\Keysight.CommandExpert.InstrumentAbstraction.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseLaser\ControlledPTT.Lasers.BaseLaser.csproj">
@@ -101,10 +101,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)" mkdir "$(SolutionDir)build\$(ConfigurationName)\Lasers\$(TargetName)"
+    <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)" mkdir "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)"
 xcopy "$(TargetDir)*Agilent.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\lib\"  /Y /I
+xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\Lib\"  /Y /I
 xcopy "$(TargetDir)*AgN*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*Keysight*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\lib\"  /Y /I</PostBuildEvent>
+xcopy "$(TargetDir)*Keysight*" "$(SolutionDir)Build\$(ConfigurationName)\Lasers\$(TargetName)\Lib\"  /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

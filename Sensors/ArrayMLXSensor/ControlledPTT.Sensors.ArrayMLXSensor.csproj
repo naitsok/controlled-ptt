@@ -82,17 +82,23 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="ArrayMLXSensor.resx">
       <DependentUpon>ArrayMLXSensor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ArrayMLX_selected_cells.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="ControlledPTT.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -117,8 +123,7 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(SolutionDir)Build\$(ConfigurationName)" mkdir "$(SolutionDir)Build\$(ConfigurationName)"
 xcopy "$(TargetDir)*ArrayMLXSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*.txt" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\"  /Y /I
-xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\lib\"  /Y /I
+xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\Lib\"  /Y /I
 xcopy "$(ProjectDir)BoardArrayMLXSensor" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\$(TargetName)\BoardArrayMLXSensor" /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

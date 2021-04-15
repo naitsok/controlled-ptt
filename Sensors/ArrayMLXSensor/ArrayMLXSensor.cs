@@ -54,9 +54,6 @@ namespace ControlledPTT.Sensors
         private static readonly Font TemperatureFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
         private static readonly Brush TemperatureFontColor = new SolidBrush(Color.White);
 
-        // keep the selected cells
-        private static string SELECTED_CELLS = @".\ArrayMLX_selected_cells.txt";
-
         /// <summary>
         /// Override from BaseSensor to return title of the sensor
         /// </summary>
@@ -78,13 +75,8 @@ namespace ControlledPTT.Sensors
 
             // load previously selected cells
             bool[] selectedCellsBools = null;
-            if (File.Exists(Path.GetFullPath(SELECTED_CELLS)))
-            {
-                string selectedCells = File.ReadAllText(Path.GetFullPath(SELECTED_CELLS));
-                selectedCellsBools = selectedCells.Split(' ').Select(bool.Parse).ToArray();
-            }
-            else
-                selectedCellsBools = Enumerable.Repeat(false, SENSOR_ROWS * SENSOR_COLS).ToArray();
+            string selectedCells = Properties.Settings.Default.SelectedCells;
+            selectedCellsBools = selectedCells.Split(' ').Select(bool.Parse).ToArray();
 
             for (int i = 0; i < SENSOR_ROWS; i++)
             {
@@ -206,7 +198,7 @@ namespace ControlledPTT.Sensors
                         WIDTH, 
                         HEIGHT);
                     
-                    g.FillRectangle(getCellColor(temperature), cell);
+                    g.FillRectangle(GetCellColor(temperature), cell);
                     if (_selectedTemperatures.Contains((i, j)))
                         g.DrawRectangle(SelectedCellBorder, cell);
                     else
@@ -243,7 +235,7 @@ namespace ControlledPTT.Sensors
         /// </summary>
         /// <param name="temperature"></param>
         /// <returns></returns>
-        private SolidBrush getCellColor(double temperature)
+        private SolidBrush GetCellColor(double temperature)
         {
             // Check temperature is outside limits.
             if (temperature < MinTemperatureColor)
@@ -334,7 +326,8 @@ namespace ControlledPTT.Sensors
             {
                 selectedCells[cells.Item1 * SENSOR_COLS + cells.Item2] = true.ToString();
             }
-            File.WriteAllText(Path.GetFullPath(SELECTED_CELLS), string.Join(" ", selectedCells));
+            Properties.Settings.Default.SelectedCells = string.Join(" ", selectedCells);
+            Properties.Settings.Default.Save();
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)

@@ -39,8 +39,8 @@ namespace ControlledPTT.Lasers.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>USB0::0x0957::0x0807::N8757A-US12L2916A::0::INSTR</string>
   <string>USB0::0x0957::0x0807::US08M3130G::0::INSTR</string>
-  <string>USB0::0x0957::0x0807::US08M3130G::0::INSTR::1</string>
 </ArrayOfString>")]
         public string[] AgilentConnectionAddresses {
             get {
