@@ -11,7 +11,7 @@ Controlled PTT 2 consists of two main parts: [hardware part](#hardware) and [sof
 
 Controlled PTT 2 was developed by Konstantin Tamarov, PhD, Emilia Happonen, MSc, and Mikke Varis at Department of Applied Physics at University of Eastern Finland. Please see [Credits](#credits) section for the correct referencing when using the software.
 
-## Requrements
+## Reqiurements
 
 The software consists of the PC program written in C# programming language and the borad part which reads the temperature sensor data and sends it to the PC program.
 
@@ -79,20 +79,28 @@ Thus, if you have a specific laser hardware which can be connected to PC, new la
 
 ## Detailed description
 
+Controlled PTT 2 aims at making photothermal experiments with nanoparticle suspensions easy, controlled, reproducible and versatile. Easiness is gained through using a unified interface of the [ControlledPTT.App](#software), which is independent from sensor or laser part used. Control is achieved by possibility to perform different types of experiments and applying different experiment stop conditions. Reproducibility is obtained through keeping calibrations and having different configuration profiles for different users. Versatility is aquired through independence of the [ControlledPTT.App](#software) from the laser and sensor part. Virtually any sensor and any laser can be connected to the [ControlledPTT.App](#software) considering its executable inherits [the necessary base classes](#development). Thus, the experiments can be performed in any imaginable experimental setup, including *in situ* measurements, *in vitro* experiments with live cells, or *in vivo* experiments with animals, provided that the suitable laser and sensor parts are available.
 
-
+Overall, to perform its functions properly  Controlled PTT 2 requires the necessary [hardware](#hardware) and [software](#software).
 
 ### Hardware
+
+Hardware of Controlled PTT 2 consists of two main parts:
+
+1) Sensor part. This part is responsible for getting data from sensors and sending it to PC via any suitable connection. At this point, the developed [sensor parts](#selecting-sensor-part) are dedicated to *in vitro* experiments in 96-well plates. These sensor parts consist of one or two infrared temperature sensors connected to an Arduino or similar board that each second sends the measured temperature data to a PC. On the PC, the sensor executable written in C# reads the data, parses it if necessary and sends to [ControlledPTT.App](#software) for calibration and further processing.
+
+2) Laser part. This part is resonsible for controlling laser hardware, e.g. initializing connection to laser, setting necessary parameters and controlling the laser power. At this point, the only available option is to control current sent to a laser diode through [Agilent power supply](./Lasers/Agilent).
 
 ### Software
 
 Controlled PTT 2 Software consists of three parts:
+
 1) ControlledPTT.App(.exe) is the main application executable. It performes connection to sensor and laser part, manages sensor and laser, creates and keeps calibration for sensor data, and performes the experiment.
 
 ![ControlledPTT.App](./Docs/Images/ControlledPTT.App.png)
 
 There are three main types of experiments:
-- Experiment with only sensor part connect. ControlledPTT.App receives the data from sensor, uses calibration if applicable, writes the data to file. This experiment type can be used if laser is operated manually or there is no laser at all.
+- Experiment with only sensor part connected. ControlledPTT.App receives the data from sensor, uses calibration if applicable, writes the data to file. This experiment type can be used if laser is operated manually or there is no laser at all.
 - Experiment with a full laser power. The power of laser is set by the user in laser window and ControlledPTT.App only switches laser on when experiment is started and off when experiment is over.
 - Experiment with controlled laser power to achieve a specific temperature of the irradiated target. The power of laser is controlled using a built in Proportional-Integrtal-Differential (PID) controller in the limits set by the user in the laser window. The PID coefficients must be calibrated for the specifically used laser in order to be efficient.
 
@@ -109,14 +117,13 @@ There are there different stop conditions for an experiment:
 
 ![ControlledPTT.Lasers](./Docs/Images/ControlledPTT.Lasers.png)
 
+## Development
 
 
 
-### Development
+### Developing a new sensor part
 
-#### Developing a new sensor part
-
-#### Developing a new laser part
+### Developing a new laser part
 
 ## Credits
 
