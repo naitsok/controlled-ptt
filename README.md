@@ -119,9 +119,15 @@ There are there different stop conditions for an experiment:
 
 ## Development
 
+The development of Controlled PTT 2 is directed by [Konstantin Tamarov](mailto:konstantin.tamarov@uef.fi) at Department of Applied Physics, Univeristy of Eastern Finland. The roadmap of Controlled PTT 2 is to add more options for sensor and laser parts depending on the required applications. Therefore, [Konstantin Tamarov](mailto:konstantin.tamarov@uef.fi) can be conacted with a request to discuss and develop the necessary part. Further development as well includes bug fixes, more documentation, and examples of hardware assemly with 3D printed parts.
 
+### Contributing
+
+The proper way to contribute the Controlled PTT 2 development is to use GIT and github functionality for software development. This repository can be forked to a contributor's account and pull requests are warmly welcome.
 
 ### Developing a new sensor part
+
+The correct implementation of a new sensor part requires the development of hardware and software parts. The hardware part is completely under one's specification. The software part must be developed using Visual Studio 2019 using .NET Framework 4.7.2. The sensore part executable must be inherited from the [BaseSensor](./Sensors/BaseSensor) class, which is in turn inherited from the System.Windows.Forms.Form class.
 
 ### Developing a new laser part
 
