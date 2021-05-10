@@ -127,9 +127,11 @@ The proper way to contribute the Controlled PTT 2 development is to use GIT and 
 
 ### Developing a new sensor part
 
-The correct implementation of a new sensor part requires the development of hardware and software parts. The hardware part is completely under one's specification. The software part must be developed using Visual Studio 2019 using .NET Framework 4.7.2. The sensore part executable must be inherited from the [BaseSensor](./Sensors/BaseSensor) class, which is in turn inherited from the System.Windows.Forms.Form class.
+The correct implementation of a new sensor part requires the development of hardware and software parts. The hardware part is completely under one's specification. The software part must be developed using Visual Studio 2019 and .NET Framework 4.7.2. The sensor part executable must be inherited from the [BaseSensor](./Sensors/BaseSensor) class, which is in turn inherited from the System.Windows.Forms.Form class.
 
 ### Developing a new laser part
+
+The correct implementation of a new laser part requires the development of hardware and software parts. The hardware part is completely under one's specification. The software part must be developed using Visual Studio 2019 and .NET Framework 4.7.2. The laser part executable must be inherited from the [BaseLaser](./Lasers/BaseLaser) class, which is in turn inherited from the System.Windows.Forms.Form class.
 
 ## Credits
 
