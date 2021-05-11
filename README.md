@@ -1,6 +1,6 @@
 [![version](https://img.shields.io/badge/version-v2.0-orange)](https://github.com/naitsok/controlled-ptt/)
 [![build](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/naitsok/controlled-ptt/releases/)
-
+[![DOI](https://zenodo.org/badge/284663695.svg)](https://zenodo.org/badge/latestdoi/284663695)
 [![License](https://img.shields.io/badge/license-GPLv3.0-blue)](./LICENSE)
 
 # Controlled Photothermal Therapy 2.0
@@ -147,7 +147,13 @@ When using please give the following references:
 
 2. Cite the Controlled PTT 2 and this repository:
 
+To cite the latest version:
 
+K. Tamarov, M. Varis. 2021. Controlled Photothermal Therapy 2. [DOI: 10.5281/zenodo.4629678](https://doi.org/10.5281/zenodo.4749684).
+
+To cite the specific version, select the DOI of soecific version on [Zenodo page](https://doi.org/10.5281/zenodo.4749684):
+
+K. Tamarov, M. Varis. 2021. Controlled Photothermal Therapy 2. DOI: (Use DOI of specific version).
 
 
 
