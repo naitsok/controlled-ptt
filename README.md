@@ -1,7 +1,7 @@
 [![version](https://img.shields.io/badge/version-v2.0-orange)](https://github.com/naitsok/controlled-ptt/)
 [![build](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/naitsok/controlled-ptt/releases/)
 
-[![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+[![License](https://img.shields.io/badge/license-GPLv3.0-blue)](./LICENSE)
 
 # Controlled Photothermal Therapy 2.0
 
@@ -134,6 +134,20 @@ The correct implementation of a new sensor part requires the development of hard
 The correct implementation of a new laser part requires the development of hardware and software parts. The hardware part is completely under one's specification. The software part must be developed using Visual Studio 2019 and .NET Framework 4.7.2. The laser part executable must be inherited from the [BaseLaser](./Lasers/BaseLaser) class, which is in turn inherited from the System.Windows.Forms.Form class.
 
 ## Credits
+
+Controlled PTT 2 has been developed by Konstantin Tamarov and Mikke Varis.
+
+Licence: GPLv3.
+
+When using please give the following references:
+
+1. Cite the published paper, where the first version of Controlled PTT was used:
+
+- E. Happonen, K. Tamarov, M.-V. Martikainen, K. Ketola, M. Roponen, V.-P. Lehto, W. Xu, Thermal dose as a universal tool to evaluate nanoparticle-induced photothermal therapy, 2020, 587, 119657.
+
+2. Cite the Controlled PTT 2 and this repository:
+
+
 
 
 
