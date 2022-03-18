@@ -25,18 +25,6 @@ namespace ControlledPTT.Sensors.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false false")]
-        public string SelectedCells {
-            get {
-                return ((string)(this["SelectedCells"]));
-            }
-            set {
-                this["SelectedCells"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int ComPortIndex {
             get {
@@ -49,7 +37,7 @@ namespace ControlledPTT.Sensors.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
         public int BaudRateIndex {
             get {
                 return ((int)(this["BaudRateIndex"]));

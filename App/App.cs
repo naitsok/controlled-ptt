@@ -11,7 +11,7 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.IO;
 using Newtonsoft.Json.Linq;
-
+using OxyPlot.Legends;
 
 namespace ControlledPTT
 {
@@ -95,7 +95,7 @@ namespace ControlledPTT
         {
             PlotModel pm = new PlotModel()
             {
-                Title = "Object Temperature and Thermal Dose",
+                Title = "Object Temperature and Thermal Dose Graph",
                 PlotAreaBackground = OxyColors.White,
                 DefaultColors = new List<OxyColor>
                 {
@@ -103,13 +103,25 @@ namespace ControlledPTT
                     OxyColors.Green,
                     OxyColors.Blue
                 },
-                TitleFontSize = 12,
+                TitlePadding = 0,
+                TitleFontSize = 11,
                 TitleFontWeight = 400,
-                LegendFontWeight = 500,
-                LegendFontSize = 12,
-                LegendTextColor = OxyColors.Black,
-                LegendPosition = LegendPosition.RightTop,
+                DefaultFontSize = 11
+                // Below changed in OxyPlot 2.1 from OxyPlot 2.0
+                // LegendFontWeight = 500,
+                // LegendFontSize = 12,
+                // LegendTextColor = OxyColors.Black,
+                // LegendPosition = LegendPosition.RightTop,
             };
+            pm.Legends.Add(new Legend()
+            {
+                FontWeight = 500,
+                FontSize = 11,
+                TextColor = OxyColors.Black,
+                LegendPosition = LegendPosition.RightTop,
+                LegendItemSpacing = 0.5,
+                LegendPadding = 0
+            });
             // X axis - elapsed experiment time
             pm.Axes.Add(new LinearAxis()
             {
@@ -189,8 +201,8 @@ namespace ControlledPTT
             Axis xTime = pltTemperature.Model.Axes[0];
             if (elapsedSeconds > xTime.Maximum - X_TIME_SCALE_CHANGE)
             {
-                xTime.Maximum += 2 * X_TIME_SCALE_CHANGE;
-                xTime.Minimum += 2 * X_TIME_SCALE_CHANGE;
+                xTime.Maximum += X_TIME_SCALE_CHANGE;
+                xTime.Minimum += X_TIME_SCALE_CHANGE;
             }
 
             // Then deal with temperature
@@ -257,6 +269,9 @@ namespace ControlledPTT
 
             if (saveCurrentConfigWhenClosingToolStripMenuItem.Checked)
             {
+                // Startup settings
+                _config["start_sensor_and_laser_parts_on_app_startup"] = loadSensorAndLaserPartsOnStartupToolStripMenuItem.Checked;
+
                 // Check new sensors were added by user
                 JArray sensors = new JArray();
                 for (int i = _numInstalledSensors; i < cmbSensors.Items.Count; i++)
@@ -427,6 +442,10 @@ namespace ControlledPTT
             _discretizationTimeMin = (double)_discretizationTime / (1000 * 60);
             _expTimer.Interval = _discretizationTime;
             _expTimer.Tick += new EventHandler(this.experimentTimer_Tick);
+
+            // Start sensor and laser parts if necessary
+            loadSensorAndLaserPartsOnStartupToolStripMenuItem.Checked = (bool)_config["start_sensor_and_laser_parts_on_app_startup"];
+
         }
 
         #endregion
@@ -652,6 +671,22 @@ namespace ControlledPTT
         }
 
         #region Event Handlers
+
+        /// <summary>
+        /// Invokes the start sensor and start laser parts events if the property is selected in the configuration
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void App_Load(object sender, EventArgs e)
+        {
+            if (loadSensorAndLaserPartsOnStartupToolStripMenuItem.Checked)
+            {
+                if (btnStartSensor.Enabled)
+                    Invoke(new EventHandler(btnStartSensor_Click));
+                if (btnStartLaser.Enabled && cmbExperimentType.SelectedIndex > 0)
+                    Invoke(new EventHandler(btnStartLaser_Click));
+            }
+        }
 
         /// <summary>
         /// Show PID control panel when PID controlled experiment is selected.
@@ -935,6 +970,13 @@ namespace ControlledPTT
             _aboutBox.ShowDialog();
         }
 
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         #endregion
+
     }
 }

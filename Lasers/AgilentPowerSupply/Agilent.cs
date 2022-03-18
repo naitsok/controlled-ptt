@@ -138,11 +138,12 @@ namespace ControlledPTT.Lasers
             return _initialized;
         }
 
-        private double _current = 0; // [A]
+        private double _current = 0; // 0 to 1
         /// <summary>
-        /// Sets the power in relative units. In case of Agilent, it is current in [A] which is set.
+        /// Sets the power in relative units from 0 to 1. In case of Agilent, 
+        /// this value is converted to current in [A] which is set by the power supply in the indicated MinPower and MaxPower limits.
         /// </summary>
-        /// <param name="power">Must be in [0, 1] according to ILaser.</param>
+        /// <param name="power">Must be in [0, 1] according to BaseLaser.</param>
         public override void SetPower(double power)
         {
             if (power > 1.0)

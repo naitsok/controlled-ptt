@@ -51,11 +51,11 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
-      <HintPath>..\packages\OxyPlot.Core.2.0.0\lib\net45\OxyPlot.dll</HintPath>
+    <Reference Include="OxyPlot, Version=2.1.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <HintPath>..\packages\OxyPlot.Core.2.1.0\lib\net45\OxyPlot.dll</HintPath>
     </Reference>
-    <Reference Include="OxyPlot.WindowsForms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
-      <HintPath>..\packages\OxyPlot.WindowsForms.2.0.0\lib\net45\OxyPlot.WindowsForms.dll</HintPath>
+    <Reference Include="OxyPlot.WindowsForms, Version=2.1.0.0, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
+      <HintPath>..\packages\OxyPlot.WindowsForms.2.1.0\lib\net45\OxyPlot.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -98,6 +98,9 @@
     </Compile>
     <Compile Include="App.Designer.cs">
       <DependentUpon>App.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolStripNumberControl.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PID.cs" />
     <Compile Include="Program.cs" />

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Ports;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ControlledPTT.Sensors
@@ -16,21 +18,27 @@ namespace ControlledPTT.Sensors
         // Variable indicating if connection is open.
         private bool _comConnected = false; 
 
-        private double _objectTemperature = 0.0;
+        private List<double> _objectTemperatures = new List<double>();
 
-        private double _ambientTemperature = 0.0;
+        private List<double> _ambientTemperatures = new List<double>();
 
         // Methods to be overriden from BaseSensor
         public override string Title { get { return "One MLX Sensor"; } }
 
-        protected override double GetTemperature() { return _objectTemperature; }
+        protected override double GetTemperature() 
+        {
+            if (_objectTemperatures.Count == 0) return 0;
+            return _objectTemperatures.Sum() / _objectTemperatures.Count; 
+        }
 
         public MLXSensor()
         {
             InitializeComponent();
 
-            cbBaudRate.SelectedIndex = 6;
             GetComPorts();
+            if (Properties.Settings.Default.ComPortIndex < cbPorts.Items.Count)
+                cbPorts.SelectedIndex = Properties.Settings.Default.ComPortIndex;
+            cbBaudRate.SelectedIndex = Properties.Settings.Default.BaudRateIndex;
         }
 
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -40,7 +48,7 @@ namespace ControlledPTT.Sensors
             {
                 try
                 {
-                    string _recievedData = _comPort.ReadLine(); // ReadExisting();
+                    _receivedData = _comPort.ReadLine(); // ReadExisting();
                                                                 // One line must contain "object_temperature ambient_temperature" in Celcius.
                     Invoke(new EventHandler(processData)); // Process recieved temperatures.
                 }
@@ -124,12 +132,26 @@ namespace ControlledPTT.Sensors
             txtObjTemp.Text = temperatures[0];
             txtAmbTemp.Text = temperatures[1];
 
+            double objectTemperature = double.NaN;
+            double ambientTemperature = double.NaN;
+
             try
             {
-                _objectTemperature = double.Parse(temperatures[0]);
-                _ambientTemperature = double.Parse(temperatures[1]);
+                objectTemperature = double.Parse(temperatures[0]);
+                ambientTemperature = double.Parse(temperatures[1]);
             }
             catch { /* Ignore parsing errors */ }
+
+            if (TemperatureJustSent)
+            {
+                _objectTemperatures = new List<double>();
+                _ambientTemperatures = new List<double>();
+            }
+            _objectTemperatures.Add(objectTemperature);
+            _ambientTemperatures.Add(ambientTemperature);
+            // TemperatureJustSent is set to true in the BaseSensor class when the temperature 
+            // data is sent to App.
+            TemperatureJustSent = false;
 
         }
 
@@ -143,6 +165,9 @@ namespace ControlledPTT.Sensors
                     _comPort = null;
                 }
             }
+            Properties.Settings.Default.ComPortIndex = cbPorts.SelectedIndex;
+            Properties.Settings.Default.BaudRateIndex = cbBaudRate.SelectedIndex;
+            Properties.Settings.Default.Save();
         }
 
         private void btnClose_Click(object sender, EventArgs e)

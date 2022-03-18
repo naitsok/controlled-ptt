@@ -48,7 +48,6 @@
             // 
             // gbArduino
             // 
-            this.gbArduino.Controls.Add(this.btnClose);
             this.gbArduino.Controls.Add(this.btnClearData);
             this.gbArduino.Controls.Add(this.label3);
             this.gbArduino.Controls.Add(this.txtAllRecievedData);
@@ -64,14 +63,14 @@
             this.gbArduino.Controls.Add(this.btnConnToBoard);
             this.gbArduino.Location = new System.Drawing.Point(12, 12);
             this.gbArduino.Name = "gbArduino";
-            this.gbArduino.Size = new System.Drawing.Size(260, 337);
+            this.gbArduino.Size = new System.Drawing.Size(260, 269);
             this.gbArduino.TabIndex = 34;
             this.gbArduino.TabStop = false;
             this.gbArduino.Text = "Sensor controller connection";
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(6, 308);
+            this.btnClose.Location = new System.Drawing.Point(18, 287);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(112, 23);
             this.btnClose.TabIndex = 23;
@@ -219,8 +218,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 361);
+            this.ClientSize = new System.Drawing.Size(284, 320);
+            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.gbArduino);
+            this.MinimumSize = new System.Drawing.Size(300, 359);
             this.Name = "MLXSensor";
             this.Text = "One MLX Sensor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OneMLXForm_FormClosing);

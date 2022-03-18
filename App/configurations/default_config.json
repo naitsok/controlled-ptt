@@ -1,6 +1,7 @@
 {
   "discretization_ms": 1000,
   "save_settings_on_closing": true,
+  "start_sensor_and_laser_parts_on_app_startup": true,
   "calibration": ".\\Calibrations\\dummy_calibration.json",
   "use_calibration": true,
   "experiment_path": ".\\Experiments\\",

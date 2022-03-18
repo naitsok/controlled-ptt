@@ -20,16 +20,18 @@ namespace ControlledPTT.Sensors
         // Variable indicating if connection is open.
         private bool _comConnected = false;
 
-        // Keeps average temperature calculated by averagin temperatures from the selected cells
-        private double _temperature = 0.0;
+        // Keeps average temperatures calculated by averagin temperatures from the selected cells
+        // The length of the list depends on the rate the data is obtained frin the hardware
+        private List<double> _temperatures = new List<double>();
 
         // Dimensions of the infrared array sensor;
         private static readonly int SENSOR_ROWS = 4;
         private static readonly int SENSOR_COLS = 16;
 
         // Array keeps temperatures received from the board. It updates as soon as new data
-        // is receieved, i.e. each second.
-        private double[,] _temperatures = new double[SENSOR_ROWS, SENSOR_COLS];
+        // is receieved. The temperatures are averaged if the data from sensor comes faster
+        // then the general discretization time.
+        private double[,] _pixelTemperatures = new double[SENSOR_ROWS, SENSOR_COLS];
         private HashSet<(int, int)> _selectedTemperatures = new HashSet<(int, int)>();
 
         // Parameters for temperature visualization.
@@ -63,15 +65,21 @@ namespace ControlledPTT.Sensors
         /// Override from BaseSensor to get the temperature to be sent to MainApp
         /// </summary>
         /// <returns>Temperature to be sent to MainApp by BaseSensor</returns>
-        protected override double GetTemperature() { return _temperature; }
+        protected override double GetTemperature() 
+        {
+            if (_temperatures.Count == 0) return 0;
+            return _temperatures.Sum() / _temperatures.Count; 
+        }
 
         public ArrayMLXSensor()
         {
             InitializeComponent();
 
-            cbBaudRate.SelectedIndex = 8;
             // _sendTimer.Tick += new EventHandler(this.sendDataTimer_Tick);
             GetComPorts();
+            if (Properties.Settings.Default.ComPortIndex < cbPorts.Items.Count)
+                cbPorts.SelectedIndex = Properties.Settings.Default.ComPortIndex;
+            cbBaudRate.SelectedIndex = Properties.Settings.Default.BaudRateIndex;
 
             // load previously selected cells
             bool[] selectedCellsBools = null;
@@ -189,7 +197,7 @@ namespace ControlledPTT.Sensors
                         temperature = double.Parse(splittedData[j + SENSOR_COLS * i], NumberStyles.Any, CultureInfo.InvariantCulture);
                     }
                     catch { /* Ignore parsing errors if any */ }
-                    _temperatures[i, j] = temperature;
+                    _pixelTemperatures[i, j] = temperature;
 
                     // Visualize temperatures.
                     Rectangle cell = new Rectangle(
@@ -216,8 +224,16 @@ namespace ControlledPTT.Sensors
             g.Dispose();
 
             // Calculate temperature to store it in the variable of BaseSensorForm
-            _temperature = CalculateAvgTemperature();
-            txtAvgTemperature.Text = _temperature.ToString("0.##");
+
+            double avgTemperature = CalculateAvgTemperature();
+            txtAvgTemperature.Text = avgTemperature.ToString("0.##");
+
+            if (TemperatureJustSent)
+                _temperatures = new List<double>();
+            _temperatures.Add(avgTemperature);
+            // TemperatureJustSent is set to true in the BaseSensor class when the temperature 
+            // data is sent to App.
+            TemperatureJustSent = false;
         }
 
         private void gbTemperatures_Paint(object sender, PaintEventArgs e)
@@ -304,7 +320,7 @@ namespace ControlledPTT.Sensors
             double avgTemperature = 0;
             foreach ((int, int) indices in _selectedTemperatures)
             {
-                avgTemperature += _temperatures[indices.Item1, indices.Item2];
+                avgTemperature += _pixelTemperatures[indices.Item1, indices.Item2];
             }
             return avgTemperature / _selectedTemperatures.Count;
         }
@@ -327,6 +343,8 @@ namespace ControlledPTT.Sensors
                 selectedCells[cells.Item1 * SENSOR_COLS + cells.Item2] = true.ToString();
             }
             Properties.Settings.Default.SelectedCells = string.Join(" ", selectedCells);
+            Properties.Settings.Default.ComPortIndex = cbPorts.SelectedIndex;
+            Properties.Settings.Default.BaudRateIndex = cbBaudRate.SelectedIndex;
             Properties.Settings.Default.Save();
         }
 

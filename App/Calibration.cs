@@ -10,6 +10,7 @@ using OxyPlot.Series;
 using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using OxyPlot.Legends;
 
 namespace ControlledPTT
 {
@@ -183,11 +184,21 @@ namespace ControlledPTT
                 DefaultColors = new List<OxyColor>{ OxyColors.Blue, OxyColors.Red, },
                 TitleFontSize = 12,
                 TitleFontWeight = 400,
-                LegendFontWeight = 500,
-                LegendFontSize = 12,
-                LegendPosition = LegendPosition.LeftTop,
-                LegendTextColor = OxyColors.Black,
+                
+                // Changed in OxyPlot 2.1
+                // LegendFontWeight = 500,
+                // LegendFontSize = 12,
+                // LegendPosition = LegendPosition.LeftTop,
+                // LegendTextColor = OxyColors.Black,
             };
+            _calibrationPM.Legends.Add(new Legend()
+            {
+                FontWeight = 500,
+                FontSize = 12,
+                TextColor = OxyColors.Black,
+                LegendPosition = LegendPosition.RightTop,
+            });
+
             _calibrationPM.Axes.Add(new LinearAxis()
             {
                 Title = "Sensor Temperature",

@@ -19,6 +19,11 @@ namespace ControlledPTT.Sensors
         // Temperature to be sent by timer
         private Timer _sendTempTimer = new Timer() { Interval = 1000 };
 
+        // TemperatureJustSent is needed if the sensor part receieves the temperature data
+        // from hardware more often than BaseSensor sends this data to the App. In this case the
+        // recieved temperature data must be averaged upon reveiving until it is sent to the App.
+        protected bool TemperatureJustSent { get; set; } = true;
+
         public BaseSensor()
         {
             InitializeComponent();
@@ -29,7 +34,14 @@ namespace ControlledPTT.Sensors
         /// <summary>
         /// Retunrs the title of the sensor to be placed as text in the sensor selector of the App.
         /// </summary>
-        public virtual string Title { get { throw new NotImplementedException(); } }
+        public virtual string Title 
+        { 
+            get 
+            {
+                if (DesignMode) return "Base Sensor";
+                throw new NotImplementedException(); 
+            } 
+        }
 
         /// <summary>
         /// Gets the tempreature to be sent to the App.
@@ -37,6 +49,7 @@ namespace ControlledPTT.Sensors
         /// <returns></returns>
         protected virtual double GetTemperature()
         {
+            if (DesignMode) return 0;
             throw new NotImplementedException();
         }
 
@@ -57,6 +70,7 @@ namespace ControlledPTT.Sensors
         private void sendDataTimer_Tick(object sender, EventArgs e)
         {
             SendTemperature();
+            TemperatureJustSent = true;
         }
 
         protected void SendTemperature()
