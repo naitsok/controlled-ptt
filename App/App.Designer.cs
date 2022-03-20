@@ -93,7 +93,7 @@
             this.saveCurrentConfigWhenClosingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadSensorAndLaserPartsOnStartupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.experimentSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nudDiscretizationTimeToolStripMenuItem = new ToolStripNumberControl();
+            this.nudDiscretizationTimeToolStripMenuItem = new ControlledPTT.ToolStripNumberControl();
             this.createDirectoryWithCurrentDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createFileWithCurrentTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -116,6 +116,7 @@
             this.ofdLoadCalibration = new System.Windows.Forms.OpenFileDialog();
             this.ofdLoadConfig = new System.Windows.Forms.OpenFileDialog();
             this.btnExit = new System.Windows.Forms.Button();
+            this.discrettizationTimemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbExperiment.SuspendLayout();
             this.gbStopCondition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudThermalDose)).BeginInit();
@@ -852,21 +853,19 @@
             // experimentSettingsToolStripMenuItem
             // 
             this.experimentSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.discrettizationTimemsToolStripMenuItem,
             this.nudDiscretizationTimeToolStripMenuItem,
             this.createDirectoryWithCurrentDateToolStripMenuItem,
             this.createFileWithCurrentTimeToolStripMenuItem});
             this.experimentSettingsToolStripMenuItem.Name = "experimentSettingsToolStripMenuItem";
             this.experimentSettingsToolStripMenuItem.Size = new System.Drawing.Size(124, 20);
             this.experimentSettingsToolStripMenuItem.Text = "Experiment Settings";
-            //
+            // 
             // nudDiscretizationTimeToolStripMenuItem
-            //
+            // 
             this.nudDiscretizationTimeToolStripMenuItem.Name = "nudDiscretizationTimeToolStripMenuItem";
-            this.nudDiscretizationTimeToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
-            this.nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.MinimumSize = new System.Drawing.Size(100, 18);
-            this.nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Minimum = 10;
-            this.nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Maximum = 10000;
-            this.nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Value = 1000;
+            this.nudDiscretizationTimeToolStripMenuItem.Size = new System.Drawing.Size(100, 23);
+            this.nudDiscretizationTimeToolStripMenuItem.Text = "1000";
             // 
             // createDirectoryWithCurrentDateToolStripMenuItem
             // 
@@ -1042,6 +1041,12 @@
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // discrettizationTimemsToolStripMenuItem
+            // 
+            this.discrettizationTimemsToolStripMenuItem.Name = "discrettizationTimemsToolStripMenuItem";
+            this.discrettizationTimemsToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.discrettizationTimemsToolStripMenuItem.Text = "Discretization Time Interval (ms)";
+            // 
             // App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1174,6 +1179,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripCurrentConfig;
         private System.Windows.Forms.ToolStripMenuItem loadSensorAndLaserPartsOnStartupToolStripMenuItem;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.ToolStripMenuItem discrettizationTimemsToolStripMenuItem;
     }
 }
 

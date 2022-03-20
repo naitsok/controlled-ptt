@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/version-v2.0-orange)](https://github.com/naitsok/controlled-ptt/)
+[![version](https://img.shields.io/badge/version-v2.0.1-orange)](https://github.com/naitsok/controlled-ptt/)
 [![build](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/naitsok/controlled-ptt/releases/)
 [![DOI](https://zenodo.org/badge/284663695.svg)](https://zenodo.org/badge/latestdoi/284663695)
 [![License](https://img.shields.io/badge/license-GPLv3.0-blue)](./LICENSE)
@@ -9,14 +9,15 @@ Controlled Photothermal Therapy 2.0 (or just Controlled PTT 2) is the second ver
 
 Controlled PTT 2 consists of two main parts: [hardware part](#hardware) and [software part](#software). The hardware part consists of temperature sensor(s) and a laser. Depending on the application, different sensor parts and laser parts can be used. You can also develop your own sensor or laser parts, or they can be developed specifically for you upon a request. Please contact [Konstantin Tamarov](mailto:konstantin.tamarov@uef.fi) to discuss your requirements.
 
-Controlled PTT 2 was developed by Konstantin Tamarov, PhD, Emilia Happonen, MSc, and Mikke Varis at Department of Applied Physics at University of Eastern Finland. Please see [Credits](#credits) section for the correct referencing when using the software.
+Controlled PTT 2 was developed by Konstantin Tamarov, PhD, Emilia Happonen, MSc, Mikke Varis, and Yiannis Constantinou at Department of Applied Physics at University of Eastern Finland. Please see [Credits](#credits) section for the correct referencing when using the software.
 
 ## Reqiurements
 
-The software consists of the PC program written in C# programming language and the borad part which reads the temperature sensor data and sends it to the PC program.
+The Controlled PTT 2.0 consists of 3 main parts: (1) the PC program written in C# programming language; (2) the board part which reads the temperature sensor data and sends it to the PC program; (3) the laser part which controls the laser hardware if it is attached. The following requirements are in place:
 
 - [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/net472) to run the software on a PC with Windows OS. .NET Framework 4.7.2 is included by default in Windows 7 or higher.
-- [Arduino Studio 1.8.13](https://www.arduino.cc/en/software) or higher. Arduino Studio is needed to install necessary drivers and upload the program to the board. Refer to the [sensors](#selecting-sensor-part) section for more information about temperature sensors and boards.
+- [Arduino Studio 1.8.13](https://www.arduino.cc/en/software) or higher. Arduino Studio is needed to install necessary drivers and upload the program to the board. Refer to the [sensors](#selecting-sensor-part) section or to the full [Sensors](./Sensors) documentation for more information about temperature sensors and boards.
+- Necessary drivers for laser hardware. Drivers for the available laser parts are included in the distribution. Refer to the [lasers](#selecting-laser-part) section or to the full [Lasers](./Lasers) documentation.
 
 ## Usage
 

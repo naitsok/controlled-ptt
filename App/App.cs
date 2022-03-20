@@ -271,6 +271,7 @@ namespace ControlledPTT
             {
                 // Startup settings
                 _config["start_sensor_and_laser_parts_on_app_startup"] = loadSensorAndLaserPartsOnStartupToolStripMenuItem.Checked;
+                _config["discretization_ms"] = (int)_discretizationTime;
 
                 // Check new sensors were added by user
                 JArray sensors = new JArray();
@@ -442,6 +443,7 @@ namespace ControlledPTT
             _discretizationTimeMin = (double)_discretizationTime / (1000 * 60);
             _expTimer.Interval = _discretizationTime;
             _expTimer.Tick += new EventHandler(this.experimentTimer_Tick);
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Value = _discretizationTime;
 
             // Start sensor and laser parts if necessary
             loadSensorAndLaserPartsOnStartupToolStripMenuItem.Checked = (bool)_config["start_sensor_and_laser_parts_on_app_startup"];
@@ -640,6 +642,17 @@ namespace ControlledPTT
         {
             InitializeComponent();
 
+            // Initialize discretization time
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Size = new Size(150, 20);
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.MinimumSize = new Size(170, 20);
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.MaximumSize = new Size(170, 20);
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Minimum = 100; // ms
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Maximum = 10000; // ms
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.DecimalPlaces = 0;
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Increment = 1;
+            nudDiscretizationTimeToolStripMenuItem.ValueChanged += NudDiscretizationTimeToolStripMenuItem_ValueChanged;
+
             // Initialize graph
             ResetGraphData();
 
@@ -670,6 +683,7 @@ namespace ControlledPTT
             LoadAppConfiguration();
         }
 
+
         #region Event Handlers
 
         /// <summary>
@@ -685,6 +699,21 @@ namespace ControlledPTT
                     Invoke(new EventHandler(btnStartSensor_Click));
                 if (btnStartLaser.Enabled && cmbExperimentType.SelectedIndex > 0)
                     Invoke(new EventHandler(btnStartLaser_Click));
+            }
+        }
+
+        /// <summary>
+        /// Sets up the time intervals for Sensor part to send data and for App to send data to laser if PID is used
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NudDiscretizationTimeToolStripMenuItem_ValueChanged(object sender, EventArgs e)
+        {
+            _discretizationTime = (int)nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Value;
+            _expTimer.Interval = _discretizationTime;
+            if (_sensor != null)
+            {
+                _sensor.SetTimerInterval(_discretizationTime);
             }
         }
 
