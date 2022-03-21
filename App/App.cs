@@ -711,10 +711,7 @@ namespace ControlledPTT
         {
             _discretizationTime = (int)nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Value;
             _expTimer.Interval = _discretizationTime;
-            if (_sensor != null)
-            {
-                _sensor.SetTimerInterval(_discretizationTime);
-            }
+            _sensor?.SetTimerInterval(_discretizationTime);
         }
 
         /// <summary>
@@ -944,7 +941,9 @@ namespace ControlledPTT
             SaveAppConfiguration();
 
             _calibration.Dispose();
-            // Log.CloseAndFlush();
+
+            _sensor?.Close();
+            _laser?.Close();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
