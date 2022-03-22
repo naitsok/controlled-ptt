@@ -29,7 +29,8 @@
 // Watch Video explainign I2C address: https://www.youtube.com/watch?v=bqMMIbmYJS0
 //
  
-#include <Wire.h> //Include this library if using Arduino or similar board.
+#include <Wire.h>
+ 
  
 void setup()
 {

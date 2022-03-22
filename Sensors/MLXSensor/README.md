@@ -29,7 +29,7 @@ This sketch and C# communication program are dedicated to reading temperature in
 
  See below for a Fritzing diagram with a Teensy 3.1 – a circuit analogous to our Teensy 3.6 setup. 
  
-<img src="https://github.com/Mikkevaris/controlledptt-sensor/blob/master/one-mlx-sensor/OneMlx.png" height="350" width="600">
+ ![On MLX Sensor board](../../Docs/Images/OneMlx.png)
 
 # Compilation
 
@@ -49,7 +49,7 @@ If it is needed to change the sensor's address, use i2c_change_address sketch in
 
 When the Arduino sketch is uploaded to development board, you are ready to move on to the C# program. Start by opening one-mlx-sensor.sln in Visual Studio, which can be found in pc-mlx folder. However, before you can run the program there's still few things to do. The program uses BaseSensor as a base class, which handles the communication with the hardware. You'll need to include a .dll reference generated of this class in one-sensor-mlx program. To do so, first open BaseSensor.sln in your Visual Studio. Basesensor.sln can be found in repository's base-sensor folder. On the toolbar choose the Release option as shown in image below.
 
-<img src = "https://github.com/Mikkevaris/controlledptt-sensor/blob/master/array-mlx-sensor/toolbarbuildconfiguration.png">
+![Release Build Configuration](../../Docs/Images/toolbarbuildconfiguration.png)
 
 Then select Build > Build Solution. After building is succeeded you can close the BaseSensor class. Now in one-mlx-sensor window right click References which can be found in Solution Explorer on right side of the Visual Studio window. Click "Add References" and then "Browse" in Reference Manager window. Navigate to this repository's folder and then base-sensor > bin > Release and add BaseSensor.dll. Make sure that .dll is checked in Reference Manager window and click "OK". Reference of the BaseSensor class is now included.
 

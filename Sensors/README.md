@@ -1,9 +1,10 @@
 ## Sensors
 
+This directory contains the C# projects for the Sensor modules. Each Sensor module contains the C# application, the sketches for Arduino studio to program the boards, and instructions for board wiring. The core of each Sensor module is the [BaseSensor](./BaseSensor) DLL. All C# modules must reference and inherit from the [BaseSensor](./BaseSensor) class. The [ControlledPTT.App](../App) also references the [BaseSensor](./BaseSensor) and uses it to create the selected particular Sensor modules. 
 
 ### Requirements
 
-Each sensor part consists of two compnents: (1) the C# module to read the data sent from the sensor; (2) board connected to the sensor hardware and PC. The following requirements are in place:
+Each sensor part consists of two compnents: (1) the C# module to read the data sent from the sensor and send in to the [ControlledPTT.App](../App); (2) board connected to the sensor hardware and PC. The following requirements are in place:
 
 - [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/net472) to run the C# module on a PC with Windows OS. .NET Framework 4.7.2 is included by default in Windows 7 or higher.
 - [Arduino Studio 1.8.13](https://www.arduino.cc/en/software) or higher. Arduino Studio is needed to install necessary drivers and upload the program to the board. More details in the [sensors section](#selecting-sensor-part).
