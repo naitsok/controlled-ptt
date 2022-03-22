@@ -132,11 +132,11 @@
     <None Include="Calibrations\dummy_calibration.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Configurations\build_config.json">
+    <None Include="Configurations\release_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Configurations\default_config.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -169,10 +169,11 @@ xcopy "$(TargetDir)*BaseSensor.*" "$(SolutionDir)Build\$(ConfigurationName)\Lib\
 xcopy "$(TargetDir)*BaseLaser.*" "$(SolutionDir)Build\$(ConfigurationName)\Lib\"  /Y /I
 xcopy "$(TargetDir)*App.*" "$(SolutionDir)Build\$(ConfigurationName)\"  /Y /I
 xcopy "$(TargetDir)Calibrations" "$(SolutionDir)Build\$(ConfigurationName)\Calibrations\"  /Y /I
-xcopy "$(TargetDir)Configurations\build_config.json" "$(SolutionDir)Build\$(ConfigurationName)\Configurations\default_config.json*"  /Y /I
+xcopy "$(TargetDir)Configurations\release_config.json" "$(SolutionDir)Build\$(ConfigurationName)\Configurations\default_config.json*"  /Y /I
 xcopy "$(SolutionDir)Sensors\BoardCommons" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\BoardCommons\" /S /Y /I</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>powershell -Command "Get-ChildItem -Path $(SolutionDir)AssemblyInfo.cs -Force -Recurse | Foreach-Object { (gc $_.FullName) -replace '2.0.0.\*', '2.0.1.*' | Out-File -encoding UTF8 $_.FullName }"</PreBuildEvent>
+    <PreBuildEvent>powershell -Command "Get-ChildItem -Path $(SolutionDir)AssemblyInfo.cs -Force -Recurse | Foreach-Object { (gc $_.FullName) -replace '2.0.0.\*', '2.0.1.*' | Out-File -encoding UTF8 $_.FullName }"
+powershell -Command "Get-ChildItem -Path $(ProjectDir)Configurations/default_config.json -Force -Recurse | Foreach-Object { (gc $_.FullName) -replace '{BuildConfiguration}', '$(ConfigurationName)'  | Out-File -encoding UTF8 $_.FullName }"</PreBuildEvent>
   </PropertyGroup>
 </Project>

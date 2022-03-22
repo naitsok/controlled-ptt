@@ -156,17 +156,17 @@ When using please give the following references:
 
 To cite the latest version:
 
-K. Tamarov, M. Varis. 2021. Controlled Photothermal Therapy 2. [DOI: 10.5281/zenodo.4629678](https://doi.org/10.5281/zenodo.4749684).
+K. Tamarov, E.Happonen, M. Varis, Y.Constantinou, W. Xu, V.-P. Lehto. 2021. Controlled Photothermal Therapy 2. [DOI: 10.5281/zenodo.4629678](https://doi.org/10.5281/zenodo.4749684).
 
 To cite the specific version, select the DOI of specific version on [Zenodo page](https://doi.org/10.5281/zenodo.4749684):
 
-K. Tamarov, M. Varis. 2021. Controlled Photothermal Therapy 2. DOI: (Use DOI of specific version).
+K. Tamarov, E.Happonen, M. Varis, Y.Constantinou, W. Xu, V.-P. Lehto. 2021. Controlled Photothermal Therapy 2. DOI: (Use DOI of specific version).
 
 
 ## Changelog
 ### V2.0.1
 
-#### Feature:
+#### Features:
 - CNI Laser with PSU-III-LED controller is added.
 - Discretization Time Interval is added to the Experiment Settings menu.
 - Minor updates and bug fixes, such as correct configuration saving for laser and sensor parts.

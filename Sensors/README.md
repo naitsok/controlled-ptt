@@ -34,6 +34,14 @@ If there is no part suitable for your hardware, new sensor part [can be develope
 
 ### Developing a new sensor part
 
-The correct implementation of a new sensor part requires the development of hardware and software parts. The hardware part is completely under one's specification. The software part must be developed using Visual Studio 2019 and .NET Framework 4.7.2. The sensor part executable must be inherited from the [BaseSensor](./Sensors/BaseSensor) class, which is in turn inherited from the System.Windows.Forms.Form class.
+[BoardCommons](./BoardCommons) folder contains necessary libraries for Arduino Studio, example sketches and utilites, such as getting/setting the addresses for the connected sensors. 
 
-Contains sketches programs to read the data from temperature sensors using suggested harware, send the data to PC and display it on PC using C# programs.
+The correct implementation of a new sensor part requires the development of hardware and software parts. The hardware part is completely under one's specification. The software part must be developed using Visual Studio 2019 and .NET Framework 4.7.2. The sensor part executable must be inherited from the [BaseSensor](./BaseSensor) class, which is in turn inherited from the System.Windows.Forms.Form class. Refer to the source code for the available C# projects and the Arduino Studio sketches.
+
+Here are the main moments that need to be considered:
+- The C# project for sensor part must inherit from the [BaseSensor](./BaseSensor).
+- Not implemented methods in the [BaseSensor](./BaseSensor) must be implemented.
+- Post-build events must copy the compiled files, configurations, libraries, etc. to the build directory.
+
+
+

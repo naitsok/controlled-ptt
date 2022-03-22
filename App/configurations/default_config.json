@@ -1,4 +1,4 @@
-{
+﻿{
   "discretization_ms": 1000,
   "save_settings_on_closing": true,
   "start_sensor_and_laser_parts_on_app_startup": true,
@@ -18,11 +18,11 @@
     "integral": 50,
     "differential": 50
   },
-  "sensors_path": "..\\..\\..\\build\\Debug\\Sensors\\",
+  "sensors_path": "..\\..\\..\\build\\Release\\Sensors\\",
   "user_added_sensors": [
   ],
   "selected_sensor_index": 1,
-  "lasers_path": "..\\..\\..\\build\\Debug\\Lasers\\",
+  "lasers_path": "..\\..\\..\\build\\Release\\Lasers\\",
   "user_added_lasers": [
   ],
   "selected_laser_index": 1,

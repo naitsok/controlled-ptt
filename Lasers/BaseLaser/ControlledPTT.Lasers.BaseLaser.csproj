@@ -58,7 +58,6 @@
     <Compile Include="BaseLaser.Designer.cs">
       <DependentUpon>BaseLaser.cs</DependentUpon>
     </Compile>
-    <Compile Include="IBaseLaser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
