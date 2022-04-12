@@ -170,6 +170,7 @@ K. Tamarov, E.Happonen, M. Varis, Y.Constantinou, W. Xu, V.-P. Lehto. 2021. Cont
 #### Features:
 - Added documentation for CNI Laser and Agilent Power Supply laser parts.
 - Discretiztion Time Interval now gets disabled during experiment run.
+- Slighlty reduced sizes of the ArrayMLXSensor, Agilent Power Supply laser, CNIMDLIII laser and ControlledPTT.App to fit 1440x900 resolution screens.
 - Fixed runtime errors during building when switching from Debug to Release mode and vice versa.
 
 ### V2.0.1

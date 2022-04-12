@@ -84,7 +84,7 @@ namespace ControlledPTT.Lasers
             this.gbLaserConn.Controls.Add(this.btnInitLaser);
             this.gbLaserConn.Location = new System.Drawing.Point(12, 12);
             this.gbLaserConn.Name = "gbLaserConn";
-            this.gbLaserConn.Size = new System.Drawing.Size(360, 238);
+            this.gbLaserConn.Size = new System.Drawing.Size(285, 238);
             this.gbLaserConn.TabIndex = 35;
             this.gbLaserConn.TabStop = false;
             this.gbLaserConn.Text = "Laser controller connection";
@@ -104,13 +104,13 @@ namespace ControlledPTT.Lasers
             this.cbLaserCalibration.FormattingEnabled = true;
             this.cbLaserCalibration.Location = new System.Drawing.Point(127, 80);
             this.cbLaserCalibration.Name = "cbLaserCalibration";
-            this.cbLaserCalibration.Size = new System.Drawing.Size(227, 21);
+            this.cbLaserCalibration.Size = new System.Drawing.Size(150, 21);
             this.cbLaserCalibration.TabIndex = 23;
             this.cbLaserCalibration.SelectedIndexChanged += new System.EventHandler(this.cbLaserCalibration_SelectedIndexChanged);
             // 
             // btnClearData
             // 
-            this.btnClearData.Location = new System.Drawing.Point(313, 148);
+            this.btnClearData.Location = new System.Drawing.Point(236, 148);
             this.btnClearData.Name = "btnClearData";
             this.btnClearData.Size = new System.Drawing.Size(41, 84);
             this.btnClearData.TabIndex = 22;
@@ -130,7 +130,7 @@ namespace ControlledPTT.Lasers
             // 
             this.txtAllReceivedData.Location = new System.Drawing.Point(6, 148);
             this.txtAllReceivedData.Name = "txtAllReceivedData";
-            this.txtAllReceivedData.Size = new System.Drawing.Size(301, 84);
+            this.txtAllReceivedData.Size = new System.Drawing.Size(224, 84);
             this.txtAllReceivedData.TabIndex = 20;
             this.txtAllReceivedData.Text = "";
             // 
@@ -142,7 +142,7 @@ namespace ControlledPTT.Lasers
             this.txtInitStatus.Location = new System.Drawing.Point(127, 107);
             this.txtInitStatus.Name = "txtInitStatus";
             this.txtInitStatus.ReadOnly = true;
-            this.txtInitStatus.Size = new System.Drawing.Size(227, 20);
+            this.txtInitStatus.Size = new System.Drawing.Size(150, 20);
             this.txtInitStatus.TabIndex = 15;
             this.txtInitStatus.Text = "Not Initalized";
             this.txtInitStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -172,7 +172,7 @@ namespace ControlledPTT.Lasers
             this.cbPorts.FormattingEnabled = true;
             this.cbPorts.Location = new System.Drawing.Point(127, 22);
             this.cbPorts.Name = "cbPorts";
-            this.cbPorts.Size = new System.Drawing.Size(227, 21);
+            this.cbPorts.Size = new System.Drawing.Size(150, 21);
             this.cbPorts.TabIndex = 2;
             // 
             // cbBaudRate
@@ -196,7 +196,7 @@ namespace ControlledPTT.Lasers
             "115200 "});
             this.cbBaudRate.Location = new System.Drawing.Point(127, 53);
             this.cbBaudRate.Name = "cbBaudRate";
-            this.cbBaudRate.Size = new System.Drawing.Size(227, 21);
+            this.cbBaudRate.Size = new System.Drawing.Size(150, 21);
             this.cbBaudRate.TabIndex = 13;
             // 
             // btnInitLaser
@@ -231,7 +231,7 @@ namespace ControlledPTT.Lasers
             this.gbLimits.Controls.Add(this.lblMaxPower);
             this.gbLimits.Location = new System.Drawing.Point(12, 256);
             this.gbLimits.Name = "gbLimits";
-            this.gbLimits.Size = new System.Drawing.Size(360, 135);
+            this.gbLimits.Size = new System.Drawing.Size(285, 135);
             this.gbLimits.TabIndex = 36;
             this.gbLimits.TabStop = false;
             this.gbLimits.Text = "Laser Power and Current Limits";
@@ -251,7 +251,7 @@ namespace ControlledPTT.Lasers
             0,
             131072});
             this.nudMaxCurrent.Name = "nudMaxCurrent";
-            this.nudMaxCurrent.Size = new System.Drawing.Size(227, 20);
+            this.nudMaxCurrent.Size = new System.Drawing.Size(150, 20);
             this.nudMaxCurrent.TabIndex = 40;
             this.nudMaxCurrent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudMaxCurrent.ValueChanged += new System.EventHandler(this.nudMaxCurrent_ValueChanged);
@@ -271,7 +271,7 @@ namespace ControlledPTT.Lasers
             0,
             131072});
             this.nudMinCurrent.Name = "nudMinCurrent";
-            this.nudMinCurrent.Size = new System.Drawing.Size(227, 20);
+            this.nudMinCurrent.Size = new System.Drawing.Size(150, 20);
             this.nudMinCurrent.TabIndex = 38;
             this.nudMinCurrent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudMinCurrent.ValueChanged += new System.EventHandler(this.nudMinCurrent_ValueChanged);
@@ -303,7 +303,7 @@ namespace ControlledPTT.Lasers
             0,
             0});
             this.nudMinPower.Name = "nudMinPower";
-            this.nudMinPower.Size = new System.Drawing.Size(227, 20);
+            this.nudMinPower.Size = new System.Drawing.Size(150, 20);
             this.nudMinPower.TabIndex = 16;
             this.nudMinPower.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudMinPower.ValueChanged += new System.EventHandler(this.nudMinPower_ValueChanged);
@@ -317,7 +317,7 @@ namespace ControlledPTT.Lasers
             0,
             0});
             this.nudMaxPower.Name = "nudMaxPower";
-            this.nudMaxPower.Size = new System.Drawing.Size(227, 20);
+            this.nudMaxPower.Size = new System.Drawing.Size(150, 20);
             this.nudMaxPower.TabIndex = 17;
             this.nudMaxPower.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudMaxPower.Value = new decimal(new int[] {
@@ -355,7 +355,7 @@ namespace ControlledPTT.Lasers
             this.gbOutput.Controls.Add(this.lblOutputPower);
             this.gbOutput.Location = new System.Drawing.Point(12, 397);
             this.gbOutput.Name = "gbOutput";
-            this.gbOutput.Size = new System.Drawing.Size(360, 97);
+            this.gbOutput.Size = new System.Drawing.Size(285, 97);
             this.gbOutput.TabIndex = 37;
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
@@ -375,7 +375,7 @@ namespace ControlledPTT.Lasers
             0,
             131072});
             this.nudOutputCurrent.Name = "nudOutputCurrent";
-            this.nudOutputCurrent.Size = new System.Drawing.Size(227, 20);
+            this.nudOutputCurrent.Size = new System.Drawing.Size(150, 20);
             this.nudOutputCurrent.TabIndex = 42;
             this.nudOutputCurrent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudOutputCurrent.ValueChanged += new System.EventHandler(this.nudOutputCurrent_ValueChanged);
@@ -407,7 +407,7 @@ namespace ControlledPTT.Lasers
             this.txtLaserOutput.Location = new System.Drawing.Point(127, 71);
             this.txtLaserOutput.Name = "txtLaserOutput";
             this.txtLaserOutput.ReadOnly = true;
-            this.txtLaserOutput.Size = new System.Drawing.Size(227, 20);
+            this.txtLaserOutput.Size = new System.Drawing.Size(150, 20);
             this.txtLaserOutput.TabIndex = 28;
             this.txtLaserOutput.Text = "Output Off";
             this.txtLaserOutput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -421,7 +421,7 @@ namespace ControlledPTT.Lasers
             0,
             0});
             this.nudOutputPower.Name = "nudOutputPower";
-            this.nudOutputPower.Size = new System.Drawing.Size(227, 20);
+            this.nudOutputPower.Size = new System.Drawing.Size(150, 20);
             this.nudOutputPower.TabIndex = 16;
             this.nudOutputPower.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudOutputPower.ValueChanged += new System.EventHandler(this.nudOutputPower_ValueChanged);
@@ -439,12 +439,12 @@ namespace ControlledPTT.Lasers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 531);
+            this.ClientSize = new System.Drawing.Size(309, 531);
             this.Controls.Add(this.gbOutput);
             this.Controls.Add(this.gbLimits);
             this.Controls.Add(this.gbLaserConn);
             this.Controls.Add(this.btnClose);
-            this.MinimumSize = new System.Drawing.Size(400, 570);
+            this.MinimumSize = new System.Drawing.Size(325, 570);
             this.Name = "CNIMDLIII";
             this.Text = "CNI MDL-III Laser";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CNIMDLIII_FormClosing);

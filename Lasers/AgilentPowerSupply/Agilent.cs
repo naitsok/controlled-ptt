@@ -80,8 +80,8 @@ namespace ControlledPTT.Lasers
                 // Check if it Agilent is indeed initialized.
                 if (IsLaserInitialized())
                 {
-                    btnInitialize.Text = "Disconnect from Agilent";
-                    txtInitStatus.Text = "Connected to Agilent";
+                    btnInitialize.Text = "Disconnect";
+                    txtInitStatus.Text = "Initialized";
                     txtInitStatus.BackColor = Color.Green;
                 }
             }
@@ -128,8 +128,8 @@ namespace ControlledPTT.Lasers
                     MessageBox.Show("An error occured while sending command to Agilent. Please check if it is connected and initialize the Agilent again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtAgilentSwitch.Text = "Output Off";
                     txtAgilentSwitch.BackColor = Color.Red;
-                    btnSwitchAgilent.Text = "Switch Output On";
-                    txtInitStatus.Text = "Laser Not Initialized";
+                    btnSwitchAgilent.Text = "Switch On";
+                    txtInitStatus.Text = "Not Initialized";
                     txtInitStatus.BackColor = Color.Red;
                     btnInitialize.Text = "Initialize";
                 }
@@ -212,7 +212,7 @@ namespace ControlledPTT.Lasers
                 _currentOn = true;
                 txtAgilentSwitch.Text = "Output On";
                 txtAgilentSwitch.BackColor = Color.Green;
-                btnSwitchAgilent.Text = "Switch Output Off";
+                btnSwitchAgilent.Text = "Switch Off";
                 return true;
             }
             return false;
@@ -246,7 +246,7 @@ namespace ControlledPTT.Lasers
                 _currentOn = false;
                 txtAgilentSwitch.Text = "Output Off";
                 txtAgilentSwitch.BackColor = Color.Red;
-                btnSwitchAgilent.Text = "Switch Output On";
+                btnSwitchAgilent.Text = "Switch On";
                 return true;
             }
             return false;

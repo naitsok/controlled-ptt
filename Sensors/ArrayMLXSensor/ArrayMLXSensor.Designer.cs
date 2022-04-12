@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.gbArduino = new System.Windows.Forms.GroupBox();
+            this.btnClose = new System.Windows.Forms.Button();
             this.btnDeselectAll = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.btnAvgTemperature = new System.Windows.Forms.Button();
@@ -44,7 +45,6 @@
             this.cbBaudRate = new System.Windows.Forms.ComboBox();
             this.btnConnToBoard = new System.Windows.Forms.Button();
             this.gbTemperatures = new System.Windows.Forms.GroupBox();
-            this.btnClose = new System.Windows.Forms.Button();
             this.gbArduino.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,16 +67,26 @@
             this.gbArduino.Controls.Add(this.btnConnToBoard);
             this.gbArduino.Location = new System.Drawing.Point(13, 12);
             this.gbArduino.Name = "gbArduino";
-            this.gbArduino.Size = new System.Drawing.Size(295, 540);
+            this.gbArduino.Size = new System.Drawing.Size(258, 540);
             this.gbArduino.TabIndex = 36;
             this.gbArduino.TabStop = false;
             this.gbArduino.Text = "Sensor controller connection";
             // 
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(6, 511);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(130, 23);
+            this.btnClose.TabIndex = 40;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
             // btnDeselectAll
             // 
-            this.btnDeselectAll.Location = new System.Drawing.Point(142, 319);
+            this.btnDeselectAll.Location = new System.Drawing.Point(132, 319);
             this.btnDeselectAll.Name = "btnDeselectAll";
-            this.btnDeselectAll.Size = new System.Drawing.Size(144, 23);
+            this.btnDeselectAll.Size = new System.Drawing.Size(120, 23);
             this.btnDeselectAll.TabIndex = 39;
             this.btnDeselectAll.Text = "Deselect All Cell";
             this.btnDeselectAll.UseVisualStyleBackColor = true;
@@ -96,7 +106,7 @@
             // 
             this.btnAvgTemperature.Location = new System.Drawing.Point(6, 348);
             this.btnAvgTemperature.Name = "btnAvgTemperature";
-            this.btnAvgTemperature.Size = new System.Drawing.Size(130, 23);
+            this.btnAvgTemperature.Size = new System.Drawing.Size(120, 23);
             this.btnAvgTemperature.TabIndex = 32;
             this.btnAvgTemperature.Text = "Average Temperature";
             this.btnAvgTemperature.UseVisualStyleBackColor = true;
@@ -105,7 +115,7 @@
             // 
             this.btnSelectAll.Location = new System.Drawing.Point(6, 319);
             this.btnSelectAll.Name = "btnSelectAll";
-            this.btnSelectAll.Size = new System.Drawing.Size(130, 23);
+            this.btnSelectAll.Size = new System.Drawing.Size(120, 23);
             this.btnSelectAll.TabIndex = 30;
             this.btnSelectAll.Text = "Select All Cells";
             this.btnSelectAll.UseVisualStyleBackColor = true;
@@ -113,9 +123,9 @@
             // 
             // txtAvgTemperature
             // 
-            this.txtAvgTemperature.Location = new System.Drawing.Point(142, 350);
+            this.txtAvgTemperature.Location = new System.Drawing.Point(132, 350);
             this.txtAvgTemperature.Name = "txtAvgTemperature";
-            this.txtAvgTemperature.Size = new System.Drawing.Size(145, 20);
+            this.txtAvgTemperature.Size = new System.Drawing.Size(120, 20);
             this.txtAvgTemperature.TabIndex = 29;
             this.txtAvgTemperature.Text = "0.00";
             this.txtAvgTemperature.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -126,13 +136,13 @@
             this.txtAllReceivedData.Multiline = true;
             this.txtAllReceivedData.Name = "txtAllReceivedData";
             this.txtAllReceivedData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAllReceivedData.Size = new System.Drawing.Size(237, 130);
+            this.txtAllReceivedData.Size = new System.Drawing.Size(203, 130);
             this.txtAllReceivedData.TabIndex = 26;
             // 
             // btnClearData
             // 
             this.btnClearData.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btnClearData.Location = new System.Drawing.Point(249, 132);
+            this.btnClearData.Location = new System.Drawing.Point(215, 132);
             this.btnClearData.Name = "btnClearData";
             this.btnClearData.Size = new System.Drawing.Size(37, 130);
             this.btnClearData.TabIndex = 22;
@@ -153,10 +163,10 @@
             // 
             this.txtConnectedStatus.BackColor = System.Drawing.Color.Red;
             this.txtConnectedStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtConnectedStatus.Location = new System.Drawing.Point(142, 81);
+            this.txtConnectedStatus.Location = new System.Drawing.Point(132, 81);
             this.txtConnectedStatus.Name = "txtConnectedStatus";
             this.txtConnectedStatus.ReadOnly = true;
-            this.txtConnectedStatus.Size = new System.Drawing.Size(145, 20);
+            this.txtConnectedStatus.Size = new System.Drawing.Size(120, 20);
             this.txtConnectedStatus.TabIndex = 15;
             this.txtConnectedStatus.Text = "Not Connected";
             this.txtConnectedStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -165,7 +175,7 @@
             // 
             this.btnBaudRate.Location = new System.Drawing.Point(6, 51);
             this.btnBaudRate.Name = "btnBaudRate";
-            this.btnBaudRate.Size = new System.Drawing.Size(130, 23);
+            this.btnBaudRate.Size = new System.Drawing.Size(120, 23);
             this.btnBaudRate.TabIndex = 14;
             this.btnBaudRate.Text = "Baud Rate";
             this.btnBaudRate.UseVisualStyleBackColor = true;
@@ -174,7 +184,7 @@
             // 
             this.btnGetComPorts.Location = new System.Drawing.Point(6, 22);
             this.btnGetComPorts.Name = "btnGetComPorts";
-            this.btnGetComPorts.Size = new System.Drawing.Size(130, 23);
+            this.btnGetComPorts.Size = new System.Drawing.Size(120, 23);
             this.btnGetComPorts.TabIndex = 0;
             this.btnGetComPorts.Text = "Get COM ports";
             this.btnGetComPorts.UseVisualStyleBackColor = true;
@@ -184,9 +194,9 @@
             // 
             this.cbPorts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPorts.FormattingEnabled = true;
-            this.cbPorts.Location = new System.Drawing.Point(142, 22);
+            this.cbPorts.Location = new System.Drawing.Point(132, 22);
             this.cbPorts.Name = "cbPorts";
-            this.cbPorts.Size = new System.Drawing.Size(145, 21);
+            this.cbPorts.Size = new System.Drawing.Size(120, 21);
             this.cbPorts.TabIndex = 2;
             // 
             // cbBaudRate
@@ -208,16 +218,16 @@
             "56000",
             "57600",
             "115200 "});
-            this.cbBaudRate.Location = new System.Drawing.Point(142, 51);
+            this.cbBaudRate.Location = new System.Drawing.Point(132, 51);
             this.cbBaudRate.Name = "cbBaudRate";
-            this.cbBaudRate.Size = new System.Drawing.Size(145, 21);
+            this.cbBaudRate.Size = new System.Drawing.Size(120, 21);
             this.cbBaudRate.TabIndex = 13;
             // 
             // btnConnToBoard
             // 
             this.btnConnToBoard.Location = new System.Drawing.Point(6, 80);
             this.btnConnToBoard.Name = "btnConnToBoard";
-            this.btnConnToBoard.Size = new System.Drawing.Size(130, 23);
+            this.btnConnToBoard.Size = new System.Drawing.Size(120, 23);
             this.btnConnToBoard.TabIndex = 3;
             this.btnConnToBoard.Text = "Connect to Board";
             this.btnConnToBoard.UseVisualStyleBackColor = true;
@@ -225,7 +235,7 @@
             // 
             // gbTemperatures
             // 
-            this.gbTemperatures.Location = new System.Drawing.Point(314, 12);
+            this.gbTemperatures.Location = new System.Drawing.Point(277, 12);
             this.gbTemperatures.Name = "gbTemperatures";
             this.gbTemperatures.Size = new System.Drawing.Size(225, 540);
             this.gbTemperatures.TabIndex = 37;
@@ -234,24 +244,14 @@
             this.gbTemperatures.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gbTemperatures_MouseClick);
             this.gbTemperatures.Paint += new System.Windows.Forms.PaintEventHandler(this.gbTemperatures_Paint);
             // 
-            // btnClose
-            // 
-            this.btnClose.Location = new System.Drawing.Point(6, 511);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(130, 23);
-            this.btnClose.TabIndex = 40;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
-            // 
             // ArrayMLXSensor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(549, 561);
+            this.ClientSize = new System.Drawing.Size(516, 561);
             this.Controls.Add(this.gbTemperatures);
             this.Controls.Add(this.gbArduino);
-            this.MinimumSize = new System.Drawing.Size(565, 600);
+            this.MinimumSize = new System.Drawing.Size(532, 600);
             this.Name = "ArrayMLXSensor";
             this.Text = "Array MLX Sensor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ArraySensor_FormClosing);

@@ -164,7 +164,7 @@ namespace ControlledPTT
             _laser.Show();
 
             // Organize windows
-            _laser.Location = new Point(Location.X + Size.Width + 10, 10);
+            _laser.Location = new Point(Location.X + Size.Width, 0);
 
             // Disable controls
             gbLaser.Enabled = false;

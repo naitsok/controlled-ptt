@@ -46,13 +46,13 @@ namespace ControlledPTT.Lasers
             this.txtAgilentSwitch = new System.Windows.Forms.TextBox();
             this.btnSwitchAgilent = new System.Windows.Forms.Button();
             this.gbOutput = new System.Windows.Forms.GroupBox();
-            this.btnClose = new System.Windows.Forms.Button();
             this.nudOutputVoltage = new System.Windows.Forms.NumericUpDown();
             this.lblOutpuVoltage = new System.Windows.Forms.Label();
             this.txtVoltageNow = new System.Windows.Forms.TextBox();
             this.txtCurrentNow = new System.Windows.Forms.TextBox();
             this.lblVoltageNow = new System.Windows.Forms.Label();
             this.lblCurrentNow = new System.Windows.Forms.Label();
+            this.btnClose = new System.Windows.Forms.Button();
             this.cmbAgilentConnAddress = new System.Windows.Forms.ComboBox();
             this.btnRemoveAddress = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinCurrent)).BeginInit();
@@ -73,14 +73,14 @@ namespace ControlledPTT.Lasers
             0,
             0,
             131072});
-            this.nudMinCurrent.Location = new System.Drawing.Point(180, 22);
+            this.nudMinCurrent.Location = new System.Drawing.Point(152, 20);
             this.nudMinCurrent.Maximum = new decimal(new int[] {
             12,
             0,
             0,
             65536});
             this.nudMinCurrent.Name = "nudMinCurrent";
-            this.nudMinCurrent.Size = new System.Drawing.Size(156, 20);
+            this.nudMinCurrent.Size = new System.Drawing.Size(140, 20);
             this.nudMinCurrent.TabIndex = 0;
             this.nudMinCurrent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -92,14 +92,14 @@ namespace ControlledPTT.Lasers
             0,
             0,
             131072});
-            this.nudMaxCurrent.Location = new System.Drawing.Point(180, 50);
+            this.nudMaxCurrent.Location = new System.Drawing.Point(152, 48);
             this.nudMaxCurrent.Maximum = new decimal(new int[] {
             12,
             0,
             0,
             65536});
             this.nudMaxCurrent.Name = "nudMaxCurrent";
-            this.nudMaxCurrent.Size = new System.Drawing.Size(156, 20);
+            this.nudMaxCurrent.Size = new System.Drawing.Size(140, 20);
             this.nudMaxCurrent.TabIndex = 1;
             this.nudMaxCurrent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudMaxCurrent.Value = new decimal(new int[] {
@@ -161,14 +161,14 @@ namespace ControlledPTT.Lasers
             0,
             0,
             65536});
-            this.nudMaxVoltage.Location = new System.Drawing.Point(180, 108);
+            this.nudMaxVoltage.Location = new System.Drawing.Point(152, 106);
             this.nudMaxVoltage.Maximum = new decimal(new int[] {
             60,
             0,
             0,
             0});
             this.nudMaxVoltage.Name = "nudMaxVoltage";
-            this.nudMaxVoltage.Size = new System.Drawing.Size(156, 20);
+            this.nudMaxVoltage.Size = new System.Drawing.Size(140, 20);
             this.nudMaxVoltage.TabIndex = 17;
             this.nudMaxVoltage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudMaxVoltage.Value = new decimal(new int[] {
@@ -185,14 +185,14 @@ namespace ControlledPTT.Lasers
             0,
             0,
             65536});
-            this.nudMinVoltage.Location = new System.Drawing.Point(180, 80);
+            this.nudMinVoltage.Location = new System.Drawing.Point(152, 78);
             this.nudMinVoltage.Maximum = new decimal(new int[] {
             60,
             0,
             0,
             0});
             this.nudMinVoltage.Name = "nudMinVoltage";
-            this.nudMinVoltage.Size = new System.Drawing.Size(156, 20);
+            this.nudMinVoltage.Size = new System.Drawing.Size(140, 20);
             this.nudMinVoltage.TabIndex = 16;
             this.nudMinVoltage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -208,7 +208,7 @@ namespace ControlledPTT.Lasers
             this.gbLimits.Controls.Add(this.label1);
             this.gbLimits.Location = new System.Drawing.Point(12, 90);
             this.gbLimits.Name = "gbLimits";
-            this.gbLimits.Size = new System.Drawing.Size(342, 136);
+            this.gbLimits.Size = new System.Drawing.Size(300, 136);
             this.gbLimits.TabIndex = 20;
             this.gbLimits.TabStop = false;
             this.gbLimits.Text = "Limits for Current and Voltage";
@@ -221,14 +221,14 @@ namespace ControlledPTT.Lasers
             0,
             0,
             131072});
-            this.nudOutputCurrent.Location = new System.Drawing.Point(180, 18);
+            this.nudOutputCurrent.Location = new System.Drawing.Point(152, 18);
             this.nudOutputCurrent.Maximum = new decimal(new int[] {
             12,
             0,
             0,
             65536});
             this.nudOutputCurrent.Name = "nudOutputCurrent";
-            this.nudOutputCurrent.Size = new System.Drawing.Size(156, 20);
+            this.nudOutputCurrent.Size = new System.Drawing.Size(140, 20);
             this.nudOutputCurrent.TabIndex = 21;
             this.nudOutputCurrent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudOutputCurrent.ValueChanged += new System.EventHandler(this.nudOutputCurrent_ValueChanged);
@@ -247,21 +247,21 @@ namespace ControlledPTT.Lasers
             this.txtInitStatus.BackColor = System.Drawing.Color.Red;
             this.txtInitStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtInitStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtInitStatus.Location = new System.Drawing.Point(189, 54);
+            this.txtInitStatus.Location = new System.Drawing.Point(164, 54);
             this.txtInitStatus.Name = "txtInitStatus";
             this.txtInitStatus.ReadOnly = true;
-            this.txtInitStatus.Size = new System.Drawing.Size(163, 20);
+            this.txtInitStatus.Size = new System.Drawing.Size(140, 20);
             this.txtInitStatus.TabIndex = 23;
-            this.txtInitStatus.Text = "Agilent Not Initialized";
+            this.txtInitStatus.Text = "Not Initialized";
             this.txtInitStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // btnInitialize
             // 
             this.btnInitialize.Location = new System.Drawing.Point(12, 52);
             this.btnInitialize.Name = "btnInitialize";
-            this.btnInitialize.Size = new System.Drawing.Size(171, 23);
+            this.btnInitialize.Size = new System.Drawing.Size(146, 23);
             this.btnInitialize.TabIndex = 24;
-            this.btnInitialize.Text = "Initialize Agilent";
+            this.btnInitialize.Text = "Initialize";
             this.btnInitialize.UseVisualStyleBackColor = true;
             this.btnInitialize.Click += new System.EventHandler(this.btnInitialize_Click);
             // 
@@ -270,10 +270,10 @@ namespace ControlledPTT.Lasers
             this.txtAgilentSwitch.BackColor = System.Drawing.Color.Red;
             this.txtAgilentSwitch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAgilentSwitch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtAgilentSwitch.Location = new System.Drawing.Point(177, 122);
+            this.txtAgilentSwitch.Location = new System.Drawing.Point(149, 122);
             this.txtAgilentSwitch.Name = "txtAgilentSwitch";
             this.txtAgilentSwitch.ReadOnly = true;
-            this.txtAgilentSwitch.Size = new System.Drawing.Size(159, 20);
+            this.txtAgilentSwitch.Size = new System.Drawing.Size(143, 20);
             this.txtAgilentSwitch.TabIndex = 26;
             this.txtAgilentSwitch.Text = "Output Off";
             this.txtAgilentSwitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -282,9 +282,9 @@ namespace ControlledPTT.Lasers
             // 
             this.btnSwitchAgilent.Location = new System.Drawing.Point(6, 120);
             this.btnSwitchAgilent.Name = "btnSwitchAgilent";
-            this.btnSwitchAgilent.Size = new System.Drawing.Size(165, 23);
+            this.btnSwitchAgilent.Size = new System.Drawing.Size(140, 23);
             this.btnSwitchAgilent.TabIndex = 25;
-            this.btnSwitchAgilent.Text = "Switch Agilent On";
+            this.btnSwitchAgilent.Text = "Switch On";
             this.btnSwitchAgilent.UseVisualStyleBackColor = true;
             this.btnSwitchAgilent.Click += new System.EventHandler(this.btnSwitchAgilent_Click);
             // 
@@ -302,20 +302,10 @@ namespace ControlledPTT.Lasers
             this.gbOutput.Controls.Add(this.lblOutputCurrent);
             this.gbOutput.Location = new System.Drawing.Point(12, 232);
             this.gbOutput.Name = "gbOutput";
-            this.gbOutput.Size = new System.Drawing.Size(342, 149);
+            this.gbOutput.Size = new System.Drawing.Size(300, 149);
             this.gbOutput.TabIndex = 27;
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
-            // 
-            // btnClose
-            // 
-            this.btnClose.Location = new System.Drawing.Point(18, 387);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(165, 23);
-            this.btnClose.TabIndex = 31;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // nudOutputVoltage
             // 
@@ -325,14 +315,14 @@ namespace ControlledPTT.Lasers
             0,
             0,
             65536});
-            this.nudOutputVoltage.Location = new System.Drawing.Point(180, 44);
+            this.nudOutputVoltage.Location = new System.Drawing.Point(152, 44);
             this.nudOutputVoltage.Maximum = new decimal(new int[] {
             60,
             0,
             0,
             0});
             this.nudOutputVoltage.Name = "nudOutputVoltage";
-            this.nudOutputVoltage.Size = new System.Drawing.Size(156, 20);
+            this.nudOutputVoltage.Size = new System.Drawing.Size(140, 20);
             this.nudOutputVoltage.TabIndex = 29;
             this.nudOutputVoltage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudOutputVoltage.ValueChanged += new System.EventHandler(this.nudOutputVoltage_ValueChanged);
@@ -348,19 +338,19 @@ namespace ControlledPTT.Lasers
             // 
             // txtVoltageNow
             // 
-            this.txtVoltageNow.Location = new System.Drawing.Point(180, 96);
+            this.txtVoltageNow.Location = new System.Drawing.Point(152, 96);
             this.txtVoltageNow.Name = "txtVoltageNow";
             this.txtVoltageNow.ReadOnly = true;
-            this.txtVoltageNow.Size = new System.Drawing.Size(156, 20);
+            this.txtVoltageNow.Size = new System.Drawing.Size(140, 20);
             this.txtVoltageNow.TabIndex = 30;
             this.txtVoltageNow.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // txtCurrentNow
             // 
-            this.txtCurrentNow.Location = new System.Drawing.Point(180, 70);
+            this.txtCurrentNow.Location = new System.Drawing.Point(152, 70);
             this.txtCurrentNow.Name = "txtCurrentNow";
             this.txtCurrentNow.ReadOnly = true;
-            this.txtCurrentNow.Size = new System.Drawing.Size(156, 20);
+            this.txtCurrentNow.Size = new System.Drawing.Size(140, 20);
             this.txtCurrentNow.TabIndex = 29;
             this.txtCurrentNow.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -382,13 +372,23 @@ namespace ControlledPTT.Lasers
             this.lblCurrentNow.TabIndex = 29;
             this.lblCurrentNow.Text = "Current Now [A]";
             // 
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(18, 387);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(140, 23);
+            this.btnClose.TabIndex = 31;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
             // cmbAgilentConnAddress
             // 
             this.cmbAgilentConnAddress.AllowDrop = true;
             this.cmbAgilentConnAddress.FormattingEnabled = true;
             this.cmbAgilentConnAddress.Location = new System.Drawing.Point(12, 25);
             this.cmbAgilentConnAddress.Name = "cmbAgilentConnAddress";
-            this.cmbAgilentConnAddress.Size = new System.Drawing.Size(270, 21);
+            this.cmbAgilentConnAddress.Size = new System.Drawing.Size(220, 21);
             this.cmbAgilentConnAddress.TabIndex = 28;
             this.cmbAgilentConnAddress.Text = "USB0::0x0957::0x0807::US08M3130G::0::INSTR";
             this.cmbAgilentConnAddress.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbAgilentConnAddress_KeyPress);
@@ -396,7 +396,7 @@ namespace ControlledPTT.Lasers
             // 
             // btnRemoveAddress
             // 
-            this.btnRemoveAddress.Location = new System.Drawing.Point(288, 24);
+            this.btnRemoveAddress.Location = new System.Drawing.Point(238, 23);
             this.btnRemoveAddress.Name = "btnRemoveAddress";
             this.btnRemoveAddress.Size = new System.Drawing.Size(66, 23);
             this.btnRemoveAddress.TabIndex = 29;
@@ -408,7 +408,7 @@ namespace ControlledPTT.Lasers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 415);
+            this.ClientSize = new System.Drawing.Size(324, 415);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnRemoveAddress);
             this.Controls.Add(this.cmbAgilentConnAddress);
@@ -417,6 +417,7 @@ namespace ControlledPTT.Lasers
             this.Controls.Add(this.txtInitStatus);
             this.Controls.Add(this.gbLimits);
             this.Controls.Add(this.lblAgilentConnAddress);
+            this.MinimumSize = new System.Drawing.Size(340, 454);
             this.Name = "Agilent";
             this.Text = "Laser Connected to Agilent Power Supply";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Agilent_FormClosing);

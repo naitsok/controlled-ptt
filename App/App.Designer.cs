@@ -93,7 +93,7 @@
             this.saveCurrentConfigWhenClosingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadSensorAndLaserPartsOnStartupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.experimentSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nudDiscretizationTimeToolStripMenuItem = new ControlledPTT.ToolStripNumberControl();
+            this.discrettizationTimemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createDirectoryWithCurrentDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createFileWithCurrentTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -116,7 +116,7 @@
             this.ofdLoadCalibration = new System.Windows.Forms.OpenFileDialog();
             this.ofdLoadConfig = new System.Windows.Forms.OpenFileDialog();
             this.btnExit = new System.Windows.Forms.Button();
-            this.discrettizationTimemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nudDiscretizationTimeToolStripMenuItem = new ControlledPTT.ToolStripNumberControl();
             this.gbExperiment.SuspendLayout();
             this.gbStopCondition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudThermalDose)).BeginInit();
@@ -159,7 +159,7 @@
             // 
             // pltTemperature
             // 
-            this.pltTemperature.Location = new System.Drawing.Point(0, 607);
+            this.pltTemperature.Location = new System.Drawing.Point(0, 557);
             this.pltTemperature.Name = "pltTemperature";
             this.pltTemperature.PanCursor = System.Windows.Forms.Cursors.Hand;
             this.pltTemperature.Size = new System.Drawing.Size(534, 260);
@@ -191,16 +191,16 @@
             this.gbExperiment.Controls.Add(this.gbPID);
             this.gbExperiment.Controls.Add(this.btnStartExperiment);
             this.gbExperiment.Controls.Add(this.lblElapsedTime);
-            this.gbExperiment.Location = new System.Drawing.Point(12, 217);
+            this.gbExperiment.Location = new System.Drawing.Point(12, 174);
             this.gbExperiment.Name = "gbExperiment";
-            this.gbExperiment.Size = new System.Drawing.Size(510, 396);
+            this.gbExperiment.Size = new System.Drawing.Size(510, 387);
             this.gbExperiment.TabIndex = 47;
             this.gbExperiment.TabStop = false;
             this.gbExperiment.Text = "Experiment";
             // 
             // txtGainedThermalDose
             // 
-            this.txtGainedThermalDose.Location = new System.Drawing.Point(398, 371);
+            this.txtGainedThermalDose.Location = new System.Drawing.Point(398, 361);
             this.txtGainedThermalDose.Name = "txtGainedThermalDose";
             this.txtGainedThermalDose.ReadOnly = true;
             this.txtGainedThermalDose.Size = new System.Drawing.Size(106, 20);
@@ -210,7 +210,7 @@
             // lblGainedThermalDose
             // 
             this.lblGainedThermalDose.AutoSize = true;
-            this.lblGainedThermalDose.Location = new System.Drawing.Point(264, 374);
+            this.lblGainedThermalDose.Location = new System.Drawing.Point(264, 364);
             this.lblGainedThermalDose.Name = "lblGainedThermalDose";
             this.lblGainedThermalDose.Size = new System.Drawing.Size(110, 13);
             this.lblGainedThermalDose.TabIndex = 89;
@@ -223,7 +223,7 @@
             this.gbStopCondition.Controls.Add(this.cmbStopCondition);
             this.gbStopCondition.Controls.Add(this.lblExpTime);
             this.gbStopCondition.Controls.Add(this.nudExpTime);
-            this.gbStopCondition.Location = new System.Drawing.Point(6, 293);
+            this.gbStopCondition.Location = new System.Drawing.Point(6, 283);
             this.gbStopCondition.Name = "gbStopCondition";
             this.gbStopCondition.Size = new System.Drawing.Size(498, 46);
             this.gbStopCondition.TabIndex = 87;
@@ -308,7 +308,7 @@
             // 
             // txtElapsedTime
             // 
-            this.txtElapsedTime.Location = new System.Drawing.Point(398, 345);
+            this.txtElapsedTime.Location = new System.Drawing.Point(398, 335);
             this.txtElapsedTime.Name = "txtElapsedTime";
             this.txtElapsedTime.ReadOnly = true;
             this.txtElapsedTime.Size = new System.Drawing.Size(106, 20);
@@ -335,7 +335,7 @@
             this.gbLaser.Controls.Add(this.btnStartLaser);
             this.gbLaser.Controls.Add(this.btnLoadLaser);
             this.gbLaser.Controls.Add(this.cmbLasers);
-            this.gbLaser.Location = new System.Drawing.Point(6, 149);
+            this.gbLaser.Location = new System.Drawing.Point(6, 147);
             this.gbLaser.Name = "gbLaser";
             this.gbLaser.Size = new System.Drawing.Size(498, 42);
             this.gbLaser.TabIndex = 86;
@@ -465,7 +465,7 @@
             this.txtExperimentStarted.BackColor = System.Drawing.Color.Red;
             this.txtExperimentStarted.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtExperimentStarted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtExperimentStarted.Location = new System.Drawing.Point(6, 371);
+            this.txtExperimentStarted.Location = new System.Drawing.Point(6, 361);
             this.txtExperimentStarted.Name = "txtExperimentStarted";
             this.txtExperimentStarted.ReadOnly = true;
             this.txtExperimentStarted.Size = new System.Drawing.Size(249, 20);
@@ -485,7 +485,7 @@
             this.gbPID.Controls.Add(this.lblDiffGain);
             this.gbPID.Controls.Add(this.lblIntGain);
             this.gbPID.Controls.Add(this.nudPropGain);
-            this.gbPID.Location = new System.Drawing.Point(6, 197);
+            this.gbPID.Location = new System.Drawing.Point(6, 191);
             this.gbPID.Name = "gbPID";
             this.gbPID.Size = new System.Drawing.Size(498, 90);
             this.gbPID.TabIndex = 73;
@@ -640,7 +640,7 @@
             // 
             // btnStartExperiment
             // 
-            this.btnStartExperiment.Location = new System.Drawing.Point(6, 343);
+            this.btnStartExperiment.Location = new System.Drawing.Point(6, 333);
             this.btnStartExperiment.Name = "btnStartExperiment";
             this.btnStartExperiment.Size = new System.Drawing.Size(249, 23);
             this.btnStartExperiment.TabIndex = 77;
@@ -651,7 +651,7 @@
             // lblElapsedTime
             // 
             this.lblElapsedTime.AutoSize = true;
-            this.lblElapsedTime.Location = new System.Drawing.Point(265, 348);
+            this.lblElapsedTime.Location = new System.Drawing.Point(265, 338);
             this.lblElapsedTime.Name = "lblElapsedTime";
             this.lblElapsedTime.Size = new System.Drawing.Size(71, 13);
             this.lblElapsedTime.TabIndex = 81;
@@ -660,7 +660,7 @@
             // lblCalibratedTemperature
             // 
             this.lblCalibratedTemperature.AutoSize = true;
-            this.lblCalibratedTemperature.Location = new System.Drawing.Point(265, 108);
+            this.lblCalibratedTemperature.Location = new System.Drawing.Point(265, 77);
             this.lblCalibratedTemperature.Name = "lblCalibratedTemperature";
             this.lblCalibratedTemperature.Size = new System.Drawing.Size(137, 13);
             this.lblCalibratedTemperature.TabIndex = 83;
@@ -669,7 +669,7 @@
             // lblSensorTemp
             // 
             this.lblSensorTemp.AutoSize = true;
-            this.lblSensorTemp.Location = new System.Drawing.Point(265, 75);
+            this.lblSensorTemp.Location = new System.Drawing.Point(265, 51);
             this.lblSensorTemp.Name = "lblSensorTemp";
             this.lblSensorTemp.Size = new System.Drawing.Size(70, 13);
             this.lblSensorTemp.TabIndex = 82;
@@ -677,7 +677,7 @@
             // 
             // txtCalibratedTemp
             // 
-            this.txtCalibratedTemp.Location = new System.Drawing.Point(404, 105);
+            this.txtCalibratedTemp.Location = new System.Drawing.Point(404, 74);
             this.txtCalibratedTemp.Name = "txtCalibratedTemp";
             this.txtCalibratedTemp.ReadOnly = true;
             this.txtCalibratedTemp.Size = new System.Drawing.Size(100, 20);
@@ -686,7 +686,7 @@
             // 
             // txtSensorTemp
             // 
-            this.txtSensorTemp.Location = new System.Drawing.Point(404, 72);
+            this.txtSensorTemp.Location = new System.Drawing.Point(404, 48);
             this.txtSensorTemp.Name = "txtSensorTemp";
             this.txtSensorTemp.ReadOnly = true;
             this.txtSensorTemp.Size = new System.Drawing.Size(100, 20);
@@ -699,12 +699,12 @@
             this.gbSensor.Controls.Add(this.btnStartSensor);
             this.gbSensor.Controls.Add(this.btnLoadSensor);
             this.gbSensor.Controls.Add(this.cmbSensors);
-            this.gbSensor.Location = new System.Drawing.Point(12, 27);
+            this.gbSensor.Location = new System.Drawing.Point(12, 23);
             this.gbSensor.Name = "gbSensor";
             this.gbSensor.Size = new System.Drawing.Size(510, 47);
             this.gbSensor.TabIndex = 60;
             this.gbSensor.TabStop = false;
-            this.gbSensor.Text = "Sensor Selection";
+            this.gbSensor.Text = "Sensor";
             // 
             // btnRemoveSensor
             // 
@@ -751,7 +751,7 @@
             this.cbUseCalibration.AutoSize = true;
             this.cbUseCalibration.Checked = true;
             this.cbUseCalibration.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbUseCalibration.Location = new System.Drawing.Point(6, 19);
+            this.cbUseCalibration.Location = new System.Drawing.Point(107, 0);
             this.cbUseCalibration.Name = "cbUseCalibration";
             this.cbUseCalibration.Size = new System.Drawing.Size(97, 17);
             this.cbUseCalibration.TabIndex = 54;
@@ -861,11 +861,11 @@
             this.experimentSettingsToolStripMenuItem.Size = new System.Drawing.Size(124, 20);
             this.experimentSettingsToolStripMenuItem.Text = "Experiment Settings";
             // 
-            // nudDiscretizationTimeToolStripMenuItem
+            // discrettizationTimemsToolStripMenuItem
             // 
-            this.nudDiscretizationTimeToolStripMenuItem.Name = "nudDiscretizationTimeToolStripMenuItem";
-            this.nudDiscretizationTimeToolStripMenuItem.Size = new System.Drawing.Size(100, 23);
-            this.nudDiscretizationTimeToolStripMenuItem.Text = "1000";
+            this.discrettizationTimemsToolStripMenuItem.Name = "discrettizationTimemsToolStripMenuItem";
+            this.discrettizationTimemsToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.discrettizationTimemsToolStripMenuItem.Text = "Discretization Time Interval (ms)";
             // 
             // createDirectoryWithCurrentDateToolStripMenuItem
             // 
@@ -921,16 +921,16 @@
             this.gbCalibration.Controls.Add(this.txtSensorTemp);
             this.gbCalibration.Controls.Add(this.txtCalibration);
             this.gbCalibration.Controls.Add(this.cbUseCalibration);
-            this.gbCalibration.Location = new System.Drawing.Point(12, 80);
+            this.gbCalibration.Location = new System.Drawing.Point(12, 72);
             this.gbCalibration.Name = "gbCalibration";
-            this.gbCalibration.Size = new System.Drawing.Size(510, 131);
+            this.gbCalibration.Size = new System.Drawing.Size(510, 100);
             this.gbCalibration.TabIndex = 61;
             this.gbCalibration.TabStop = false;
             this.gbCalibration.Text = "Sensor Calibration";
             // 
             // txtIntercept
             // 
-            this.txtIntercept.Location = new System.Drawing.Point(157, 105);
+            this.txtIntercept.Location = new System.Drawing.Point(157, 74);
             this.txtIntercept.Name = "txtIntercept";
             this.txtIntercept.ReadOnly = true;
             this.txtIntercept.Size = new System.Drawing.Size(98, 20);
@@ -939,7 +939,7 @@
             // 
             // txtSlope
             // 
-            this.txtSlope.Location = new System.Drawing.Point(157, 72);
+            this.txtSlope.Location = new System.Drawing.Point(157, 48);
             this.txtSlope.Name = "txtSlope";
             this.txtSlope.ReadOnly = true;
             this.txtSlope.Size = new System.Drawing.Size(98, 20);
@@ -949,7 +949,7 @@
             // lblIntercept
             // 
             this.lblIntercept.AutoSize = true;
-            this.lblIntercept.Location = new System.Drawing.Point(6, 108);
+            this.lblIntercept.Location = new System.Drawing.Point(6, 77);
             this.lblIntercept.Name = "lblIntercept";
             this.lblIntercept.Size = new System.Drawing.Size(101, 13);
             this.lblIntercept.TabIndex = 85;
@@ -958,7 +958,7 @@
             // lblSlope
             // 
             this.lblSlope.AutoSize = true;
-            this.lblSlope.Location = new System.Drawing.Point(6, 75);
+            this.lblSlope.Location = new System.Drawing.Point(6, 51);
             this.lblSlope.Name = "lblSlope";
             this.lblSlope.Size = new System.Drawing.Size(86, 13);
             this.lblSlope.TabIndex = 84;
@@ -966,7 +966,7 @@
             // 
             // btnModifyCalibration
             // 
-            this.btnModifyCalibration.Location = new System.Drawing.Point(348, 40);
+            this.btnModifyCalibration.Location = new System.Drawing.Point(348, 19);
             this.btnModifyCalibration.Name = "btnModifyCalibration";
             this.btnModifyCalibration.Size = new System.Drawing.Size(75, 23);
             this.btnModifyCalibration.TabIndex = 64;
@@ -976,7 +976,7 @@
             // 
             // btnNewCalibration
             // 
-            this.btnNewCalibration.Location = new System.Drawing.Point(429, 40);
+            this.btnNewCalibration.Location = new System.Drawing.Point(429, 19);
             this.btnNewCalibration.Name = "btnNewCalibration";
             this.btnNewCalibration.Size = new System.Drawing.Size(75, 23);
             this.btnNewCalibration.TabIndex = 63;
@@ -986,7 +986,7 @@
             // 
             // btnLoadCalibration
             // 
-            this.btnLoadCalibration.Location = new System.Drawing.Point(267, 40);
+            this.btnLoadCalibration.Location = new System.Drawing.Point(267, 19);
             this.btnLoadCalibration.Name = "btnLoadCalibration";
             this.btnLoadCalibration.Size = new System.Drawing.Size(75, 23);
             this.btnLoadCalibration.TabIndex = 62;
@@ -996,7 +996,7 @@
             // 
             // txtCalibration
             // 
-            this.txtCalibration.Location = new System.Drawing.Point(6, 42);
+            this.txtCalibration.Location = new System.Drawing.Point(6, 21);
             this.txtCalibration.Name = "txtCalibration";
             this.txtCalibration.ReadOnly = true;
             this.txtCalibration.Size = new System.Drawing.Size(249, 20);
@@ -1033,7 +1033,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(410, 852);
+            this.btnExit.Location = new System.Drawing.Point(410, 794);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(112, 23);
             this.btnExit.TabIndex = 64;
@@ -1041,17 +1041,17 @@
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // discrettizationTimemsToolStripMenuItem
+            // nudDiscretizationTimeToolStripMenuItem
             // 
-            this.discrettizationTimemsToolStripMenuItem.Name = "discrettizationTimemsToolStripMenuItem";
-            this.discrettizationTimemsToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
-            this.discrettizationTimemsToolStripMenuItem.Text = "Discretization Time Interval (ms)";
+            this.nudDiscretizationTimeToolStripMenuItem.Name = "nudDiscretizationTimeToolStripMenuItem";
+            this.nudDiscretizationTimeToolStripMenuItem.Size = new System.Drawing.Size(41, 23);
+            this.nudDiscretizationTimeToolStripMenuItem.Text = "100";
             // 
             // App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(534, 881);
+            this.ClientSize = new System.Drawing.Size(534, 821);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.gbCalibration);
             this.Controls.Add(this.pltAmbTemp);
@@ -1061,9 +1061,8 @@
             this.Controls.Add(this.menuMain);
             this.Controls.Add(this.gbSensor);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Location = new System.Drawing.Point(100, 10);
             this.MainMenuStrip = this.menuMain;
-            this.MinimumSize = new System.Drawing.Size(550, 920);
+            this.MinimumSize = new System.Drawing.Size(550, 860);
             this.Name = "App";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Controlled Photothermal Therapy 2";
