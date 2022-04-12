@@ -262,6 +262,12 @@ namespace ControlledPTT
 
         #region Configuration Helpers
 
+        [Conditional("DEBUG")]
+        private void GetDebugRelease(ref string debugRelease)
+        {
+            debugRelease = "Debug";
+        }
+
         private void SaveAppConfiguration()
         {
             // Settings from menu should be always saved
@@ -360,13 +366,21 @@ namespace ControlledPTT
 
             saveCurrentConfigWhenClosingToolStripMenuItem.Checked = (bool)_config["save_settings_on_closing"];
 
+            // check if in debug mode during development
+            string debugRelease = "Release";
+            GetDebugRelease(ref debugRelease);
+
             // get information about sensors and select the indicated one
             _selectedSensorIndex = (int)_config["selected_sensor_index"] - 1;
-            FindSensors((string)_config["sensors_path"], (JArray)_config["user_added_sensors"], _selectedSensorIndex);
+            string sensorsPath = (string)_config["sensors_path"];
+            sensorsPath = sensorsPath.Replace("{{Debug_Release}}", debugRelease);
+            FindSensors(sensorsPath, (JArray)_config["user_added_sensors"], _selectedSensorIndex);
 
             // get information about lasers and select the indicated one
             _selectedLaserIndex = (int)_config["selected_laser_index"] - 1;
-            FindLasers((string)_config["lasers_path"], (JArray)_config["user_added_lasers"], _selectedLaserIndex);
+            string laserPath = (string)_config["lasers_path"];
+            laserPath = laserPath.Replace("{{Debug_Release}}", debugRelease);
+            FindLasers(laserPath, (JArray)_config["user_added_lasers"], _selectedLaserIndex);
 
             // calibration
             string calibrationFile = (string)_config["calibration"];
@@ -591,6 +605,7 @@ namespace ControlledPTT
             cbSaveHeader.Enabled = false;
             gbLaser.Enabled = false;
             nudTargetTemp.Enabled = false;
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Enabled = false;
         }
 
         /// <summary>
@@ -612,6 +627,7 @@ namespace ControlledPTT
             txtOperator.Enabled = true;
             cbSaveHeader.Enabled = true;
             nudTargetTemp.Enabled = true;
+            nudDiscretizationTimeToolStripMenuItem.NumericUpDownControl.Enabled = true;
             if (_laser == null)
                 gbLaser.Enabled = true;
         }

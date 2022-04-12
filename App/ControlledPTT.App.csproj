@@ -173,7 +173,7 @@ xcopy "$(TargetDir)Configurations\release_config.json" "$(SolutionDir)Build\$(Co
 xcopy "$(SolutionDir)Sensors\BoardCommons" "$(SolutionDir)Build\$(ConfigurationName)\Sensors\BoardCommons\" /S /Y /I</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>powershell -Command "Get-ChildItem -Path $(SolutionDir)AssemblyInfo.cs -Force -Recurse | Foreach-Object { (gc $_.FullName) -replace '2.0.0.\*', '2.0.1.*' | Out-File -encoding UTF8 $_.FullName }"
+    <PreBuildEvent>powershell -Command "Get-ChildItem -Path $(SolutionDir)AssemblyInfo.cs -Force -Recurse | Foreach-Object { (gc $_.FullName) -replace '2.0.1.\*', '2.0.2.*' | Out-File -encoding UTF8 $_.FullName }"
 powershell -Command "Get-ChildItem -Path $(ProjectDir)Configurations/default_config.json -Force -Recurse | Foreach-Object { (gc $_.FullName) -replace '{BuildConfiguration}', '$(ConfigurationName)'  | Out-File -encoding UTF8 $_.FullName }"</PreBuildEvent>
   </PropertyGroup>
 </Project>

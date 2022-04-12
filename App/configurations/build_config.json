@@ -1,4 +1,4 @@
-﻿{
+{
   "discretization_ms": 1000,
   "save_settings_on_closing": true,
   "start_sensor_and_laser_parts_on_app_startup": true,
@@ -10,7 +10,7 @@
   "save_experiment_data": true,
   "create_experiment_folder_with_current_date": true,
   "create_experiment_file_with_current_time": true,
-  "logs_path": ".\\Logs\\",
+  "logs_path": ".\\logs\\",
   "min_target_temperature": 0,
   "max_target_temperature": 100,
   "pid": {
@@ -18,11 +18,11 @@
     "integral": 50,
     "differential": 50
   },
-  "sensors_path": "..\\..\\..\\build\\{{Debug_Release}}\\Sensors\\",
+  "sensors_path": ".\\Sensors\\",
   "user_added_sensors": [
   ],
-  "selected_sensor_index": 1,
-  "lasers_path": "..\\..\\..\\build\\{{Debug_Release}}\\Lasers\\",
+  "selected_sensor_index": 3,
+  "lasers_path": ".\\Lasers\\",
   "user_added_lasers": [
   ],
   "selected_laser_index": 1,

@@ -4,15 +4,15 @@ This directory contains the C# projects for the Laser modules. Each Laser module
 
 ### Requirements
 
-Each sensor part consists of two compnents: (1) the C# module to read the data sent from the sensor and send in to the [ControlledPTT.App](../App); (2) board connected to the sensor hardware and PC. The following requirements are in place:
+Each laser part consists of a the C# module to connect to laser harware, intialize it, set limits (such as maximum and minimum power or current), set output power (current), and get the power data from PID controller of the [ControlledPTT.App](../App). Necessary drivers are included. The following requirements are in place:
 
 - [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/net472) to run the C# module on a PC with Windows OS. .NET Framework 4.7.2 is included by default in Windows 7 or higher.
 
 ### Selecting laser part
 
 The currently developed laser parts are:
-1. [CNI LED Laser](./Lasers/CNIMDLIII) with the MDL-III-LED controller. Controlled PTT 2 sends the power data to the controller via COM port connection. The Prolific USB-to-Serial Comm Port is [Lib](./Lasers/CNIMDLIII/Lib) folder.
-2. Connect a laser diode to [Agilent N5768A or similar](./Lasers/Agilent) power supply, which is in turn connected to PC and Controlled PTT 2. The power supply sets the current to the laser diode and thus regulates its power.
+1. [CNI LED Laser](./CNIMDLIII) with the MDL-III-LED controller. Controlled PTT 2 sends the power data to the controller via COM port connection. The Prolific USB-to-Serial Comm Port is [Lib](./CNIMDLIII/Lib) folder.
+2. Connect a laser diode to [Agilent N5768A or similar](./Agilent) power supply, which is in turn connected to PC and Controlled PTT 2. The power supply sets the current to the laser diode and thus regulates its power.
 
 If you have a specific laser hardware which can be connected to PC, new laser part [can be developed](#developing-a-new-laser-part) upon a [request](mailto:konstantin.tamarov@uef.fi) or by [yourself](#development).
 

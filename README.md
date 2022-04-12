@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/version-v2.0.1-orange)](https://github.com/naitsok/controlled-ptt/)
+[![version](https://img.shields.io/badge/version-v2.0.2-orange)](https://github.com/naitsok/controlled-ptt/)
 [![build](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/naitsok/controlled-ptt/releases/)
 [![DOI](https://zenodo.org/badge/284663695.svg)](https://zenodo.org/badge/latestdoi/284663695)
 [![License](https://img.shields.io/badge/license-GPLv3.0-blue)](./LICENSE)
@@ -164,6 +164,14 @@ K. Tamarov, E.Happonen, M. Varis, Y.Constantinou, W. Xu, V.-P. Lehto. 2021. Cont
 
 
 ## Changelog
+
+### V2.0.2
+
+#### Features:
+- Added documentation for CNI Laser and Agilent Power Supply laser parts.
+- Discretiztion Time Interval now gets disabled during experiment run.
+- Fixed runtime errors during building when switching from Debug to Release mode and vice versa.
+
 ### V2.0.1
 
 #### Features:
