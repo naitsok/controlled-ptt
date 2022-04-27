@@ -172,9 +172,9 @@ namespace ControlledPTT
 
             // Organize windows
             _sensor.Location = new Point(0, 0);
-            Location = new Point(_sensor.Size.Width, 0);
+            Location = new Point(_sensor.Size.Width - 10, 0);
             if (_laser != null)
-                _laser.Location = new Point(Location.X + Size.Width, 0);
+                _laser.Location = new Point(Location.X + Size.Width - 10, 0);
 
             // Disable controls
             gbSensor.Enabled = false;
