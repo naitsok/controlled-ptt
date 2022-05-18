@@ -175,8 +175,8 @@ namespace ControlledPTT.Sensors
         private void btnClearData_Click(object sender, EventArgs e)
         {
             txtAllReceivedData.Clear();
-            txtAvgTemperature.Clear();
-            txtAvgTemperature.Text = "0.00";
+            txtAverageTemp.Clear();
+            txtAverageTemp.Text = "0.00";
         }
 
         private void ProcessData(object sender, EventArgs e)
@@ -185,7 +185,8 @@ namespace ControlledPTT.Sensors
             txtAllReceivedData.ScrollToCaret();
 
             // Get the received data into array the same way it was packed on the controller side.
-            var splittedData = _receivedData.Split('\t');
+            string[] splittedData = _receivedData.Split('\t');
+            // splittedData contains 65 temperatures, first 64 are pixel data and the last 65 is the ambient temperature
             Graphics g = gbTemperatures.CreateGraphics();
             for (int i = 0; i < SENSOR_ROWS; i++)
             {
@@ -226,7 +227,8 @@ namespace ControlledPTT.Sensors
             // Calculate temperature to store it in the variable of BaseSensorForm
 
             double avgTemperature = CalculateAvgTemperature();
-            txtAvgTemperature.Text = avgTemperature.ToString("0.##");
+            txtAverageTemp.Text = avgTemperature.ToString("0.##");
+            txtAmbientTemp.Text = splittedData[64];
 
             if (TemperatureJustSent)
                 _temperatures = new List<double>();

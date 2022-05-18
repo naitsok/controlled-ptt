@@ -34,7 +34,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnAvgTemperature = new System.Windows.Forms.Button();
             this.btnSelectAll = new System.Windows.Forms.Button();
-            this.txtAvgTemperature = new System.Windows.Forms.TextBox();
+            this.txtAverageTemp = new System.Windows.Forms.TextBox();
             this.txtAllReceivedData = new System.Windows.Forms.TextBox();
             this.btnClearData = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -45,17 +45,21 @@
             this.cbBaudRate = new System.Windows.Forms.ComboBox();
             this.btnConnToBoard = new System.Windows.Forms.Button();
             this.gbTemperatures = new System.Windows.Forms.GroupBox();
+            this.btnAmbientTemp = new System.Windows.Forms.Button();
+            this.txtAmbientTemp = new System.Windows.Forms.TextBox();
             this.gbArduino.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbArduino
             // 
+            this.gbArduino.Controls.Add(this.btnAmbientTemp);
+            this.gbArduino.Controls.Add(this.txtAmbientTemp);
             this.gbArduino.Controls.Add(this.btnClose);
             this.gbArduino.Controls.Add(this.btnDeselectAll);
             this.gbArduino.Controls.Add(this.label2);
             this.gbArduino.Controls.Add(this.btnAvgTemperature);
             this.gbArduino.Controls.Add(this.btnSelectAll);
-            this.gbArduino.Controls.Add(this.txtAvgTemperature);
+            this.gbArduino.Controls.Add(this.txtAverageTemp);
             this.gbArduino.Controls.Add(this.txtAllReceivedData);
             this.gbArduino.Controls.Add(this.btnClearData);
             this.gbArduino.Controls.Add(this.label3);
@@ -108,7 +112,7 @@
             this.btnAvgTemperature.Name = "btnAvgTemperature";
             this.btnAvgTemperature.Size = new System.Drawing.Size(120, 23);
             this.btnAvgTemperature.TabIndex = 32;
-            this.btnAvgTemperature.Text = "Average Temperature";
+            this.btnAvgTemperature.Text = "Average Object Temp";
             this.btnAvgTemperature.UseVisualStyleBackColor = true;
             // 
             // btnSelectAll
@@ -121,14 +125,14 @@
             this.btnSelectAll.UseVisualStyleBackColor = true;
             this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);
             // 
-            // txtAvgTemperature
+            // txtAverageTemp
             // 
-            this.txtAvgTemperature.Location = new System.Drawing.Point(132, 350);
-            this.txtAvgTemperature.Name = "txtAvgTemperature";
-            this.txtAvgTemperature.Size = new System.Drawing.Size(120, 20);
-            this.txtAvgTemperature.TabIndex = 29;
-            this.txtAvgTemperature.Text = "0.00";
-            this.txtAvgTemperature.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtAverageTemp.Location = new System.Drawing.Point(132, 350);
+            this.txtAverageTemp.Name = "txtAverageTemp";
+            this.txtAverageTemp.Size = new System.Drawing.Size(120, 20);
+            this.txtAverageTemp.TabIndex = 29;
+            this.txtAverageTemp.Text = "0.00";
+            this.txtAverageTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtAllReceivedData
             // 
@@ -244,6 +248,24 @@
             this.gbTemperatures.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gbTemperatures_MouseClick);
             this.gbTemperatures.Paint += new System.Windows.Forms.PaintEventHandler(this.gbTemperatures_Paint);
             // 
+            // btnAmbientTemp
+            // 
+            this.btnAmbientTemp.Location = new System.Drawing.Point(6, 377);
+            this.btnAmbientTemp.Name = "btnAmbientTemp";
+            this.btnAmbientTemp.Size = new System.Drawing.Size(120, 23);
+            this.btnAmbientTemp.TabIndex = 42;
+            this.btnAmbientTemp.Text = "Ambient Temperature";
+            this.btnAmbientTemp.UseVisualStyleBackColor = true;
+            // 
+            // txtAmbientTemp
+            // 
+            this.txtAmbientTemp.Location = new System.Drawing.Point(132, 379);
+            this.txtAmbientTemp.Name = "txtAmbientTemp";
+            this.txtAmbientTemp.Size = new System.Drawing.Size(120, 20);
+            this.txtAmbientTemp.TabIndex = 41;
+            this.txtAmbientTemp.Text = "0.00";
+            this.txtAmbientTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // ArrayMLXSensor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -273,13 +295,15 @@
         private System.Windows.Forms.ComboBox cbBaudRate;
         private System.Windows.Forms.Button btnConnToBoard;
         private System.Windows.Forms.TextBox txtAllReceivedData;
-        private System.Windows.Forms.TextBox txtAvgTemperature;
+        private System.Windows.Forms.TextBox txtAverageTemp;
         private System.Windows.Forms.Button btnSelectAll;
         private System.Windows.Forms.GroupBox gbTemperatures;
         private System.Windows.Forms.Button btnDeselectAll;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnAvgTemperature;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Button btnAmbientTemp;
+        private System.Windows.Forms.TextBox txtAmbientTemp;
     }
 }
 

@@ -45,6 +45,8 @@ void loop(){
       data = data + String(temperature, 2) + "\t";
     }
   }
+  double ambTemperature = sensor.getAmbient();
+  data = data + String(ambTemperature, 2) + "\t";
   Serial.println(data);
   data = "";
   delay(250);

@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/version-v2.0.2-orange)](https://github.com/naitsok/controlled-ptt/)
+[![version](https://img.shields.io/badge/version-v2.0.3-orange)](https://github.com/naitsok/controlled-ptt/)
 [![build](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/naitsok/controlled-ptt/releases/)
 [![DOI](https://zenodo.org/badge/284663695.svg)](https://zenodo.org/badge/latestdoi/284663695)
 [![License](https://img.shields.io/badge/license-GPLv3.0-blue)](./LICENSE)
@@ -25,7 +25,9 @@ The Controlled PTT 2 consists of 3 main parts: (1) the PC program written in C# 
 
 In order to use Controlled PTT 2 software, at least one [sensor hardware part](#selecting-sensor-part) must be assembled and programmed. The available sensor parts, detailed instruction to assemble and program them are located in [Sensors](./Sensors) directory. Arduino Studio must be installed in any case to upload sketch to the sensor board and provide necessary drivers.
 
-The Controlled PTT 2 software requires either its executables to be [downloaded](#download-executables) from the [latest release](https://github.com/naitsok/controlled-ptt/releases/) or it can be [built from the source](#building-from-the-source-code).
+The Controlled PTT 2 software requires either its executables to be [downloaded](#download-executables) from the [latest release](https://github.com/naitsok/controlled-ptt/releases/) or it can be [built from the source](#building-from-the-source-code).\
+
+If software does not start, check [troubleshooting](#troubleshooting).
 
 ### Download executables
 
@@ -70,6 +72,7 @@ If there is no part suitable for your hardware, new sensor part [can be develope
 
 #### Troubleshooting
 
+- **Software does not start**. Software does not start if Windows (for example through organization policies) does not allow to laungh software from unverified publisher. In this case all the executales (ControlledPTT.App, executables for each sensor in [Sensors](./Sensors/) folder and executables for each laser in [Lasers](./Lasers/) folder) must be unblocked via the following procedure. First, right click the executable file and select "Properties". Next, on "Security" tab select Unblock and Apply -> ok. Repeat on all executables. Now the software should start.
 - Make sure that the board connected via USB is recognized by PC. It can be done using Windows Device Manager and checking if there are unrecognized USB devices.
 - After uploading the sketch to the board using Arduino Studio, Serial Monitor there can be used to check if board is sending data to PC.
 - The compiled Windows Forms executables for each sensor part can be run separately without running ControlledPTT.App. By clicking "Connect to Board" button, the received data from board can be verified. Note that Serial Monitor of Arduino Studio must be closed and the appropriate COM port must be selected.
@@ -164,6 +167,12 @@ K. Tamarov, E.Happonen, M. Varis, Y.Constantinou, W. Xu, V.-P. Lehto. 2021. Cont
 
 
 ## Changelog
+
+### V2.0.3
+
+#### Features:
+- ArrayMLXSensor part now also shows the ambient (shell) temperature of the sensor.
+- Updated README to troubleshoot the issue of Windows blocking software.
 
 ### V2.0.2
 
