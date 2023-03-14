@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
@@ -142,8 +143,10 @@ namespace ControlledPTT.Sensors
             try
             {
                 // Calculate average temperature from two sensors.
-                objectTemperature = 0.5 * (double.Parse(temperatures[0]) + double.Parse(temperatures[2]));
-                ambientTemperature = 0.5 * (double.Parse(temperatures[1]) + double.Parse(temperatures[3]));
+                objectTemperature = 0.5 * (double.Parse(temperatures[0], NumberStyles.Any, CultureInfo.InvariantCulture) + 
+                    double.Parse(temperatures[2], NumberStyles.Any, CultureInfo.InvariantCulture));
+                ambientTemperature = 0.5 * (double.Parse(temperatures[1], NumberStyles.Any, CultureInfo.InvariantCulture) + 
+                    double.Parse(temperatures[3], NumberStyles.Any, CultureInfo.InvariantCulture));
             }
             catch { /* ignore parsing errors */ }
 

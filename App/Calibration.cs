@@ -98,6 +98,13 @@ namespace ControlledPTT
             if (string.IsNullOrEmpty(CalibrationFile))
                 return;
 
+            if (!File.Exists(CalibrationFile))
+            {
+                CalibrationFile = "";
+                return;
+            }
+
+
             _calibration = JObject.Parse(File.ReadAllText(CalibrationFile));
             Slope = (double)_calibration["slope"];
             Intercept = (double)_calibration["intercept"];

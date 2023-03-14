@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/version-v2.0.3-orange)](https://github.com/naitsok/controlled-ptt/)
+[![version](https://img.shields.io/badge/version-v2.0.4-orange)](https://github.com/naitsok/controlled-ptt/)
 [![build](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/naitsok/controlled-ptt/releases/)
 [![DOI](https://zenodo.org/badge/284663695.svg)](https://zenodo.org/badge/latestdoi/284663695)
 [![License](https://img.shields.io/badge/license-GPLv3.0-blue)](./LICENSE)
@@ -167,6 +167,10 @@ K. Tamarov, E.Happonen, M. Varis, Y.Constantinou, W. Xu, V.-P. Lehto. 2021. Cont
 
 
 ## Changelog
+
+### V2.0.4
+- Fixed crash on start bug when calibration file in the selected configuration is not found.
+- Fixed bug when converting received temperature from one and two MLX sensors.
 
 ### V2.0.3
 

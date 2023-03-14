@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
@@ -137,8 +138,8 @@ namespace ControlledPTT.Sensors
 
             try
             {
-                objectTemperature = double.Parse(temperatures[0]);
-                ambientTemperature = double.Parse(temperatures[1]);
+                objectTemperature = double.Parse(temperatures[0], NumberStyles.Any, CultureInfo.InvariantCulture);
+                ambientTemperature = double.Parse(temperatures[1], NumberStyles.Any, CultureInfo.InvariantCulture);
             }
             catch { /* Ignore parsing errors */ }
 
