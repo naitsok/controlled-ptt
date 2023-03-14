@@ -169,6 +169,8 @@ K. Tamarov, E.Happonen, M. Varis, Y.Constantinou, W. Xu, V.-P. Lehto. 2021. Cont
 ## Changelog
 
 ### V2.0.4
+
+#### Features:
 - Fixed crash on start bug when calibration file in the selected configuration is not found.
 - Fixed bug when converting received temperature from one and two MLX sensors.
 
