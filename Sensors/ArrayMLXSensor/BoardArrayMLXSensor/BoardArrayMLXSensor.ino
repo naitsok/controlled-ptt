@@ -23,7 +23,6 @@
  */
 
 #include <Arduino.h>
-#include <i2c_t3.h>
 #include "MLX90621.h"
 
 MLX90621 sensor; // create an instance of the Sensor class
@@ -37,7 +36,7 @@ void setup(){
 }
 
 void loop(){
-  sensor.measure(); //get new readings from the sensor
+  sensor.measure(true); //get new readings from the sensor
   
   for(int i = 0; i < 4; i++){ //go through all the rows
     for(int j = 0; j < 16; j++){ //go through all the columns
